@@ -4,28 +4,109 @@
 
 ---
 
+## 🆕 功能目录模式（v2.0 新特性）
+
+> **推荐使用功能目录模式**，提供更好的上下文管理和进度跟踪
+
+### 什么是功能目录模式？
+
+功能目录模式将每个功能的所有文档集中在一个目录中，提供：
+
+- ✅ **单一事实来源**: 所有文档集中管理
+- ✅ **详细进度跟踪**: 实现日志和中断恢复
+- ✅ **架构决策记录**: ADR 格式的决策文档
+- ✅ **可复用提示词**: 常见任务的提示词库
+
+### 功能目录结构
+
+```
+prompts/
+├── workflows/              # 工作流文件
+├── features/               # 功能目录（v2.0）
+│   ├── _template/          # 功能模板
+│   │   ├── AGENTS.md       # AI 助手指南
+│   │   ├── design.md       # 设计文档
+│   │   ├── implementation.md # 实现进度
+│   │   ├── decisions.md    # 决策记录（ADR）
+│   │   ├── bdd-scenarios.md # BDD 场景
+│   │   └── prompts.md      # 可复用提示词
+│   └── user-login/         # 实际功能示例
+│       └── ...
+└── README.md
+```
+
+### 使用功能目录模式
+
+```bash
+# 1. 创建新功能
+/workflow --init 用户登录
+
+# 2. 填写设计文档
+"我要开发用户登录功能。请填写 features/user-login/design.md"
+
+# 3. 开始开发
+/workflow 用户登录
+
+# 4. 中断后恢复
+/workflow --resume 用户登录
+```
+
+---
+
 ## 📁 目录结构
 
 ```
 prompts/
-└── workflows/                  # 所有工作流和阶段模块
-    ├── workflow-v2.md              # 主工作流（总控）
-    ├── tdd-quick.md                # 快速 TDD 工作流
-    ├── stage-1-user-story.md       # 阶段一：用户故事
-    ├── stage-2-bdd-scenario.md     # 阶段二：BDD 场景
-    ├── stage-3-tdd-cycle.md        # 阶段三：TDD 循环
-    ├── stage-4-implementation.md   # 阶段四：代码实现
-    └── stage-5-optimization.md     # 阶段五：代码优化
+├── workflows/                  # 所有工作流和阶段模块
+│   ├── workflow.md                  # 主工作流（总控）
+│   ├── tdd-quick.md                # 快速 TDD 工作流
+│   ├── stage-1-user-story.md       # 阶段一：用户故事
+│   ├── stage-2-bdd-scenario.md     # 阶段二：BDD 场景
+│   ├── stage-3-tdd-cycle.md        # 阶段三：TDD 循环
+│   ├── stage-4-implementation.md   # 阶段四：代码实现
+│   └── stage-5-optimization.md     # 阶段五：代码优化
+└── features/                   # 功能目录（v2.0 新增）
+    ├── _template/                  # 功能模板
+    └── user-login/                 # 实际功能示例
 ```
 
 ---
 
 ## 🚀 快速开始
 
-### 1. 完整工作流（推荐）
+### 方式 1：功能目录模式（推荐）
+
+#### 1.1 创建新功能
 
 ```bash
-/workflow-v2 用户登录
+/workflow --init 用户登录
+```
+
+#### 1.2 填写设计文档
+
+```bash
+"我要开发用户登录功能。这是我的想法：[描述]。
+请审查代码库并填写 features/user-login/design.md"
+```
+
+#### 1.3 开始开发
+
+```bash
+/workflow 用户登录
+```
+
+**适用场景**: 正式项目、质量要求高
+**预计耗时**: 2-4 小时
+**优势**: 完整的文档、进度跟踪、决策记录
+
+---
+
+### 方式 2：参数模式（传统）
+
+#### 2.1 完整工作流
+
+```bash
+/workflow 用户登录
 ```
 
 执行所有 5 个阶段，产出完整的文档、测试和代码。
@@ -35,7 +116,7 @@ prompts/
 
 ---
 
-### 2. 快速工作流
+### 3. 快速工作流
 
 ```bash
 /workflow-quick 用户登录
@@ -99,6 +180,14 @@ prompts/
 - 定义价值
 - INVEST 验证
 
+**新增特性**:
+
+- **优先级排序**: P1/P2/P3 + 原因说明
+- **独立测试描述**: 每个故事可独立开发/测试/部署
+- **需求编号**: FR-001, FR-002...
+- **成功标准量化**: SC-001, SC-002...
+- **待澄清标记**: `[NEEDS CLARIFICATION: ...]`
+
 ---
 
 ### 阶段二：BDD 场景设计
@@ -114,6 +203,14 @@ prompts/
 - 识别场景（Happy/Error/Edge）
 - 编写 Gherkin
 - 定义步骤
+
+**新增特性**:
+
+- **边界情况识别**: 提问式引导清单
+  - 输入边界、状态边界、时间边界
+  - 权限边界、系统边界
+- **场景关联需求**: @FR-XXX 标签
+- **成功标准验证**: 在场景中量化验证
 
 ---
 
@@ -178,7 +275,7 @@ prompts/
 
 ```
 需求明确 + 质量要求高
-    → 完整工作流（/workflow-v2）
+    → 完整工作流（/workflow）
 
 快速原型 + 时间紧张
     → 快速工作流（/workflow-quick）
@@ -204,16 +301,16 @@ prompts/
 
 ```bash
 # 完整流程
-/workflow-v2 用户登录
+/workflow 用户登录
 
 # 跳过 BDD
-/workflow-v2 用户登录 --skip-bdd
+/workflow 用户登录 --skip-bdd
 
 # 仅执行 TDD
-/workflow-v2 用户登录 --stage=tdd
+/workflow 用户登录 --stage=tdd
 
 # 恢复执行
-/workflow-v2 用户登录 --resume
+/workflow 用户登录 --resume
 ```
 
 ---
@@ -320,7 +417,7 @@ A: 根据项目需求选择：
 A: 可以，使用参数：
 
 ```bash
-/workflow-v2 用户登录 --skip-bdd --skip-optimize
+/workflow 用户登录 --skip-bdd --skip-optimize
 ```
 
 ### Q: 如何从中断处继续？
@@ -328,7 +425,7 @@ A: 可以，使用参数：
 A: 使用 `--resume` 参数：
 
 ```bash
-/workflow-v2 用户登录 --resume
+/workflow 用户登录 --resume
 ```
 
 ### Q: 各阶段可以独立执行吗？
@@ -341,5 +438,23 @@ A: 可以，但需要确保前置条件：
 
 ---
 
-**文档版本**: v1.1
+**文档版本**: v2.0
 **最后更新**: 2026-03-11
+
+**v2.0 更新内容**（功能目录模式）:
+
+- ✨ 新增功能目录模式（features/）
+- ✨ 新增 AGENTS.md（AI 助手专用指南）
+- ✨ 新增 design.md（单一事实来源）
+- ✨ 新增 implementation.md（详细实现进度）
+- ✨ 新增 decisions.md（架构决策记录 ADR）
+- ✨ 新增 prompts.md（可复用提示词库）
+- ✨ 新增 bdd-scenarios.md（BDD 场景文档）
+- ✨ 创建 user-login 完整示例
+- 📝 更新 workflow.md 支持功能目录模式
+- 📝 更新 README.md 文档
+
+**v1.2 更新内容**:
+
+- 阶段一增加优先级排序、独立测试、需求编号、成功标准、待澄清标记
+- 阶段二增加边界情况识别清单、场景关联需求标签

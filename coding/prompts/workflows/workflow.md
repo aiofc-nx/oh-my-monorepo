@@ -38,6 +38,69 @@ argument-hint: '<功能名称> [--skip-bdd] [--skip-optimize] [--stage=<阶段>]
 
 ---
 
+## 🆕 功能目录模式（推荐）
+
+> **优先使用功能目录模式**，提供更好的上下文管理和进度跟踪
+
+### 什么是功能目录模式？
+
+功能目录模式将每个功能的所有文档集中在一个目录中，包括：
+
+- 设计文档 (design.md)
+- 实现进度 (implementation.md)
+- 决策记录 (decisions.md)
+- BDD 场景 (bdd-scenarios.md)
+- AI 助手指南 (AGENTS.md)
+- 可复用提示词 (prompts.md)
+
+### 使用功能目录模式
+
+```bash
+# 1. 创建新功能（如果不存在）
+/workflow --init 用户登录
+
+# 2. 继续开发功能（自动读取 implementation.md）
+/workflow 用户登录
+
+# 3. 从上次中断处继续
+/workflow --resume 用户登录
+
+# 4. 同步实现状态
+/workflow --sync 用户登录
+```
+
+### 功能目录结构
+
+```
+features/
+├── _template/              # 功能模板
+│   ├── AGENTS.md
+│   ├── design.md
+│   ├── implementation.md
+│   ├── decisions.md
+│   ├── bdd-scenarios.md
+│   └── prompts.md
+└── user-login/             # 实际功能示例
+    ├── AGENTS.md
+    ├── design.md
+    ├── implementation.md
+    ├── decisions.md
+    ├── bdd-scenarios.md
+    └── prompts.md
+```
+
+### 功能目录模式 vs 参数模式
+
+| 特性           | 功能目录模式      | 参数模式          |
+| -------------- | ----------------- | ----------------- |
+| **上下文管理** | ✅ 集中在一个目录 | ❌ 分散在多个文件 |
+| **进度跟踪**   | ✅ 详细的实现日志 | ❌ 概念性进度条   |
+| **决策记录**   | ✅ ADR 格式       | ❌ 无             |
+| **中断恢复**   | ✅ 自动读取进度   | ⚠️ 需要手动指定   |
+| **文档完整性** | ✅ 单一事实来源   | ❌ 文档分散       |
+
+---
+
 ## 🎯 执行模式
 
 ### 完整模式（默认）
@@ -90,7 +153,29 @@ argument-hint: '<功能名称> [--skip-bdd] [--skip-optimize] [--stage=<阶段>]
 
 ## 🔄 进度跟踪
 
-### 自动保存进度
+### 功能目录模式（推荐）
+
+进度自动保存到 `features/{feature}/implementation.md`:
+
+```markdown
+## 当前状态
+
+**状态**: 🔵 进行中
+**开始时间**: 2026-03-11
+**最后更新**: 2026-03-11 03:30
+
+## ✅ 已完成
+
+- [x] 阶段一：用户故事
+- [x] 阶段二：BDD 场景
+- [x] 阶段三：TDD 循环（User 实体）
+
+## 🔵 进行中
+
+- [ ] 重构 User 实体验证逻辑
+```
+
+### 参数模式
 
 进度自动保存到 `.workflow/progress.json`:
 
@@ -144,7 +229,49 @@ flowchart LR
 
 ## 🚀 快速开始
 
-### 1. 完整流程
+### 方式 1：功能目录模式（推荐）
+
+#### 1.1 创建新功能
+
+```bash
+/workflow --init 用户登录
+```
+
+这将：
+
+1. 从 `features/_template/` 复制模板到 `features/user-login/`
+2. 创建功能目录结构
+3. 填充模板文件
+
+#### 1.2 填写设计文档
+
+```bash
+# 告诉 AI 助手填写设计文档
+"我要开发用户登录功能。这是我的想法：[描述]。
+请审查代码库并填写 features/user-login/design.md"
+```
+
+#### 1.3 开始开发
+
+```bash
+/workflow 用户登录
+```
+
+自动执行所有阶段，进度保存到 `features/user-login/implementation.md`。
+
+#### 1.4 中断后恢复
+
+```bash
+/workflow --resume 用户登录
+```
+
+自动读取 `features/user-login/implementation.md`，从上次中断处继续。
+
+---
+
+### 方式 2：参数模式（传统）
+
+#### 2.1 完整流程
 
 ```bash
 /workflow 用户登录
@@ -152,7 +279,7 @@ flowchart LR
 
 自动执行所有 5 个阶段。
 
-### 2. 仅执行特定阶段
+#### 2.2 仅执行特定阶段
 
 ```bash
 # 仅创建用户故事

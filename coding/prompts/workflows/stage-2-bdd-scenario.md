@@ -25,6 +25,7 @@ argument-hint: '<功能名称>'
 
 - [ ] 用户故事文件存在: `docs/user-stories/$ARGUMENTS.md`
 - [ ] 验收标准已明确
+- [ ] 功能需求已编号 (FR-001, FR-002...)
 
 如果用户故事不存在，先运行：
 
@@ -37,7 +38,7 @@ argument-hint: '<功能名称>'
 ## 场景设计流程
 
 ```
-用户故事 → 拆分场景 → 编写 Gherkin → 定义步骤
+用户故事 → 识别边界 → 拆分场景 → 编写 Gherkin → 定义步骤
 ```
 
 ---
@@ -64,6 +65,46 @@ argument-hint: '<功能名称>'
 
 ---
 
+## 边界情况识别
+
+> 使用提问式引导，确保覆盖所有边界情况
+
+### 边界问题清单
+
+**输入边界**:
+
+- 当输入为空/ null 时会发生什么？
+- 当输入超过最大长度时会发生什么？
+- 当输入包含特殊字符时会发生什么？
+- 当输入格式不正确时会发生什么？
+
+**状态边界**:
+
+- 当资源不存在时会发生什么？
+- 当资源已存在（重复）时会发生什么？
+- 当资源被锁定/禁用时会发生什么？
+- 当资源达到上限时会发生什么？
+
+**时间边界**:
+
+- 当操作超时时会发生什么？
+- 当会话过期时会发生什么？
+- 当并发操作冲突时会发生什么？
+
+**权限边界**:
+
+- 当用户未登录时会发生什么？
+- 当用户权限不足时会发生什么？
+- 当资源不属于当前用户时会发生什么？
+
+**系统边界**:
+
+- 当外部服务不可用时会发生什么？
+- 当数据库连接失败时会发生什么？
+- 当内存/磁盘空间不足时会发生什么？
+
+---
+
 ## 执行步骤
 
 ### 1. 读取用户故事
@@ -72,7 +113,9 @@ argument-hint: '<功能名称>'
 
 - 故事描述
 - 验收标准
-- 业务规则
+- 功能需求 (FR-001, FR-002...)
+- 成功标准 (SC-001, SC-002...)
+- 待澄清项
 
 ### 2. 识别场景
 
@@ -81,6 +124,7 @@ argument-hint: '<功能名称>'
 - 每个验收标准至少 1 个场景
 - 覆盖 Happy/Error/Edge 三种类型
 - 确保场景独立、可重复
+- 回答边界问题清单中的问题
 
 ### 3. 编写 Gherkin
 
@@ -104,6 +148,12 @@ Feature: $ARGUMENTS
     Given 前置条件
     When 执行动作
     Then 失败并返回错误信息
+
+  @edge-case
+  Scenario: 边界场景
+    Given 边界条件
+    When 执行动作
+    Then 符合预期的结果
 
   @business-rule
   Scenario: 业务规则场景
@@ -158,7 +208,7 @@ Then('错误信息包含 {string}', (message: string) => {
 
 `features/$ARGUMENTS.feature`
 
-**最少场景数**: 3 个（Happy/Error/Edge）
+**最少场景数**: 5 个（Happy + 2 Error + 2 Edge）
 
 ### 步骤定义文件
 
@@ -170,10 +220,12 @@ Then('错误信息包含 {string}', (message: string) => {
 
 ## 阶段完成条件
 
-- [ ] 至少 3 个场景（Happy/Error/Edge）
+- [ ] 至少 5 个场景（Happy/Error/Edge）
+- [ ] 边界问题清单已回答
 - [ ] 所有场景使用标准 Gherkin 语法
 - [ ] 步骤定义文件已创建
 - [ ] 所有场景可执行（无语法错误）
+- [ ] 场景覆盖所有功能需求 (FR-XXX)
 
 验证命令:
 
@@ -196,7 +248,7 @@ Feature: 用户登录
   Background:
     Given 系统中存在用户 "test@example.com" 密码为 "Password123"
 
-  @happy-path
+  @happy-path @FR-001
   Scenario: 成功登录
     Given 用户在登录页面
     When 用户输入邮箱 "test@example.com" 和密码 "Password123"
@@ -204,8 +256,9 @@ Feature: 用户登录
     Then 用户应该成功登录
     And 页面跳转到首页
     And 显示欢迎消息 "欢迎回来"
+    And 响应时间小于 200ms
 
-  @validation
+  @validation @FR-002
   Scenario: 密码错误
     Given 用户在登录页面
     When 用户输入邮箱 "test@example.com" 和密码 "WrongPassword"
@@ -214,7 +267,7 @@ Feature: 用户登录
     And 显示错误消息 "邮箱或密码错误"
     And 用户仍在登录页面
 
-  @validation
+  @validation @FR-002
   Scenario: 用户不存在
     Given 用户在登录页面
     When 用户输入邮箱 "nonexistent@example.com" 和密码 "Password123"
@@ -222,7 +275,23 @@ Feature: 用户登录
     Then 登录失败
     And 显示错误消息 "邮箱或密码错误"
 
-  @business-rule
+  @edge-case @FR-002
+  Scenario: 邮箱格式不正确
+    Given 用户在登录页面
+    When 用户输入邮箱 "invalid-email" 和密码 "Password123"
+    And 用户点击登录按钮
+    Then 登录失败
+    And 显示错误消息 "邮箱格式不正确"
+
+  @edge-case @FR-002
+  Scenario: 输入为空
+    Given 用户在登录页面
+    When 用户输入邮箱 "" 和密码 ""
+    And 用户点击登录按钮
+    Then 登录失败
+    And 显示错误消息 "邮箱和密码不能为空"
+
+  @business-rule @FR-005
   Scenario: 账户锁定
     Given 用户 "test@example.com" 已连续失败登录 4 次
     When 用户再次输入错误密码
@@ -230,7 +299,7 @@ Feature: 用户登录
     And 显示错误消息 "账户已锁定，请 15 分钟后再试"
     And 账户被锁定 15 分钟
 
-  @business-rule
+  @business-rule @FR-004
   Scenario: 记住我功能
     Given 用户在登录页面
     When 用户输入正确的邮箱和密码
@@ -247,9 +316,12 @@ Feature: 用户登录
 - [ ] 覆盖正常流程（Happy Path）
 - [ ] 覆盖异常流程（Error Cases）
 - [ ] 覆盖边界条件（Edge Cases）
+- [ ] 边界问题清单已回答
 - [ ] 场景独立、可重复执行
 - [ ] 步骤定义清晰
-- [ ] 使用标签分类（@happy-path, @validation, @business-rule）
+- [ ] 使用标签分类（@happy-path, @validation, @edge-case, @business-rule）
+- [ ] 关联功能需求（@FR-XXX）
+- [ ] 包含成功标准验证（如响应时间）
 
 ---
 
@@ -302,6 +374,33 @@ When('用户点击登录按钮', async () => {
 });
 ```
 
+### Q: 如何在场景中验证成功标准？
+
+A: 在 Then 步骤中添加量化验证：
+
+```gherkin
+Then 响应时间小于 200ms
+Then 用户在 30 秒内完成操作
+```
+
+```typescript
+Then('响应时间小于 {int}ms', async (maxTime: number) => {
+  const start = Date.now();
+  await someAction();
+  const duration = Date.now() - start;
+  expect(duration).toBeLessThan(maxTime);
+});
+```
+
+### Q: 如何关联功能需求？
+
+A: 使用标签关联：
+
+```gherkin
+@FR-001 @FR-002
+Scenario: 用户登录
+```
+
 ---
 
 ## 下一步
@@ -318,3 +417,4 @@ When('用户点击登录按钮', async () => {
 
 - [Gherkin 语法参考](https://cucumber.io/docs/gherkin/reference/)
 - [BDD 最佳实践](https://cucumber.io/docs/guides/)
+- [边界值分析](https://en.wikipedia.org/wiki/Boundary-value_analysis)
