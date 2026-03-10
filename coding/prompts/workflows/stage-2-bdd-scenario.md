@@ -298,7 +298,7 @@ A: 使用 async/await：
 
 ```typescript
 When('用户点击登录按钮', async () => {
-  result = await loginHandler.execute(command);
+  result = await userService.login(email, password);
 });
 ```
 

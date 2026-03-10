@@ -124,8 +124,8 @@ prompts/
 **输入**: BDD 场景
 **输出**:
 
-- `src/domain/[module]/[entity].aggregate.spec.ts`
-- `src/domain/[module]/[entity].aggregate.ts`
+- `src/modules/[module]/[entity].spec.ts`
+- `src/modules/[module]/[entity].ts`
   **耗时**: 30-40 分钟
 
 **核心任务**:
@@ -140,18 +140,18 @@ prompts/
 
 **文件**: `workflows/stage-4-implementation.md`
 
-**输入**: 领域模型
+**输入**: 核心模型
 **输出**:
 
-- `src/application/commands/[command].handler.ts`
-- `src/infrastructure/repositories/[repo].impl.ts`
+- `src/modules/[module]/services/[module].service.ts`
+- `src/modules/[module]/repositories/[module].repository.ts`
   **耗时**: 30-40 分钟
 
 **核心任务**:
 
-- 实现 Command Handler
-- 实现仓储
-- 集成基础设施
+- 实现服务层
+- 实现数据访问层
+- 实现控制器
 
 ---
 
@@ -337,9 +337,9 @@ A: 可以，但需要确保前置条件：
 
 - 阶段二需要阶段一的用户故事
 - 阶段三需要阶段二的 BDD 场景
-- 阶段四需要阶段三的领域模型
+- 阶段四需要阶段三的核心模型
 
 ---
 
-**文档版本**: v1.0
+**文档版本**: v1.1
 **最后更新**: 2026-03-11

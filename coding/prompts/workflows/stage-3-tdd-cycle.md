@@ -42,9 +42,9 @@ argument-hint: '<功能名称> [--entity=<实体名>]'
 ### 测试文件位置
 
 ```
-src/domain/[module]/[entity].aggregate.spec.ts
-src/domain/[module]/[value-object].vo.spec.ts
-src/application/commands/[command].handler.spec.ts
+src/modules/[module]/[entity].spec.ts
+src/modules/[module]/services/[service].spec.ts
+src/modules/[module]/controllers/[controller].spec.ts
 ```
 
 ### 测试模板
@@ -64,8 +64,8 @@ describe('[EntityName]', () => {
       const result = Entity.create(props);
 
       // Assert - 验证结果
-      expect(result.isOk()).toBe(true);
-      expect(result.value.property).toBe(expected);
+      expect(result).toBeDefined();
+      expect(result.property).toBe(expected);
     });
 
     it('should fail when [validation]', () => {
@@ -73,8 +73,7 @@ describe('[EntityName]', () => {
         /* 无效数据 */
       });
 
-      expect(result.isFail()).toBe(true);
-      expect(result.value.message).toContain('错误信息');
+      expect(() => result).toThrow('错误信息');
     });
   });
 });
@@ -105,25 +104,26 @@ pnpm vitest run <file-path>
 ### 实现模板
 
 ```typescript
-export class Entity extends AggregateRoot<EntityProps> {
-  static create(props: CreateProps): Result<Entity, ValidationError> {
+export class Entity {
+  private id: string;
+  private props: EntityProps;
+
+  static create(props: CreateProps): Entity {
     // 1. 验证
     if (!props.required) {
-      return Result.fail(new ValidationError('必填字段不能为空', 'required'));
+      throw new Error('必填字段不能为空');
     }
 
     // 2. 创建实体
-    const entity = new Entity({
-      id: EntityId.generate(),
+    const entity = new Entity();
+    entity.id = crypto.randomUUID();
+    entity.props = {
       ...props,
       createdAt: new Date(),
       updatedAt: new Date(),
-    });
+    };
 
-    // 3. 触发事件
-    entity.addDomainEvent(new EntityCreatedEvent(entity.id));
-
-    return Result.ok(entity);
+    return entity;
   }
 }
 ```
@@ -155,26 +155,25 @@ pnpm vitest run <file-path>
 **重构前**:
 
 ```typescript
-export class Entity extends AggregateRoot<EntityProps> {
-  static create(props: CreateProps): Result<Entity, ValidationError> {
+export class Entity {
+  static create(props: CreateProps): Entity {
     if (!props.required) {
-      return Result.fail(new ValidationError('必填字段不能为空', 'required'));
+      throw new Error('必填字段不能为空');
     }
 
     if (!props.email?.includes('@')) {
-      return Result.fail(new ValidationError('邮箱格式不正确', 'email'));
+      throw new Error('邮箱格式不正确');
     }
 
-    const entity = new Entity({
-      id: EntityId.generate(),
+    const entity = new Entity();
+    entity.id = crypto.randomUUID();
+    entity.props = {
       ...props,
       createdAt: new Date(),
       updatedAt: new Date(),
-    });
+    };
 
-    entity.addDomainEvent(new EntityCreatedEvent(entity.id));
-
-    return Result.ok(entity);
+    return entity;
   }
 }
 ```
@@ -182,44 +181,33 @@ export class Entity extends AggregateRoot<EntityProps> {
 **重构后**:
 
 ```typescript
-export class Entity extends AggregateRoot<EntityProps> {
-  static create(props: CreateProps): Result<Entity, ValidationError> {
-    const errors = this.validate(props);
-    if (errors.length > 0) {
-      return Result.fail(errors[0]);
-    }
+export class Entity {
+  static create(props: CreateProps): Entity {
+    this.validate(props);
 
-    const entity = new Entity(this.initializeProps(props));
-    entity.emitCreatedEvent();
+    const entity = new Entity();
+    entity.id = crypto.randomUUID();
+    entity.props = this.initializeProps(props);
 
-    return Result.ok(entity);
+    return entity;
   }
 
-  private static validate(props: CreateProps): ValidationError[] {
-    const errors: ValidationError[] = [];
-
+  private static validate(props: CreateProps): void {
     if (!props.required?.trim()) {
-      errors.push(new ValidationError('必填字段不能为空', 'required'));
+      throw new Error('必填字段不能为空');
     }
 
     if (!props.email?.includes('@')) {
-      errors.push(new ValidationError('邮箱格式不正确', 'email'));
+      throw new Error('邮箱格式不正确');
     }
-
-    return errors;
   }
 
   private static initializeProps(props: CreateProps): EntityProps {
     return {
-      id: EntityId.generate(),
       ...props,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-  }
-
-  private emitCreatedEvent(): void {
-    this.addDomainEvent(new EntityCreatedEvent(this.id));
   }
 }
 ```
@@ -279,21 +267,19 @@ pnpm vitest run --coverage
 
 **实体**: User
 
-**测试**: `src/domain/user/user.aggregate.spec.ts`
+**测试**: `src/modules/user/user.entity.spec.ts`
 
 ```typescript
 import { describe, it, expect, beforeEach } from 'vitest';
-import { User } from './user.aggregate';
-import { Email } from '../value-objects/email.vo';
-import { Password } from '../value-objects/password.vo';
+import { User } from './user.entity';
 
-describe('User Aggregate', () => {
-  let validEmail: Email;
-  let validPassword: Password;
+describe('User Entity', () => {
+  let validEmail: string;
+  let validPassword: string;
 
   beforeEach(() => {
-    validEmail = Email.create('test@example.com').value;
-    validPassword = Password.create('Password123').value;
+    validEmail = 'test@example.com';
+    validPassword = 'Password123';
   });
 
   describe('login', () => {
@@ -301,11 +287,11 @@ describe('User Aggregate', () => {
       const user = User.create({
         email: validEmail,
         password: validPassword,
-      }).value;
+      });
 
       const result = user.login('Password123');
 
-      expect(result.isOk()).toBe(true);
+      expect(result.success).toBe(true);
       expect(user.loginAttempts).toBe(0);
     });
 
@@ -313,12 +299,12 @@ describe('User Aggregate', () => {
       const user = User.create({
         email: validEmail,
         password: validPassword,
-      }).value;
+      });
 
       const result = user.login('WrongPassword');
 
-      expect(result.isFail()).toBe(true);
-      expect(result.value.message).toContain('邮箱或密码错误');
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('邮箱或密码错误');
       expect(user.loginAttempts).toBe(1);
     });
 
@@ -326,7 +312,7 @@ describe('User Aggregate', () => {
       const user = User.create({
         email: validEmail,
         password: validPassword,
-      }).value;
+      });
 
       for (let i = 0; i < 5; i++) {
         user.login('WrongPassword');
@@ -335,15 +321,15 @@ describe('User Aggregate', () => {
       expect(user.isLocked).toBe(true);
 
       const result = user.login('Password123');
-      expect(result.isFail()).toBe(true);
-      expect(result.value.message).toContain('账户已锁定');
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('账户已锁定');
     });
 
     it('should reset attempts after successful login', () => {
       const user = User.create({
         email: validEmail,
         password: validPassword,
-      }).value;
+      });
 
       user.login('WrongPassword');
       user.login('WrongPassword');
@@ -401,7 +387,7 @@ A: 遵循以下步骤：
 
 完成 TDD 循环后，可以：
 
-1. **继续到阶段四**: 运行 `/stage-4-implementation $ARGUMENTS` 实现 Command Handler
+1. **继续到阶段四**: 运行 `/stage-4-implementation $ARGUMENTS` 实现服务层
 2. **验证覆盖率**: 运行 `pnpm vitest run --coverage`
 3. **运行所有测试**: 运行 `pnpm vitest run`
 

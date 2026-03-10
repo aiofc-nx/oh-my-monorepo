@@ -6,7 +6,7 @@ argument-hint: '<功能名称> [--skip-bdd] [--skip-optimize] [--stage=<阶段>]
 
 # 开发工作流程：US → BDD → TDD → 实现 → 优化
 
-> **注意**: 本文档是工作流总控文件，各阶段详情请查看 `stages/` 目录下的独立文件。
+> **注意**: 本文档是工作流总控文件，各阶段详情请查看 `workflows/` 目录下的独立文件。
 
 ---
 
@@ -78,13 +78,13 @@ argument-hint: '<功能名称> [--skip-bdd] [--skip-optimize] [--stage=<阶段>]
 
 ## 📁 阶段文件
 
-| 阶段   | 文件                               | 说明                              |
-| ------ | ---------------------------------- | --------------------------------- |
-| 阶段一 | `stages/stage-1-user-story.md`     | 创建符合 INVEST 原则的用户故事    |
-| 阶段二 | `stages/stage-2-bdd-scenario.md`   | 设计 BDD 场景（Happy/Error/Edge） |
-| 阶段三 | `stages/stage-3-tdd-cycle.md`      | TDD 红-绿-重构循环                |
-| 阶段四 | `stages/stage-4-implementation.md` | 实现 Command Handler 和基础设施   |
-| 阶段五 | `stages/stage-5-optimization.md`   | 代码质量与性能优化                |
+| 阶段   | 文件                                  | 说明                              |
+| ------ | ------------------------------------- | --------------------------------- |
+| 阶段一 | `workflows/stage-1-user-story.md`     | 创建符合 INVEST 原则的用户故事    |
+| 阶段二 | `workflows/stage-2-bdd-scenario.md`   | 设计 BDD 场景（Happy/Error/Edge） |
+| 阶段三 | `workflows/stage-3-tdd-cycle.md`      | TDD 红-绿-重构循环                |
+| 阶段四 | `workflows/stage-4-implementation.md` | 实现服务层和数据访问层            |
+| 阶段五 | `workflows/stage-5-optimization.md`   | 代码质量与性能优化                |
 
 ---
 
@@ -132,13 +132,13 @@ flowchart LR
 
 ### 各阶段产出物
 
-| 阶段       | 产出物             | 完成条件            |
-| ---------- | ------------------ | ------------------- |
-| **阶段一** | 用户故事文档       | INVEST 所有检查通过 |
-| **阶段二** | Feature 文件       | 至少 3 个场景       |
-| **阶段三** | 单元测试 + 实现    | 覆盖率 > 80%        |
-| **阶段四** | Handler + 基础设施 | 所有 BDD 场景通过   |
-| **阶段五** | 优化代码           | 性能提升 > 20%      |
+| 阶段       | 产出物              | 完成条件            |
+| ---------- | ------------------- | ------------------- |
+| **阶段一** | 用户故事文档        | INVEST 所有检查通过 |
+| **阶段二** | Feature 文件        | 至少 3 个场景       |
+| **阶段三** | 单元测试 + 实现     | 覆盖率 > 80%        |
+| **阶段四** | 服务层 + 数据访问层 | 所有 BDD 场景通过   |
+| **阶段五** | 优化代码            | 性能提升 > 20%      |
 
 ---
 
@@ -275,7 +275,7 @@ pnpm tsc --noEmit
 
 ### 阶段一：用户故事
 
-**详细文档**: `stages/stage-1-user-story.md`
+**详细文档**: `workflows/stage-1-user-story.md`
 
 **核心任务**:
 
@@ -290,7 +290,7 @@ pnpm tsc --noEmit
 
 ### 阶段二：BDD 场景
 
-**详细文档**: `stages/stage-2-bdd-scenario.md`
+**详细文档**: `workflows/stage-2-bdd-scenario.md`
 
 **核心任务**:
 
@@ -307,7 +307,7 @@ pnpm tsc --noEmit
 
 ### 阶段三：TDD 循环
 
-**详细文档**: `stages/stage-3-tdd-cycle.md`
+**详细文档**: `workflows/stage-3-tdd-cycle.md`
 
 **核心任务**:
 
@@ -317,31 +317,31 @@ pnpm tsc --noEmit
 
 **产出**:
 
-- `src/domain/[module]/[entity].aggregate.spec.ts`
-- `src/domain/[module]/[entity].aggregate.ts`
+- `src/modules/[module]/[entity].spec.ts`
+- `src/modules/[module]/[entity].ts`
 
 ---
 
 ### 阶段四：代码实现
 
-**详细文档**: `stages/stage-4-implementation.md`
+**详细文档**: `workflows/stage-4-implementation.md`
 
 **核心任务**:
 
-- 实现 Command Handler
-- 实现仓储
-- 集成基础设施
+- 实现服务层
+- 实现数据访问层
+- 实现控制器
 
 **产出**:
 
-- `src/application/commands/[command].handler.ts`
-- `src/infrastructure/repositories/[repo].impl.ts`
+- `src/modules/[module]/services/[module].service.ts`
+- `src/modules/[module]/repositories/[module].repository.ts`
 
 ---
 
 ### 阶段五：代码优化
 
-**详细文档**: `stages/stage-5-optimization.md`
+**详细文档**: `workflows/stage-5-optimization.md`
 
 **核心任务**:
 
@@ -382,11 +382,11 @@ pnpm tsc --noEmit
 
 ## 📝 参考资源
 
-- [阶段一：用户故事](./stages/stage-1-user-story.md)
-- [阶段二：BDD 场景](./stages/stage-2-bdd-scenario.md)
-- [阶段三：TDD 循环](./stages/stage-3-tdd-cycle.md)
-- [阶段四：代码实现](./stages/stage-4-implementation.md)
-- [阶段五：代码优化](./stages/stage-5-optimization.md)
+- [阶段一：用户故事](./stage-1-user-story.md)
+- [阶段二：BDD 场景](./stage-2-bdd-scenario.md)
+- [阶段三：TDD 循环](./stage-3-tdd-cycle.md)
+- [阶段四：代码实现](./stage-4-implementation.md)
+- [阶段五：代码优化](./stage-5-optimization.md)
 - [OpenCode 命令规范](../../.opencode/docs/命令文件编写规范.md)
 
 ---

@@ -1,12 +1,12 @@
 ---
-description: 阶段四 - 实现 Command Handler 和基础设施
+description: 阶段四 - 实现服务层和数据访问层
 agent: build
-argument-hint: '<功能名称> [--handler=<handler名>]'
+argument-hint: '<功能名称> [--service=<服务名>]'
 ---
 
 # 阶段四：代码实现
 
-实现 Command Handler、Repository 和基础设施层。
+实现服务层、控制器和数据访问层。
 
 ---
 
@@ -17,15 +17,15 @@ argument-hint: '<功能名称> [--handler=<handler名>]'
 ## 项目上下文
 
 当前分支: !`git branch --show-current`
-领域模型状态: !`find src/domain -name "*.aggregate.ts" -type f | wc -l | xargs -I {} echo "{} 个聚合根"`
+模块状态: !`find src/modules -name "*.ts" -type f | wc -l | xargs -I {} echo "{} 个模块文件"`
 
 ---
 
 ## 前置条件
 
-- [ ] 领域模型已完成（阶段三）
+- [ ] 核心实体/模型已完成（阶段三）
 - [ ] 单元测试覆盖率 > 80%
-- [ ] 所有领域测试通过
+- [ ] 所有核心测试通过
 
 如果未完成，先运行：
 
@@ -35,216 +35,377 @@ argument-hint: '<功能名称> [--handler=<handler名>]'
 
 ---
 
-## 实现层次结构
+## 项目结构
 
 ```
-Application Layer (应用层)
-    ├─ Commands (命令)
-    │   ├─ create-user.command.ts
-    │   └─ create-user.handler.ts
-    └─ Queries (查询)
-        ├─ get-user.query.ts
-        └─ get-user.handler.ts
-
-Infrastructure Layer (基础设施层)
-    ├─ Repositories (仓储实现)
-    │   └─ user.repository.impl.ts
-    ├─ Event Bus (事件总线)
-    │   └─ event.bus.ts
-    └─ External Services (外部服务)
-        └─ email.service.ts
+src/
+├── modules/
+│   └── [module]/
+│       ├── controllers/          # 控制器
+│       │   └── [module].controller.ts
+│       ├── services/             # 服务层
+│       │   └── [module].service.ts
+│       ├── entities/             # 实体/模型
+│       │   └── [module].entity.ts
+│       └── repositories/         # 数据访问层
+│           └── [module].repository.ts
+└── common/
+    └── ...
 ```
 
 ---
 
 ## 执行步骤
 
-### 1. Command Handler TDD
+### 1. 服务层实现
 
-#### 1.1 编写 Handler 测试
+#### 1.1 编写服务测试
 
-**文件**: `src/application/commands/[command].handler.spec.ts`
+**文件**: `src/modules/[module]/services/[module].service.spec.ts`
 
 ```typescript
-import { describe, it, expect, beforeEach } from 'vitest';
-import { CreateHandler } from './create.handler';
-import { CreateCommand } from './create.command';
-import { MockRepository } from '../../../tests/mocks/repository.mock';
-import { MockEventBus } from '../../../tests/mocks/event-bus.mock';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UserService } from './user.service';
+import { UserRepository } from '../repositories/user.repository';
 
-describe('CreateHandler', () => {
-  let handler: CreateHandler;
-  let mockRepo: MockRepository;
-  let mockEventBus: MockEventBus;
+describe('UserService', () => {
+  let service: UserService;
+  let mockRepo: UserRepository;
 
   beforeEach(() => {
-    mockRepo = new MockRepository();
-    mockEventBus = new MockEventBus();
-    handler = new CreateHandler(mockRepo, mockEventBus);
+    mockRepo = {
+      findById: vi.fn(),
+      findByEmail: vi.fn(),
+      save: vi.fn(),
+      delete: vi.fn(),
+    } as any;
+    service = new UserService(mockRepo);
   });
 
-  describe('execute', () => {
-    it('should execute successfully', async () => {
-      // Arrange
-      const command = CreateCommandFixture.createDefault();
+  describe('create', () => {
+    it('should create user successfully', async () => {
+      const dto = {
+        email: 'test@example.com',
+        password: 'Password123',
+      };
 
-      // Act
-      const result = await handler.execute(command);
+      const result = await service.create(dto);
 
-      // Assert
-      expect(result.isOk()).toBe(true);
-      expect(mockRepo.saveCalls).toHaveLength(1);
+      expect(result).toBeDefined();
+      expect(result.email).toBe(dto.email);
+      expect(mockRepo.save).toHaveBeenCalled();
     });
 
-    it('should publish events after saving', async () => {
-      const command = CreateCommandFixture.createDefault();
+    it('should fail when email already exists', async () => {
+      vi.mocked(mockRepo.findByEmail).mockResolvedValue({ id: '1' } as any);
 
-      await handler.execute(command);
+      const dto = {
+        email: 'test@example.com',
+        password: 'Password123',
+      };
 
-      expect(mockEventBus.publishedEvents).toHaveLength(1);
-      expect(mockEventBus.publishedEvents[0].constructor.name).toBe(
-        'CreatedEvent',
-      );
+      await expect(service.create(dto)).rejects.toThrow('邮箱已存在');
     });
+  });
 
-    it('should fail when entity not found', async () => {
-      const command = new CreateCommand({
-        id: 'non-existent-id',
-      });
+  describe('login', () => {
+    it('should return token on successful login', async () => {
+      vi.mocked(mockRepo.findByEmail).mockResolvedValue({
+        id: '1',
+        email: 'test@example.com',
+        password: 'hashedPassword',
+        loginAttempts: 0,
+        isLocked: false,
+      } as any);
 
-      const result = await handler.execute(command);
+      const result = await service.login('test@example.com', 'Password123');
 
-      expect(result.isFail()).toBe(true);
-      expect(result.value.code).toBe('NOT_FOUND');
+      expect(result.token).toBeDefined();
+      expect(result.expiresIn).toBe(24 * 60 * 60 * 1000);
     });
   });
 });
 ```
 
-#### 1.2 实现 Handler
+#### 1.2 实现服务
 
-**文件**: `src/application/commands/[command].handler.ts`
-
-```typescript
-import { CommandHandler, ICommandHandler } from '../command-bus';
-import { CreateCommand } from './create.command';
-import { Result } from '../../domain/result';
-import { IRepository } from '../../domain/repository.interface';
-import { IEventBus } from '../../infrastructure/event-bus.interface';
-import { ApplicationError } from '../../application/errors/application.error';
-
-@CommandHandler(CreateCommand)
-export class CreateHandler
-  implements ICommandHandler<CreateCommand, Result<string>>
-{
-  constructor(
-    private readonly repository: IRepository,
-    private readonly eventBus: IEventBus,
-  ) {}
-
-  async execute(
-    command: CreateCommand,
-  ): Promise<Result<string, ApplicationError>> {
-    // 1. 业务验证
-    const entity = await this.repository.findById(command.id);
-    if (!entity) {
-      return Result.fail(new ApplicationError('实体不存在', 'NOT_FOUND'));
-    }
-
-    // 2. 执行业务逻辑
-    const result = entity.doSomething(command.params);
-    if (result.isFail()) {
-      return Result.fail(
-        new ApplicationError(result.value.message, 'BUSINESS_ERROR'),
-      );
-    }
-
-    // 3. 持久化
-    await this.repository.save(entity);
-
-    // 4. 发布领域事件
-    await this.eventBus.publishAll(entity.domainEvents);
-    entity.clearDomainEvents();
-
-    return Result.ok(entity.id);
-  }
-}
-```
-
----
-
-### 2. Repository 实现
-
-#### 2.1 Repository 接口（领域层）
-
-**文件**: `src/domain/[module]/[entity].repository.ts`
-
-```typescript
-import { Entity } from './entity.aggregate';
-import { EntityId } from '../value-objects/entity-id.vo';
-
-export interface IEntityRepository {
-  findById(id: EntityId): Promise<Entity | null>;
-  findByIds(ids: EntityId[]): Promise<Entity[]>;
-  save(entity: Entity): Promise<void>;
-  delete(id: EntityId): Promise<void>;
-}
-```
-
-#### 2.2 Repository 实现（基础设施层）
-
-**文件**: `src/infrastructure/persistence/[entity].repository.impl.ts`
+**文件**: `src/modules/[module]/services/[module].service.ts`
 
 ```typescript
 import { Injectable } from '@nestjs/common';
-import { IEntityRepository } from '../../domain/[module]/[entity].repository';
-import { Entity } from '../../domain/[module]/[entity].aggregate';
-import { EntityId } from '../../domain/value-objects/entity-id.vo';
-import { PrismaService } from '../prisma/prisma.service';
+import { UserRepository } from '../repositories/user.repository';
+import { User } from '../entities/user.entity';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
-export class EntityRepository implements IEntityRepository {
-  constructor(private readonly prisma: PrismaService) {}
+export class UserService {
+  constructor(private readonly userRepo: UserRepository) {}
 
-  async findById(id: EntityId): Promise<Entity | null> {
-    const data = await this.prisma.entity.findUnique({
-      where: { id: id.value },
+  async create(dto: CreateUserDto): Promise<User> {
+    // 1. 检查邮箱是否已存在
+    const existing = await this.userRepo.findByEmail(dto.email);
+    if (existing) {
+      throw new Error('邮箱已存在');
+    }
+
+    // 2. 创建用户
+    const user = User.create({
+      email: dto.email,
+      password: await bcrypt.hash(dto.password, 10),
     });
 
-    if (!data) return null;
+    // 3. 保存
+    await this.userRepo.save(user);
 
-    return Entity.fromPersistence(data);
+    return user;
   }
 
-  async findByIds(ids: EntityId[]): Promise<Entity[]> {
-    const dataList = await this.prisma.entity.findMany({
-      where: { id: { in: ids.map((id) => id.value) } },
-    });
+  async login(email: string, password: string): Promise<LoginResponse> {
+    // 1. 查找用户
+    const user = await this.userRepo.findByEmail(email);
+    if (!user) {
+      throw new Error('邮箱或密码错误');
+    }
 
-    return dataList.map((data) => Entity.fromPersistence(data));
+    // 2. 验证密码
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) {
+      user.incrementLoginAttempts();
+      await this.userRepo.save(user);
+      throw new Error('邮箱或密码错误');
+    }
+
+    // 3. 检查锁定状态
+    if (user.isLocked) {
+      throw new Error('账户已锁定');
+    }
+
+    // 4. 生成 Token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET!,
+      { expiresIn: '24h' },
+    );
+
+    // 5. 重置登录尝试次数
+    user.resetLoginAttempts();
+    await this.userRepo.save(user);
+
+    return {
+      token,
+      expiresIn: 24 * 60 * 60 * 1000,
+      user: {
+        id: user.id,
+        email: user.email,
+      },
+    };
+  }
+}
+
+interface CreateUserDto {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  token: string;
+  expiresIn: number;
+  user: {
+    id: string;
+    email: string;
+  };
+}
+```
+
+---
+
+### 2. 数据访问层实现
+
+#### 2.1 Repository 接口
+
+**文件**: `src/modules/[module]/repositories/[module].repository.interface.ts`
+
+```typescript
+import { User } from '../entities/user.entity';
+
+export interface UserRepository {
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
+  findAll(): Promise<User[]>;
+  save(user: User): Promise<void>;
+  delete(id: string): Promise<void>;
+}
+```
+
+#### 2.2 Repository 实现 (MikroORM)
+
+**文件**: `src/modules/[module]/repositories/[module].repository.ts`
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { EntityManager } from '@mikro-orm/postgresql';
+import { UserRepository } from './user.repository.interface';
+import { User } from '../entities/user.entity';
+import { UserEntity } from '../entities/user.orm-entity';
+
+@Injectable()
+export class UserRepositoryImpl implements UserRepository {
+  constructor(private readonly em: EntityManager) {}
+
+  async findById(id: string): Promise<User | null> {
+    const entity = await this.em.findOne(UserEntity, { id });
+    return entity ? this.mapToUser(entity) : null;
   }
 
-  async save(entity: Entity): Promise<void> {
-    const data = entity.toPersistence();
+  async findByEmail(email: string): Promise<User | null> {
+    const entity = await this.em.findOne(UserEntity, { email });
+    return entity ? this.mapToUser(entity) : null;
+  }
 
-    await this.prisma.entity.upsert({
-      where: { id: data.id },
-      update: data,
-      create: data,
+  async findAll(): Promise<User[]> {
+    const entities = await this.em.find(UserEntity, {});
+    return entities.map((e) => this.mapToUser(e));
+  }
+
+  async save(user: User): Promise<void> {
+    const entity = this.mapToEntity(user);
+    this.em.persist(entity);
+    await this.em.flush();
+  }
+
+  async delete(id: string): Promise<void> {
+    const entity = await this.em.findOne(UserEntity, { id });
+    if (entity) {
+      await this.em.removeAndFlush(entity);
+    }
+  }
+
+  private mapToUser(entity: UserEntity): User {
+    return User.create({
+      id: entity.id,
+      email: entity.email,
+      password: entity.password,
+      loginAttempts: entity.loginAttempts,
+      isLocked: entity.isLocked,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
     });
   }
 
-  async delete(id: EntityId): Promise<void> {
-    await this.prisma.entity.delete({
-      where: { id: id.value },
-    });
+  private mapToEntity(user: User): UserEntity {
+    const entity = new UserEntity();
+    entity.id = user.id;
+    entity.email = user.email;
+    entity.password = user.password;
+    entity.loginAttempts = user.loginAttempts;
+    entity.isLocked = user.isLocked;
+    entity.updatedAt = new Date();
+    return entity;
   }
 }
 ```
 
 ---
 
-### 3. 验证 BDD 场景
+### 3. 控制器实现
+
+#### 3.1 编写控制器测试
+
+**文件**: `src/modules/[module]/controllers/[module].controller.spec.ts`
+
+```typescript
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UserController } from './user.controller';
+import { UserService } from '../services/user.service';
+
+describe('UserController', () => {
+  let controller: UserController;
+  let mockService: UserService;
+
+  beforeEach(() => {
+    mockService = {
+      create: vi.fn(),
+      login: vi.fn(),
+    } as any;
+    controller = new UserController(mockService);
+  });
+
+  describe('POST /users', () => {
+    it('should create user', async () => {
+      vi.mocked(mockService.create).mockResolvedValue({
+        id: '1',
+        email: 'test@example.com',
+      } as any);
+
+      const result = await controller.create({
+        email: 'test@example.com',
+        password: 'Password123',
+      });
+
+      expect(result.email).toBe('test@example.com');
+    });
+  });
+
+  describe('POST /users/login', () => {
+    it('should return token', async () => {
+      vi.mocked(mockService.login).mockResolvedValue({
+        token: 'jwt-token',
+        expiresIn: 86400000,
+      } as any);
+
+      const result = await controller.login({
+        email: 'test@example.com',
+        password: 'Password123',
+      });
+
+      expect(result.token).toBe('jwt-token');
+    });
+  });
+});
+```
+
+#### 3.2 实现控制器
+
+**文件**: `src/modules/[module]/controllers/[module].controller.ts`
+
+```typescript
+import { Controller, Post, Body } from '@nestjs/common';
+import { UserService } from '../services/user.service';
+
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Post()
+  async create(@Body() dto: CreateUserDto) {
+    const user = await this.userService.create(dto);
+    return {
+      id: user.id,
+      email: user.email,
+    };
+  }
+
+  @Post('login')
+  async login(@Body() dto: LoginDto) {
+    return this.userService.login(dto.email, dto.password);
+  }
+}
+
+interface CreateUserDto {
+  email: string;
+  password: string;
+}
+
+interface LoginDto {
+  email: string;
+  password: string;
+}
+```
+
+---
+
+### 4. 验证 BDD 场景
 
 运行 BDD 测试验证实现：
 
@@ -258,21 +419,20 @@ pnpm vitest run features/$ARGUMENTS.feature
 
 ## 代码实现检查清单
 
-- [ ] Command Handler 测试覆盖率 > 80%
-- [ ] 领域逻辑在聚合根/实体中
-- [ ] 值对象不可变
-- [ ] 领域事件正确触发
-- [ ] 仓储接口定义在领域层
-- [ ] 仓储实现在基础设施层
+- [ ] 服务层测试覆盖率 > 80%
+- [ ] 业务逻辑在服务层中
+- [ ] 数据访问层接口清晰
+- [ ] 控制器只做请求/响应处理
 - [ ] 所有 BDD 场景通过
 
 ---
 
 ## 阶段完成条件
 
-- [ ] Command Handler 实现完成
-- [ ] Handler 测试覆盖率 > 80%
-- [ ] Repository 实现完成
+- [ ] 服务层实现完成
+- [ ] 服务层测试覆盖率 > 80%
+- [ ] 数据访问层实现完成
+- [ ] 控制器实现完成
 - [ ] 所有 BDD 场景通过
 - [ ] 所有单元测试通过
 
@@ -280,7 +440,7 @@ pnpm vitest run features/$ARGUMENTS.feature
 
 ```bash
 # 运行单元测试
-pnpm vitest run src/application/**/*.spec.ts
+pnpm vitest run src/modules/
 
 # 运行 BDD 测试
 pnpm vitest run features/$ARGUMENTS.feature
@@ -293,220 +453,115 @@ pnpm vitest run
 
 ## 示例
 
-### Command: 用户登录
+### 功能: 用户登录
 
-**Command**: `src/application/commands/login.command.ts`
+**服务**: `src/modules/user/services/user.service.ts`
 
-```typescript
-export class LoginCommand {
-  constructor(
-    public readonly email: string,
-    public readonly password: string,
-    public readonly rememberMe: boolean = false,
-  ) {}
-}
-```
-
-**Handler 测试**: `src/application/commands/login.handler.spec.ts`
+**服务测试**: `src/modules/user/services/user.service.spec.ts`
 
 ```typescript
-import { describe, it, expect, beforeEach } from 'vitest';
-import { LoginHandler } from './login.handler';
-import { LoginCommand } from './login.command';
-import { MockUserRepository } from '../../../tests/mocks/user.repository';
-import { MockEventBus } from '../../../tests/mocks/event.bus';
-import { TokenService } from '../../infrastructure/auth/token.service';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UserService } from './user.service';
+import { UserRepository } from '../repositories/user.repository';
 
-describe('LoginHandler', () => {
-  let handler: LoginHandler;
-  let mockRepo: MockUserRepository;
-  let mockEventBus: MockEventBus;
-  let tokenService: TokenService;
+describe('UserService', () => {
+  let service: UserService;
+  let mockRepo: UserRepository;
 
-  beforeEach(async () => {
-    mockRepo = new MockUserRepository();
-    mockEventBus = new MockEventBus();
-    tokenService = new TokenService();
-    handler = new LoginHandler(mockRepo, mockEventBus, tokenService);
-
-    await mockRepo.createTestUser('test@example.com', 'Password123');
+  beforeEach(() => {
+    mockRepo = {
+      findById: vi.fn(),
+      findByEmail: vi.fn(),
+      save: vi.fn(),
+      delete: vi.fn(),
+    } as any;
+    service = new UserService(mockRepo);
   });
 
   it('should return token on successful login', async () => {
-    const command = new LoginCommand('test@example.com', 'Password123', false);
+    vi.mocked(mockRepo.findByEmail).mockResolvedValue({
+      id: '1',
+      email: 'test@example.com',
+      password: 'hashedPassword',
+      loginAttempts: 0,
+      isLocked: false,
+    } as any);
 
-    const result = await handler.execute(command);
+    const result = await service.login('test@example.com', 'Password123');
 
-    expect(result.isOk()).toBe(true);
-    expect(result.value.token).toBeDefined();
-    expect(result.value.expiresIn).toBe(24 * 60 * 60 * 1000);
+    expect(result.token).toBeDefined();
+    expect(result.expiresIn).toBe(24 * 60 * 60 * 1000);
   });
 
   it('should return 7-day token with remember me', async () => {
-    const command = new LoginCommand('test@example.com', 'Password123', true);
+    vi.mocked(mockRepo.findByEmail).mockResolvedValue({
+      id: '1',
+      email: 'test@example.com',
+      password: 'hashedPassword',
+      loginAttempts: 0,
+      isLocked: false,
+    } as any);
 
-    const result = await handler.execute(command);
+    const result = await service.login('test@example.com', 'Password123', true);
 
-    expect(result.value.expiresIn).toBe(7 * 24 * 60 * 60 * 1000);
-  });
-
-  it('should publish UserLoggedIn event', async () => {
-    const command = new LoginCommand('test@example.com', 'Password123', false);
-
-    await handler.execute(command);
-
-    expect(mockEventBus.publishedEvents).toHaveLength(1);
-    expect(mockEventBus.publishedEvents[0].constructor.name).toBe(
-      'UserLoggedInEvent',
-    );
+    expect(result.expiresIn).toBe(7 * 24 * 60 * 60 * 1000);
   });
 });
-```
-
-**Handler 实现**: `src/application/commands/login.handler.ts`
-
-```typescript
-import { CommandHandler, ICommandHandler } from '../command-bus';
-import { LoginCommand } from './login.command';
-import { Result } from '../../domain/result';
-import { IUserRepository } from '../../domain/user/user.repository';
-import { IEventBus } from '../../infrastructure/event-bus.interface';
-import { TokenService } from '../../infrastructure/auth/token.service';
-import { ApplicationError } from '../errors/application.error';
-
-@CommandHandler(LoginCommand)
-export class LoginHandler
-  implements ICommandHandler<LoginCommand, Result<LoginResponse>>
-{
-  constructor(
-    private readonly userRepo: IUserRepository,
-    private readonly eventBus: IEventBus,
-    private readonly tokenService: TokenService,
-  ) {}
-
-  async execute(
-    command: LoginCommand,
-  ): Promise<Result<LoginResponse, ApplicationError>> {
-    // 1. 查找用户
-    const user = await this.userRepo.findByEmail(command.email);
-    if (!user) {
-      return Result.fail(new ApplicationError('邮箱或密码错误', 'AUTH_FAILED'));
-    }
-
-    // 2. 验证登录
-    const loginResult = user.login(command.password);
-    if (loginResult.isFail()) {
-      await this.userRepo.save(user);
-      return Result.fail(
-        new ApplicationError(loginResult.value.message, 'AUTH_FAILED'),
-      );
-    }
-
-    // 3. 生成 Token
-    const expiresIn = command.rememberMe
-      ? 7 * 24 * 60 * 60 * 1000
-      : 24 * 60 * 60 * 1000;
-
-    const token = this.tokenService.generate(
-      { userId: user.id, email: user.email.value },
-      expiresIn,
-    );
-
-    // 4. 保存用户状态
-    await this.userRepo.save(user);
-
-    // 5. 发布事件
-    await this.eventBus.publishAll(user.domainEvents);
-    user.clearDomainEvents();
-
-    return Result.ok({
-      token,
-      expiresIn,
-      user: {
-        id: user.id,
-        email: user.email.value,
-      },
-    });
-  }
-}
-
-export interface LoginResponse {
-  token: string;
-  expiresIn: number;
-  user: {
-    id: string;
-    email: string;
-  };
-}
 ```
 
 ---
 
 ## 常见问题
 
-### Q: Handler 应该包含什么逻辑？
+### Q: 服务层应该包含什么逻辑？
 
-A: Handler 职责：
+A: 服务层职责：
 
-- ✅ 协调领域对象
-- ✅ 调用仓储
-- ✅ 发布事件
+- ✅ 业务逻辑协调
+- ✅ 数据访问调用
+- ✅ 事务管理
 - ✅ 返回结果
-- ❌ 业务逻辑（应在领域层）
-- ❌ 数据访问逻辑（应在仓储层）
+- ❌ HTTP 处理（应在控制器层）
+- ❌ 数据库操作细节（应在 Repository 层）
 
 ### Q: 如何处理事务？
 
-A: 使用 Unit of Work 模式：
+A: 使用 MikroORM 事务：
 
 ```typescript
 @Injectable()
-export class UnitOfWork {
-  constructor(private readonly prisma: PrismaService) {}
+export class UserService {
+  constructor(
+    private readonly em: EntityManager,
+    private readonly userRepo: UserRepository,
+  ) {}
 
-  async execute<T>(work: () => Promise<T>): Promise<T> {
-    return this.prisma.$transaction(async () => {
-      return work();
+  async transfer(fromId: string, toId: string, amount: number) {
+    await this.em.transactional(async (em) => {
+      const from = await this.userRepo.findById(fromId);
+      const to = await this.userRepo.findById(toId);
+
+      from.debit(amount);
+      to.credit(amount);
+
+      await this.userRepo.save(from);
+      await this.userRepo.save(to);
     });
   }
 }
-
-// 使用
-await this.unitOfWork.execute(async () => {
-  await this.repository.save(entity);
-  await this.eventBus.publishAll(events);
-});
 ```
 
 ### Q: 如何 Mock 依赖？
 
-A: 创建 Mock 类：
+A: 使用 vitest 的 vi.fn():
 
 ```typescript
-export class MockUserRepository implements IUserRepository {
-  private users: Map<string, User> = new Map();
-  public saveCalls: User[] = [];
+const mockRepo = {
+  findById: vi.fn(),
+  save: vi.fn(),
+} as any;
 
-  async findByEmail(email: string): Promise<User | null> {
-    return (
-      Array.from(this.users.values()).find((u) => u.email.value === email) ||
-      null
-    );
-  }
-
-  async save(user: User): Promise<void> {
-    this.users.set(user.id, user);
-    this.saveCalls.push(user);
-  }
-
-  async createTestUser(email: string, password: string): Promise<void> {
-    const user = User.create({
-      email: Email.create(email).value,
-      password: Password.create(password).value,
-    }).value;
-    this.users.set(user.id, user);
-  }
-}
+vi.mocked(mockRepo.findById).mockResolvedValue({ id: '1' });
 ```
 
 ---
@@ -523,6 +578,6 @@ export class MockUserRepository implements IUserRepository {
 
 ## 参考资源
 
-- [CQRS 模式](https://martinfowler.com/bliki/CQRS.html)
-- [Repository 模式](https://martinfowler.com/eaaCatalog/repository.html)
-- [DDD 分层架构](https://www.domainlanguage.com/)
+- [NestJS 文档](https://docs.nestjs.com/)
+- [MikroORM 文档](https://mikro-orm.io/)
+- [Service Layer 模式](https://martinfowler.com/eaaCatalog/serviceLayer.html)

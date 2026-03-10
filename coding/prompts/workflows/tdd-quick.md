@@ -28,7 +28,7 @@ argument-hint: '<功能名称>'
 
 ## 阶段一：用户故事（10 分钟）
 
-参考: `stages/stage-1-user-story.md`
+参考: `workflows/stage-1-user-story.md`
 
 **产出**: `docs/user-stories/$ARGUMENTS.md`
 
@@ -41,11 +41,11 @@ argument-hint: '<功能名称>'
 
 ## 阶段二：TDD 循环（30-40 分钟）
 
-参考: `stages/stage-3-tdd-cycle.md`
+参考: `workflows/stage-3-tdd-cycle.md`
 
 ### 2.1 编写核心测试
 
-**文件**: `src/domain/[module]/[entity].aggregate.spec.ts`
+**文件**: `src/modules/[module]/[entity].spec.ts`
 
 ```typescript
 describe('[EntityName]', () => {
@@ -61,11 +61,11 @@ describe('[EntityName]', () => {
 
 ### 2.2 实现
 
-**文件**: `src/domain/[module]/[entity].aggregate.ts`
+**文件**: `src/modules/[module]/[entity].ts`
 
 ```typescript
-export class Entity extends AggregateRoot<Props> {
-  static create(props: CreateProps): Result<Entity, ValidationError> {
+export class Entity {
+  static create(props: CreateProps): Entity {
     // 实现
   }
 }
@@ -73,36 +73,38 @@ export class Entity extends AggregateRoot<Props> {
 
 **产出**:
 
-- `src/domain/[module]/[entity].aggregate.spec.ts`
-- `src/domain/[module]/[entity].aggregate.ts`
+- `src/modules/[module]/[entity].spec.ts`
+- `src/modules/[module]/[entity].ts`
 
 ---
 
 ## 阶段三：代码实现（20-30 分钟）
 
-参考: `stages/stage-4-implementation.md`
+参考: `workflows/stage-4-implementation.md`
 
-### 3.1 Handler
+### 3.1 服务层
 
-**文件**: `src/application/commands/[command].handler.ts`
+**文件**: `src/modules/[module]/services/[module].service.ts`
 
 ```typescript
-export class Handler implements ICommandHandler<Command> {
-  async execute(command: Command): Promise<Result> {
-    // 1. 获取实体
+@Injectable()
+export class Service {
+  async execute(dto: Dto): Promise<Result> {
+    // 1. 获取数据
     // 2. 执行业务逻辑
     // 3. 保存
-    // 4. 发布事件
+    // 4. 返回结果
   }
 }
 ```
 
-### 3.2 Repository
+### 3.2 数据访问层
 
-**文件**: `src/infrastructure/repositories/[repo].impl.ts`
+**文件**: `src/modules/[module]/repositories/[module].repository.ts`
 
 ```typescript
-export class RepositoryImpl implements IRepository {
+@Injectable()
+export class Repository {
   async findById(id: string): Promise<Entity | null> {
     // 实现
   }
@@ -115,8 +117,8 @@ export class RepositoryImpl implements IRepository {
 
 **产出**:
 
-- `src/application/commands/[command].handler.ts`
-- `src/infrastructure/repositories/[repo].impl.ts`
+- `src/modules/[module]/services/[module].service.ts`
+- `src/modules/[module]/repositories/[module].repository.ts`
 
 ---
 
@@ -138,9 +140,9 @@ pnpm vitest run --coverage
 
 - [ ] 用户故事已创建
 - [ ] 核心测试通过
-- [ ] 领域模型已实现
-- [ ] Handler 已实现
-- [ ] Repository 已实现
+- [ ] 实体/模型已实现
+- [ ] 服务层已实现
+- [ ] 数据访问层已实现
 - [ ] 所有测试通过
 - [ ] 覆盖率 > 70%
 
@@ -196,16 +198,16 @@ pnpm vitest run --coverage
 
 **阶段二**:
 
-- `src/domain/user/user.aggregate.spec.ts`
-- `src/domain/user/user.aggregate.ts`
+- `src/modules/user/user.entity.spec.ts`
+- `src/modules/user/user.entity.ts`
 
 **阶段三**:
 
-- `src/application/commands/register-user.handler.ts`
-- `src/infrastructure/repositories/user.repository.impl.ts`
+- `src/modules/user/services/user.service.ts`
+- `src/modules/user/repositories/user.repository.ts`
 
 **总耗时**: 约 1.5 小时
 
 ---
 
-**文档版本**: v1.0
+**文档版本**: v1.1

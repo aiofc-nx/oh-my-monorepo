@@ -96,12 +96,12 @@ pnpm ls-lint
 
 #### 3.2 常见架构问题
 
-| 问题         | 症状                 | 解决方案     |
-| ------------ | -------------------- | ------------ |
-| **反向依赖** | 领域层依赖基础设施层 | 依赖倒置     |
-| **循环依赖** | 模块相互依赖         | 引入中间层   |
-| **职责不清** | 类承担过多职责       | 单一职责原则 |
-| **过度耦合** | 模块紧密耦合         | 依赖注入     |
+| 问题         | 症状           | 解决方案     |
+| ------------ | -------------- | ------------ |
+| **循环依赖** | 模块相互依赖   | 引入中间层   |
+| **职责不清** | 类承担过多职责 | 单一职责原则 |
+| **过度耦合** | 模块紧密耦合   | 依赖注入     |
+| **层级混乱** | 跨层级直接调用 | 明确分层边界 |
 
 ### 4. 安全加固
 
@@ -129,23 +129,26 @@ pnpm ls-lint
 
 ## 优化示例
 
-imports { Injectable } from '@nestjs/common';
+### 示例 1: 缓存优化
+
+```typescript
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CachedTokenService extends TokenService {
-private cache = new Map<string, CachedToken>();
+  private cache = new Map<string, CachedToken>();
 
-generate(payload: TokenPayload, expiresIn: number): string {
-const token = super.generate(payload, expiresIn);
-this.cache.set(token, {
-payload,
-expiresAt: Date.now() + expiresIn,
-});
-return token;
-}
+  generate(payload: TokenPayload, expiresIn: number): string {
+    const token = super.generate(payload, expiresIn);
+    this.cache.set(token, {
+      payload,
+      expiresAt: Date.now() + expiresIn,
+    });
+    return token;
+  }
 
-verify(token: string): TokenPayload | null {
-const cached = this.cache.get(token);
+  verify(token: string): TokenPayload | null {
+    const cached = this.cache.get(token);
 
     if (cached && cached.expiresAt > Date.now()) {
       return cached.payload;
@@ -162,26 +165,25 @@ const cached = this.cache.get(token);
     }
 
     return payload;
+  }
 
-}
-
-invalidate(token: string): void {
-this.cache.delete(token);
-}
+  invalidate(token: string): void {
+    this.cache.delete(token);
+  }
 }
 
 interface CachedToken {
-payload: TokenPayload;
-expiresAt: number;
+  payload: TokenPayload;
+  expiresAt: number;
 }
-
-````
+```
 
 **效果**: Token 验证从 50ms → 5ms（提升 90%）
 
 ### 示例 2: 批量查询优化
 
 **优化前**: N+1 查询
+
 ```typescript
 async getOrderDetails(orderIds: string[]): Promise<OrderDetail[]> {
   const details: OrderDetail[] = [];
@@ -194,7 +196,7 @@ async getOrderDetails(orderIds: string[]): Promise<OrderDetail[]> {
 
   return details;
 }
-````
+```
 
 **优化后**: 批量查询
 
@@ -256,13 +258,13 @@ async updateOrder(props: UpdateOrderProps) {
 class OrderValidator {
   static validateCustomer(customerId: string): void {
     if (!customerId?.trim()) {
-      throw new ValidationError('客户ID不能为空', 'customerId');
+      throw new Error('客户ID不能为空');
     }
   }
 
   static validateItems(items: OrderItem[]): void {
     if (!items?.length) {
-      throw new ValidationError('订单项不能为空', 'items');
+      throw new Error('订单项不能为空');
     }
   }
 
