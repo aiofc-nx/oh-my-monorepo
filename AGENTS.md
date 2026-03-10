@@ -1,4 +1,7 @@
-<!-- nx configuration start-->
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["CONTRIBUTING.md", "docs/guidelines.md", ".cursor/rules/*.md"]
+}<!-- nx configuration start-->
 <!-- Leave the start & end comments to automatically receive updates. -->
 
 # General Guidelines for working with Nx
