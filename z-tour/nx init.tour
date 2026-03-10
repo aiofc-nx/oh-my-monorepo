@@ -1,0 +1,30 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Nx Init",
+  "steps": [
+    {
+      "title": "Introduction",
+      "description": "# Nx 的初始化配置\n\n本项目将使用 Nx 作为构建管理工具。"
+    },
+    {
+      "file": "README.md",
+      "description": "- Nx 初始化\n\n```bash\nnpx nx@latest init\n```\n\n- 选择你需要的 AI 工具，我选择了 Cursor 和 OpenCode\n\n",
+      "line": 3
+    },
+    {
+      "file": "AGENTS.md",
+      "description": "- 这是 OpenCode 需要的关键文档\n- 写入了Nx 使用指南\n",
+      "line": 1
+    },
+    {
+      "file": ".cursor/AGENTS.md",
+      "description": "- 这是写给 Cursor 的\n",
+      "line": 1
+    },
+    {
+      "file": "opencode.json",
+      "description": " -  OpenCode 的配置",
+      "line": 1
+    }
+  ]
+}

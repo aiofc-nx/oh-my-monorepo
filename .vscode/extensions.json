@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "vsls-contrib.codetour",
+    "mhutchie.git-graph",
+    "github.vscode-pull-request-github",
+    "kuochunchang.goose-uml-vscode",
+    "nrwl.angular-console",
+    "sst-dev.opencode",
+    "jebbs.plantuml",
+    "pflannery.vscode-versionlens",
+    "ms-azuretools.vscode-docker",
+    "biomejs.biome",
+    "yzane.markdown-pdf"
+  ]
+}

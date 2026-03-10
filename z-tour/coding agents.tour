@@ -1,0 +1,30 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Coding Agent",
+  "steps": [
+    {
+      "title": "Introduction",
+      "description": "# Coding Agent 的约定\n\n## 配置\n\n本项目将使用 OpenCode 和 Cursor 两种 AI 代理辅助开发。\n\nNx 初始化时会引导你选择 AI 代理的配置，如果错过了可以执行以下脚本：\n\n```bash\nnpx nx configure-ai-agents\n```\n\n也可以使用：\n\n```bash\nnpx @z_ai/coding-helper\n```\n\n**约定**\n\n- `.opencode/` 是给 opencode 生态准备的目录，其他 AI 代理一般不会自动读取或执行。\n- 除非你在 Cursor 里**显式配置**了某个命令/脚本去读取 `.opencode/` 内容，否则它不会“自己发现并调用”。\n\n同样的，`.cursor/` 是给 cursor 生态准备的目录\n\n- `Cursor` 默认识别的是它自己的配置体系（如 `.cursor/`、`AGENTS.md`、rules/skills 等）。\n\n可以把它理解成：  \n**不同 AI 代理有各自的“约定目录”，默认互不通用。**\n\n## AI 心智模型: agent harness\nhttps://cursor.com/cn/learn/working-with-agents#agent-harness\n\n### 系统与用户提示词\n\n- Instructions (指令) ：用于引导行为的 system prompt (系统提示词) 和规则\n- Tools (工具) ：文件编辑、代码库搜索、终端命令执行等能力\n- Messages (消息) ：你用来指挥工作的提示词和后续对话\n\n**Agent > Rule > Command > Skill > MCP**\n\n**提示词（prompt）**\n\n就是：编排指令、调用工具、描述需求、定义规格\n\n### 如何管理上下文\nhttps://cursor.com/cn/learn/context#\n\n你的输入以及模型的输出都会成为“上下文”的一部分。可以把上下文想象成一个长列表，AI 模型在其中保留对话的工作记忆。\n\n列表的开头是系统提示词。工具创建者通过它为模型注入需遵循的指令或风格，用以引导输出的方向，并定义具体规则。\n\n接下来是用户消息或提示词。它可以是你想给模型的任何指令，例如添加一个用于管理用户账户的新路由。你不必保证完美的拼写或语法，AI 模型在理解你的意图方面出奇地好，但准确些总是更好。\n\n上下文也不局限于文本。许多 AI 产品现在支持附加图片，底层模型可以读取并理解图片内容，并将其文本表示纳入上下文。",
+      "selection": {
+        "start": {
+          "line": 21,
+          "character": 1
+        },
+        "end": {
+          "line": 22,
+          "character": 31
+        }
+      }
+    },
+    {
+      "file": "opencode.json",
+      "description": "这是本项目对 OpenCode 的配置。\n\n**注意**：OpenCode 的配置文件不止一个，全局的配置在`~/.config/opencode/opencode.json`。配置文件的读取有先后顺序，内容会合并，但是，相同项会被覆盖（后读者优先）。\n\n具体：https://opencode.ai/docs/config/",
+      "line": 1
+    },
+    {
+      "file": "AGENTS.md",
+      "description": "- `AGENTS.md`文件是 OpenCode 的规则文件。详见：https://opencode.ai/docs/rules/\n- 你可以通过`/init`命令创建。\n- 这个文件可以不止一个，你可以全局配置，也可以项目配置。\n- OpenCode 兼容 Claude Code 的相关配置文件。\n- 你还可以在`opencode.json`指定自定义的指令文件，这让你和你的团队可以重复使用规则，而不必重复，例如：\n```json\n{\n  \"$schema\": \"https://opencode.ai/config.json\",\n  \"instructions\": [\"CONTRIBUTING.md\", \"docs/guidelines.md\", \".cursor/rules/*.md\"]\n}\n```\n",
+      "line": 1
+    }
+  ]
+}

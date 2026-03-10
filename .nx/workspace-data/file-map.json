@@ -1,0 +1,670 @@
+{
+  "version": "6.0",
+  "nxVersion": "22.5.4",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [],
+    "projectFileMap": {
+      "oh-my-monorepo": [
+        {
+          "file": ".cursor/agents/ci-monitor-subagent.md",
+          "hash": "7536632319197658990"
+        },
+        {
+          "file": ".cursor/commands/monitor-ci.md",
+          "hash": "10706444342993344496"
+        },
+        {
+          "file": ".cursor/skills/link-workspace-packages/SKILL.md",
+          "hash": "6638592300654417978"
+        },
+        {
+          "file": ".cursor/skills/monitor-ci/SKILL.md",
+          "hash": "17989324963147088882"
+        },
+        {
+          "file": ".cursor/skills/monitor-ci/scripts/ci-poll-decide.mjs",
+          "hash": "3587439010022100346"
+        },
+        {
+          "file": ".cursor/skills/monitor-ci/scripts/ci-state-update.mjs",
+          "hash": "13401974159889364904"
+        },
+        {
+          "file": ".cursor/skills/nx-generate/SKILL.md",
+          "hash": "16801959272346088877"
+        },
+        {
+          "file": ".cursor/skills/nx-import/SKILL.md",
+          "hash": "12834437391178304444"
+        },
+        {
+          "file": ".cursor/skills/nx-import/references/GRADLE.md",
+          "hash": "15868511153961490698"
+        },
+        {
+          "file": ".cursor/skills/nx-import/references/JEST.md",
+          "hash": "8022966628634571060"
+        },
+        {
+          "file": ".cursor/skills/nx-import/references/NEXT.md",
+          "hash": "2570972841475183216"
+        },
+        {
+          "file": ".cursor/skills/nx-import/references/TURBOREPO.md",
+          "hash": "6654032474246573297"
+        },
+        {
+          "file": ".cursor/skills/nx-import/references/VITE.md",
+          "hash": "5723130412353202318"
+        },
+        {
+          "file": ".cursor/skills/nx-plugins/SKILL.md",
+          "hash": "4717624081372438208"
+        },
+        {
+          "file": ".cursor/skills/nx-run-tasks/SKILL.md",
+          "hash": "10723914446406921246"
+        },
+        {
+          "file": ".cursor/skills/nx-workspace/SKILL.md",
+          "hash": "14445122489349943565"
+        },
+        {
+          "file": ".cursor/skills/nx-workspace/references/AFFECTED.md",
+          "hash": "10577828056523124002"
+        },
+        {
+          "file": ".gitignore",
+          "hash": "16042766043954627478"
+        },
+        {
+          "file": ".opencode/agents/ci-monitor-subagent.md",
+          "hash": "3974731784079541034"
+        },
+        {
+          "file": ".opencode/agents/ci-monitor-subagent.zh-CN.md",
+          "hash": "12822820937592824540"
+        },
+        {
+          "file": ".opencode/agents/constitution.md",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": ".opencode/commands/monitor-ci.md",
+          "hash": "14189100750191815995"
+        },
+        {
+          "file": ".opencode/commands/monitor-ci.zh-CN.md",
+          "hash": "18150389200736090626"
+        },
+        {
+          "file": ".opencode/skills/link-workspace-packages/SKILL.md",
+          "hash": "6638592300654417978"
+        },
+        {
+          "file": ".opencode/skills/monitor-ci/SKILL.md",
+          "hash": "17989324963147088882"
+        },
+        {
+          "file": ".opencode/skills/monitor-ci/scripts/ci-poll-decide.mjs",
+          "hash": "3587439010022100346"
+        },
+        {
+          "file": ".opencode/skills/monitor-ci/scripts/ci-state-update.mjs",
+          "hash": "13401974159889364904"
+        },
+        {
+          "file": ".opencode/skills/nx-generate/SKILL.md",
+          "hash": "16801959272346088877"
+        },
+        {
+          "file": ".opencode/skills/nx-import/SKILL.md",
+          "hash": "12834437391178304444"
+        },
+        {
+          "file": ".opencode/skills/nx-import/references/GRADLE.md",
+          "hash": "15868511153961490698"
+        },
+        {
+          "file": ".opencode/skills/nx-import/references/JEST.md",
+          "hash": "8022966628634571060"
+        },
+        {
+          "file": ".opencode/skills/nx-import/references/NEXT.md",
+          "hash": "2570972841475183216"
+        },
+        {
+          "file": ".opencode/skills/nx-import/references/TURBOREPO.md",
+          "hash": "6654032474246573297"
+        },
+        {
+          "file": ".opencode/skills/nx-import/references/VITE.md",
+          "hash": "5723130412353202318"
+        },
+        {
+          "file": ".opencode/skills/nx-plugins/SKILL.md",
+          "hash": "4717624081372438208"
+        },
+        {
+          "file": ".opencode/skills/nx-run-tasks/SKILL.md",
+          "hash": "10723914446406921246"
+        },
+        {
+          "file": ".opencode/skills/nx-workspace/SKILL.md",
+          "hash": "14445122489349943565"
+        },
+        {
+          "file": ".opencode/skills/nx-workspace/references/AFFECTED.md",
+          "hash": "10577828056523124002"
+        },
+        {
+          "file": ".vscode/extensions.json",
+          "hash": "9553049267998014403"
+        },
+        {
+          "file": "AGENTS.md",
+          "hash": "3693179293707062853"
+        },
+        {
+          "file": "README.md",
+          "hash": "17767928930924412204"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/punctuation-fix.md",
+          "hash": "11276892416748538370"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/translation-auto.md",
+          "hash": "16421208324242105717"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/translation-detect.md",
+          "hash": "5221439710750378682"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/translation-execute.md",
+          "hash": "13094063614276774086"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/translation-fix.md",
+          "hash": "4747665907773781126"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/translation-qa.md",
+          "hash": "14098261894803228119"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/translation-review.md",
+          "hash": "6227769143079516716"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/translation-sync.md",
+          "hash": "10222156284699792135"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/commands/translation-workflow.md",
+          "hash": "11764202171814841458"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/settings.local.json",
+          "hash": "13101318174364117992"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/skills/release-post-verify/SKILL.md",
+          "hash": "13411470020323482232"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/skills/release-post-verify/validate_release_post.py",
+          "hash": "16732697066904255819"
+        },
+        {
+          "file": "forks/spec-kit-cn/.claude/skills/spec-kit-release/SKILL.md",
+          "hash": "10390358521281569599"
+        },
+        {
+          "file": "forks/spec-kit-cn/.devcontainer/devcontainer.json",
+          "hash": "17530776764178102668"
+        },
+        {
+          "file": "forks/spec-kit-cn/.devcontainer/post-create.sh",
+          "hash": "1977294229391793419"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/CODEOWNERS",
+          "hash": "15652191093984926120"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/ISSUE_TEMPLATE/agent_request.yml",
+          "hash": "14434156631169540931"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/ISSUE_TEMPLATE/bug_report.yml",
+          "hash": "8308547538740756906"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/ISSUE_TEMPLATE/config.yml",
+          "hash": "436140201314683784"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/ISSUE_TEMPLATE/extension_submission.yml",
+          "hash": "12528982767042337648"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/ISSUE_TEMPLATE/feature_request.yml",
+          "hash": "13821400591413044857"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/PULL_REQUEST_TEMPLATE.md",
+          "hash": "1329891249356038520"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/dependabot.yml",
+          "hash": "14238773226407342751"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/codeql.yml",
+          "hash": "7951395768194266036"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/docs.yml",
+          "hash": "9790171444698011388"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/lint.yml",
+          "hash": "109756428224482075"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/release.yml",
+          "hash": "7098562332934695452"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/scripts/check-release-exists.sh",
+          "hash": "10962220400205283772"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/scripts/create-github-release.sh",
+          "hash": "14131399089083285249"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/scripts/create-release-packages.sh",
+          "hash": "14506421405318546362"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/scripts/generate-release-notes.sh",
+          "hash": "2249491192242440058"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/scripts/get-next-version.sh",
+          "hash": "3730922406888999591"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/scripts/update-version.sh",
+          "hash": "17532817579538781153"
+        },
+        {
+          "file": "forks/spec-kit-cn/.github/workflows/test.yml",
+          "hash": "11898067496650932162"
+        },
+        {
+          "file": "forks/spec-kit-cn/.gitignore",
+          "hash": "9175355037128201411"
+        },
+        {
+          "file": "forks/spec-kit-cn/.markdownlint-cli2.jsonc",
+          "hash": "13361456383435155082"
+        },
+        {
+          "file": "forks/spec-kit-cn/.superset/config.json",
+          "hash": "5218957852255669675"
+        },
+        {
+          "file": "forks/spec-kit-cn/AGENTS.md",
+          "hash": "14510330780830411454"
+        },
+        {
+          "file": "forks/spec-kit-cn/CHANGELOG.md",
+          "hash": "2540889334974478115"
+        },
+        {
+          "file": "forks/spec-kit-cn/CLAUDE.md",
+          "hash": "809604341969013089"
+        },
+        {
+          "file": "forks/spec-kit-cn/CODE_OF_CONDUCT.md",
+          "hash": "12052412786100482948"
+        },
+        {
+          "file": "forks/spec-kit-cn/CONTRIBUTING.md",
+          "hash": "18446079264978481966"
+        },
+        {
+          "file": "forks/spec-kit-cn/LICENSE",
+          "hash": "5939812278313695531"
+        },
+        {
+          "file": "forks/spec-kit-cn/README.md",
+          "hash": "6724983421282542436"
+        },
+        {
+          "file": "forks/spec-kit-cn/SECURITY.md",
+          "hash": "233585454711170113"
+        },
+        {
+          "file": "forks/spec-kit-cn/SUPPORT.md",
+          "hash": "7801166017389667200"
+        },
+        {
+          "file": "forks/spec-kit-cn/TERMINOLOGY.md",
+          "hash": "11859194427659652280"
+        },
+        {
+          "file": "forks/spec-kit-cn/TRANSLATION_STANDARDS.md",
+          "hash": "1968730286228937604"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/.gitignore",
+          "hash": "8925090449207369091"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/README.md",
+          "hash": "8219390673039351498"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/docfx.json",
+          "hash": "4565644455035695379"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/index.md",
+          "hash": "14124615217521862310"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/installation.md",
+          "hash": "7658417742510644437"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/local-development.md",
+          "hash": "3629310998976247174"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/quickstart.md",
+          "hash": "2729418792402945403"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/toc.yml",
+          "hash": "4403659940589328673"
+        },
+        {
+          "file": "forks/spec-kit-cn/docs/upgrade.md",
+          "hash": "12431275155722474697"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/EXTENSION-API-REFERENCE.md",
+          "hash": "10485156899720714882"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/EXTENSION-DEVELOPMENT-GUIDE.md",
+          "hash": "5751271694828738461"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/EXTENSION-PUBLISHING-GUIDE.md",
+          "hash": "3419048150452167445"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/EXTENSION-USER-GUIDE.md",
+          "hash": "13919921608780999010"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/README.md",
+          "hash": "134900932275015196"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/RFC-EXTENSION-SYSTEM.md",
+          "hash": "1584321721565998030"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/catalog.community.json",
+          "hash": "11767152728547553205"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/catalog.json",
+          "hash": "17828860910769504167"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/template/.gitignore",
+          "hash": "7413785504880960383"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/template/CHANGELOG.md",
+          "hash": "5334160802748092062"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/template/EXAMPLE-README.md",
+          "hash": "18259561805947844180"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/template/LICENSE",
+          "hash": "3586999926698487380"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/template/README.md",
+          "hash": "12285488060536815924"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/template/commands/example.md",
+          "hash": "11397941662098107"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/template/config-template.yml",
+          "hash": "10373018464706484237"
+        },
+        {
+          "file": "forks/spec-kit-cn/extensions/template/extension.yml",
+          "hash": "11160657433404188923"
+        },
+        {
+          "file": "forks/spec-kit-cn/media/bootstrap-claude-code.gif",
+          "hash": "5097973481093783928"
+        },
+        {
+          "file": "forks/spec-kit-cn/media/logo_large.webp",
+          "hash": "15019510540304736484"
+        },
+        {
+          "file": "forks/spec-kit-cn/media/logo_small.webp",
+          "hash": "17209856772059129973"
+        },
+        {
+          "file": "forks/spec-kit-cn/media/spec-kit-video-header.jpg",
+          "hash": "9634428480731783755"
+        },
+        {
+          "file": "forks/spec-kit-cn/media/specify_cli.gif",
+          "hash": "1914670068260488227"
+        },
+        {
+          "file": "forks/spec-kit-cn/memory/constitution.md",
+          "hash": "1668316937737022204"
+        },
+        {
+          "file": "forks/spec-kit-cn/pyproject.toml",
+          "hash": "10690948027593714982"
+        },
+        {
+          "file": "forks/spec-kit-cn/quality-check.sh",
+          "hash": "15722100737568521537"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/bash/check-prerequisites.sh",
+          "hash": "6763456663899778838"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/bash/common.sh",
+          "hash": "2392517760819154697"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/bash/create-new-feature.sh",
+          "hash": "15594544835992755634"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/bash/setup-plan.sh",
+          "hash": "2891942150997124681"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/bash/update-agent-context.sh",
+          "hash": "1135589242483776976"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/powershell/check-prerequisites.ps1",
+          "hash": "7097216292487290145"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/powershell/common.ps1",
+          "hash": "5405108446759043503"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/powershell/create-new-feature.ps1",
+          "hash": "5861740868574266783"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/powershell/setup-plan.ps1",
+          "hash": "9511354185509548732"
+        },
+        {
+          "file": "forks/spec-kit-cn/scripts/powershell/update-agent-context.ps1",
+          "hash": "936906501012414894"
+        },
+        {
+          "file": "forks/spec-kit-cn/spec-driven.md",
+          "hash": "14871560370660965540"
+        },
+        {
+          "file": "forks/spec-kit-cn/src/specify_cli/__init__.py",
+          "hash": "2218856235999376048"
+        },
+        {
+          "file": "forks/spec-kit-cn/src/specify_cli/extensions.py",
+          "hash": "10385530739519857983"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/agent-file-template.md",
+          "hash": "614601897200972210"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/checklist-template.md",
+          "hash": "6415141565679467935"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/analyze.md",
+          "hash": "487509683143987758"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/checklist.md",
+          "hash": "11455953767354671939"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/clarify.md",
+          "hash": "3372066461816853934"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/constitution.md",
+          "hash": "14628461801275123365"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/implement.md",
+          "hash": "18165184516634283290"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/plan.md",
+          "hash": "16338208442470144821"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/specify.md",
+          "hash": "11250338394702311908"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/tasks.md",
+          "hash": "12175176437353812847"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/commands/taskstoissues.md",
+          "hash": "2711826898552203237"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/constitution-template.md",
+          "hash": "1668316937737022204"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/plan-template.md",
+          "hash": "7353262459505978177"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/spec-template.md",
+          "hash": "7651206732662922991"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/tasks-template.md",
+          "hash": "15015638038510588449"
+        },
+        {
+          "file": "forks/spec-kit-cn/templates/vscode-settings.json",
+          "hash": "4877884049848672442"
+        },
+        {
+          "file": "forks/spec-kit-cn/tests/__init__.py",
+          "hash": "4374769108243127375"
+        },
+        {
+          "file": "forks/spec-kit-cn/tests/e2e/validate-release.sh",
+          "hash": "286369982003176388"
+        },
+        {
+          "file": "forks/spec-kit-cn/tests/test_ai_skills.py",
+          "hash": "13153137276244010698"
+        },
+        {
+          "file": "forks/spec-kit-cn/tests/test_cursor_frontmatter.py",
+          "hash": "18215241681452916181"
+        },
+        {
+          "file": "forks/spec-kit-cn/tests/test_extensions.py",
+          "hash": "17415527741601223594"
+        },
+        {
+          "file": "nx.json",
+          "hash": "2250051526818301088"
+        },
+        {
+          "file": "opencode.json",
+          "hash": "11006667747569893826"
+        },
+        {
+          "file": "package-lock.json",
+          "hash": "6234762746944901471"
+        },
+        {
+          "file": "package.json",
+          "hash": "15870913860611677280"
+        },
+        {
+          "file": "putting-it-together-tutorial.md",
+          "hash": "12482940135983035437"
+        },
+        {
+          "file": "putting-it-together-tutorial_tmp.html",
+          "hash": "9704384156396358996"
+        },
+        {
+          "file": "z-tour/coding agents.tour",
+          "hash": "7623945508820860088"
+        },
+        {
+          "file": "z-tour/nx init.tour",
+          "hash": "2709360020949189062"
+        }
+      ]
+    }
+  },
+  "externalNodesHash": "6283271433489535986"
+}
