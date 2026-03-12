@@ -1,0 +1,16 @@
+{
+  "extends": "@oksai/tsconfig/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "declaration": true,
+    "types": ["node"],
+    "sourceMap": true,
+    "noEmit": false,
+    "skipLibCheck": true
+  },
+  "include": ["./generators.json", "./src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

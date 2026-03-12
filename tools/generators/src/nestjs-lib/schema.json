@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "NestjsLib",
+  "title": "Create NestJS Library (ESM + Vitest + SWC)",
+  "description": "创建面向 NestJS v12 的库，使用 ESM + Vitest + SWC",
+  "type": "object",
+  "examples": [
+    {
+      "command": "nx g nestjs-lib mylib",
+      "description": "在 libs/mylib 创建 NestJS 库"
+    },
+    {
+      "command": "nx g nestjs-lib mylib --buildable",
+      "description": "创建可构建的 NestJS 库"
+    }
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "库名称",
+      "pattern": "(?:^@[a-zA-Z0-9-*~][a-zA-Z0-9-*._~]*\\/[a-zA-Z0-9-~][a-zA-Z0-9-._~]*|^[a-zA-Z][^:]*)$",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "库名称?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "库目录 (默认: libs/<name>)",
+      "alias": "dir"
+    },
+    "tags": {
+      "type": "string",
+      "description": "项目标签 (逗号分隔)",
+      "default": "type:lib,framework:nest",
+      "alias": "t"
+    },
+    "importPath": {
+      "type": "string",
+      "description": "导入路径 (默认: @oksai/<name>)"
+    },
+    "buildable": {
+      "type": "boolean",
+      "description": "创建可构建的库",
+      "default": false,
+      "x-prompt": "是否可构建?",
+      "x-priority": "important"
+    },
+    "publishable": {
+      "type": "boolean",
+      "description": "创建可发布的库",
+      "default": false
+    },
+    "skipPackageJson": {
+      "type": "boolean",
+      "description": "跳过添加依赖到 package.json",
+      "default": false,
+      "x-priority": "internal"
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "跳过格式化",
+      "default": false,
+      "x-priority": "internal"
+    }
+  },
+  "required": ["name"]
+}

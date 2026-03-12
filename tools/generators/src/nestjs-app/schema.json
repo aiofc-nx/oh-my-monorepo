@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "NestjsApp",
+  "title": "Create NestJS Application (ESM + Vitest + SWC)",
+  "description": "创建面向 NestJS v12 的应用，使用 ESM + Vitest + SWC",
+  "type": "object",
+  "examples": [
+    {
+      "command": "nx g nestjs-app myapp",
+      "description": "在 apps/myapp 创建 NestJS 应用"
+    },
+    {
+      "command": "nx g nestjs-app myapp --directory=my-project",
+      "description": "在 apps/my-project 创建 NestJS 应用"
+    }
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "应用名称",
+      "pattern": "(?:^@[a-zA-Z0-9-*~][a-zA-Z0-9-*._~]*\\/[a-zA-Z0-9-~][a-zA-Z0-9-._~]*|^[a-zA-Z][^:]*)$",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "应用名称?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "应用目录 (默认: apps/<name>)",
+      "alias": "dir"
+    },
+    "tags": {
+      "type": "string",
+      "description": "项目标签 (逗号分隔)",
+      "default": "type:app,framework:nest",
+      "alias": "t"
+    },
+    "importPath": {
+      "type": "string",
+      "description": "导入路径 (默认: @oksai/<name>)"
+    },
+    "skipPackageJson": {
+      "type": "boolean",
+      "description": "跳过添加依赖到 package.json",
+      "default": false,
+      "x-priority": "internal"
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "跳过格式化",
+      "default": false,
+      "x-priority": "internal"
+    }
+  },
+  "required": ["name"]
+}
