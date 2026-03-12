@@ -1,0 +1,14 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "test-lib": ["libs/test-lib/src/index.ts"],
+      "mylib": ["libs/mylib/src/index.ts"],
+      "sample-lib": ["libs/sample-lib/src/index.ts"],
+      "test-react-lib": ["libs/test-react-lib/src/index.ts"],
+      "buildable-lib": ["libs/buildable-lib/src/index.ts"],
+      "shared-utils": ["libs/shared-utils/src/index.ts"]
+    }
+  }
+}

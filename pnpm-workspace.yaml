@@ -2,6 +2,7 @@ packages:
   - apps/*
   - libs/**
   - libs/*/*
+  - tools/*
 
 catalog:
   '@better-auth/api-key': ^1.5.2

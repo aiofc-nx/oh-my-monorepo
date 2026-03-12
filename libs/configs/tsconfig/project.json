@@ -1,0 +1,7 @@
+{
+  "name": "@oksai/tsconfig",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/configs/tsconfig",
+  "projectType": "library",
+  "tags": ["type:config", "shared"]
+}

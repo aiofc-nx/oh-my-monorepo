@@ -25,6 +25,7 @@
     "includes": [
       "apps/**/*.{ts,tsx,js,jsx,mts,mjs}",
       "libs/**/*.{ts,tsx,js,jsx,mts,mjs}",
+      "test-skill-app/**/*.{ts,tsx,js,jsx,mts,mjs}",
       "!**/node_modules",
       "!**/.next",
       "!**/.turbo",

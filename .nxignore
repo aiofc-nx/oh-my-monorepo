@@ -1,0 +1,32 @@
+# Documentation - changes shouldn't trigger CI
+docs/
+*.md
+!README.md
+!libs/*/README.md
+
+# IDE settings
+.vscode/
+.idea/
+
+# Tutorials and tours
+tutorials/
+z-tour/
+
+# Forked repositories
+forks/
+
+# Temporary files
+*.log
+tmp/
+test-output/
+
+# Config files that don't affect builds
+.cursor/
+.opencode/
+.specify/
+biome-staged.json
+opencode.json
+
+# CI/CD cache
+.nx/cache
+.nx/workspace-data
