@@ -323,10 +323,12 @@ pnpm nx g @oksai/generators:vite-react-lib shared-ui --directory=libs/shared-ui 
 pnpm nx test shared-types shared-ui
 ```
 
-### Scenario 3: Publishable Library
+### Scenario 3: Publishable Library (Internal)
+
+**Note**: This creates a library for internal monorepo sharing with publish capability. For external public packages, see Scenario 4.
 
 ```bash
-# Create npm package
+# Create library with publish capability (still in libs/)
 pnpm nx g @oksai/generators:vite-react-lib my-component-lib \
   --directory=libs/my-component-lib \
   --publishable \
@@ -336,10 +338,62 @@ pnpm nx g @oksai/generators:vite-react-lib my-component-lib \
 # Build
 pnpm nx build my-component-lib
 
-# Publish
+# Publish to npm (optional, for internal sharing)
 cd dist/libs/my-component-lib
 npm publish
 ```
+
+### Scenario 4: Public Package (External)
+
+**For packages intended for external/public use**, create them manually in `packages/`:
+
+```bash
+# 1. Create directory structure
+mkdir -p packages/my-sdk/src
+
+# 2. Create package.json
+cat > packages/my-sdk/package.json <<'EOF'
+{
+  "name": "@myorg/my-sdk",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"]
+}
+EOF
+
+# 3. Create source files
+echo "export const hello = () => 'Hello';" > packages/my-sdk/src/index.ts
+
+# 4. Configure tsconfig.json
+cat > packages/my-sdk/tsconfig.json <<'EOF'
+{
+  "extends": "@oksai/tsconfig/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"]
+}
+EOF
+
+# 5. Build and publish
+cd packages/my-sdk
+npx tsc
+npm publish
+```
+
+**When to use `packages/` vs `libs/`**:
+
+- **Use `libs/`** + `--publishable`:
+  - Shared within monorepo, occasionally published to npm
+  - Managed by Nx generators
+  - Version follows monorepo conventions
+
+- **Use `packages/`** (manual):
+  - Designed for external/public use
+  - Independent versioning and release cycle
+  - Examples: SDKs, config packages, UI component libraries
 
 ## Generator Options Reference
 
@@ -468,22 +522,49 @@ cat apps/<name>/vite.config.mts
 
 ```bash
 # Remove all related directories
-rm -rf apps/<name> apps/<name>-e2e libs/<name>
+rm -rf apps/<name> apps/<name>-e2e libs/<name> packages/<name>
 
 # Regenerate
 pnpm nx g @oksai/generators:<generator> <name> --directory=<correct-directory>/<name>
 ```
 
+### Unsure Whether to Use libs/ or packages/
+
+**Question**: Should my library go in `libs/` or `packages/`?
+
+**Decision Guide**:
+
+| Criteria                       | Use `libs/`           | Use `packages/`        |
+| ------------------------------ | --------------------- | ---------------------- |
+| **Primary audience**           | Internal team         | External community     |
+| **Publishing frequency**       | Rarely/Occasionally   | Regularly              |
+| **Version management**         | Follows monorepo      | Independent            |
+| **Documentation requirements** | Minimal               | Comprehensive          |
+| **Breaking changes impact**    | Low (internal)        | High (external)        |
+| **Examples**                   | Business logic, utils | SDKs, UI libs, configs |
+
+**Recommendation**:
+
+- Start in `libs/` with `--publishable` if needed
+- Move to `packages/` when:
+  - External users > internal users
+  - Independent release cycle is required
+  - Package becomes a standalone product
+
 ## Best Practices
 
 1. **ALWAYS specify `--directory` explicitly** - Double guarantee correct project location
 2. **Always dry-run first** - Verify file locations before generating
-3. **Verify directory after generation** - Check project is in `apps/` or `libs/`
-4. **Use tags** - Organize projects with meaningful tags
-5. **Follow naming conventions** - Use kebab-case for project names
-6. **Keep libs non-buildable by default** - Only add build steps when necessary
-7. **Test after generating** - Verify generated code passes all checks
-8. **Customize after generation** - Generators provide a foundation, not the final product
+3. **Verify directory after generation** - Check project is in `apps/`, `libs/`, or `packages/`
+4. **Use the right directory**:
+   - `apps/` for deployable applications
+   - `libs/` for internal private libraries (use generators)
+   - `packages/` for public packages (create manually)
+5. **Use tags** - Organize projects with meaningful tags
+6. **Follow naming conventions** - Use kebab-case for project names
+7. **Keep libs non-buildable by default** - Only add build steps when necessary
+8. **Test after generating** - Verify generated code passes all checks
+9. **Customize after generation** - Generators provide a foundation, not the final product
 
 ## Directory Convention Summary
 

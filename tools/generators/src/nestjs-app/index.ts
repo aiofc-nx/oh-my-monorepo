@@ -39,7 +39,7 @@ export async function nestjsAppGeneratorInternal(
     directory: options.appProjectRoot,
     framework: 'nest',
     bundler: 'webpack',
-    unitTestRunner: 'jest',
+    unitTestRunner: 'none',
     linter: 'none',
     tags: options.tags,
     skipFormat: true,

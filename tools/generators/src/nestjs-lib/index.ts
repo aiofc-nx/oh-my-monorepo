@@ -36,7 +36,7 @@ export async function nestjsLibGeneratorInternal(
     name: options.projectName,
     directory: options.projectRoot,
     bundler: options.buildable || options.publishable ? 'tsc' : 'none',
-    unitTestRunner: 'jest',
+    unitTestRunner: 'none',
     linter: 'none',
     tags: options.tags,
     skipFormat: true,

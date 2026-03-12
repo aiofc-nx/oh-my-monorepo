@@ -6,8 +6,9 @@ argument-hint: '<项目名称>'
 
 > **🎯 核心约定（必须遵守）**：
 >
-> - 应用（App）→ `apps/<name>`
-> - 库（Lib）→ `libs/<name>`
+> - **应用（App）** → `apps/<name>`
+> - **内部库（Internal Lib）** → `libs/<name>`（私有，仅供内部使用）
+> - **公共包（Public Package）** → `packages/<name>`（可发布，供外部使用）
 > - 所有命令必须显式指定 `--directory` 参数
 
 ---
@@ -87,6 +88,20 @@ ls -1 packages/ 2>/dev/null | sed 's/^/  - /' || echo "  (空)"`
 1. 项目类型: NestJS / React 应用还是库?
 2. 样式方案 (仅 React): CSS / Tailwind / None
 3. 是否需要构建 (仅库): buildable / publishable
+4. **库的用途 (重要)**:
+   - **内部库 (libs/)**: 仅供 monorepo 内部使用，使用生成器创建
+   - **公共包 (packages/)**: 需要发布到 npm 供外部使用，手动创建
+
+**决策指南**:
+
+| 场景               | 使用 libs/ (生成器)  | 使用 packages/ (手动) |
+| ------------------ | -------------------- | --------------------- |
+| 主要受众是内部团队 | ✅                   | ❌                    |
+| 主要受众是外部社区 | ❌                   | ✅                    |
+| 偶尔发布到 npm     | ✅ (+ --publishable) | ❌                    |
+| 定期独立发布       | ❌                   | ✅                    |
+| 版本跟随 monorepo  | ✅                   | ❌                    |
+| 需要独立版本管理   | ❌                   | ✅                    |
 
 ### 步骤 2: 使用 @oksai/generators（推荐）
 
@@ -355,6 +370,51 @@ echo '```'`
 
 ---
 
+### 创建公共包（手动）
+
+**注意**: 公共包（packages/）不使用生成器，需要手动创建。
+
+!`echo "**命令**: 手动创建公共包"
+echo ""
+echo "示例：创建 @myorg/my-sdk 公共包"
+echo '```bash'
+echo "# 1. 创建目录结构"
+echo "mkdir -p packages/my-sdk/src"
+echo ""
+echo "# 2. 创建 package.json"
+echo "cat > packages/my-sdk/package.json <<'\''EOF'\''"
+echo "{"
+echo "  \"name\": \"@myorg/my-sdk\","
+echo "  \"version\": \"1.0.0\","
+echo "  \"main\": \"dist/index.js\","
+echo "  \"types\": \"dist/index.d.ts\","
+echo "  \"files\": [\"dist\"]"
+echo "}"
+echo "EOF"
+echo ""
+echo "# 3. 创建源代码"
+echo "echo \"export const hello = () => 'Hello';\" > packages/my-sdk/src/index.ts"
+echo ""
+echo "# 4. 配置 tsconfig.json"
+echo "cat > packages/my-sdk/tsconfig.json <<'\''EOF'\''"
+echo "{"
+echo "  \"extends\": \"@oksai/tsconfig/base.json\","
+echo "  \"compilerOptions\": {"
+echo "    \"outDir\": \"dist\","
+echo "    \"rootDir\": \"src\""
+echo "  },"
+echo "  \"include\": [\"src/**/*\"]"
+echo "}"
+echo "EOF"
+echo ""
+echo "# 5. 构建和发布"
+echo "cd packages/my-sdk"
+echo "npx tsc"
+echo "npm publish"
+echo '```'`
+
+---
+
 ## 🚫 已移除的手动步骤
 
 使用 `@oksai/generators` 后，**无需手动更新**：
@@ -389,8 +449,11 @@ echo '```'`
    # 应用应该在 apps/ 目录
    ls apps/<name>
 
-   # 库应该在 libs/ 目录
+   # 内部库应该在 libs/ 目录
    ls libs/<name>
+
+   # 公共包应该在 packages/ 目录（手动创建）
+   ls packages/<name>
    ```
 
 2. **开发**: `pnpm nx serve <name>` (应用)
@@ -403,7 +466,7 @@ echo '```'`
 
 ## 🔧 故障排查
 
-### 问题：项目生成在根目录而非 apps/ 或 libs/
+### 问题：项目生成在根目录而非 apps/、libs/ 或 packages/
 
 **原因**: 未显式指定 `--directory` 参数
 
@@ -414,6 +477,47 @@ echo '```'`
    ```bash
    rm -rf <name> <name>-e2e
    ```
+
+2. 重新生成，显式指定目录：
+
+   ```bash
+   # 应用
+   pnpm nx g @oksai/generators:nestjs-app <name> --directory=apps/<name>
+
+   # 内部库
+   pnpm nx g @oksai/generators:nestjs-lib <name> --directory=libs/<name>
+
+   # 公共包（不使用生成器，手动创建）
+   mkdir -p packages/<name>
+   ```
+
+3. 验证目录：
+   ```bash
+   ls apps/<name>   # 应用应该在 apps/
+   ls libs/<name>   # 内部库应该在 libs/
+   ls packages/<name>  # 公共包应该在 packages/
+   ```
+
+### 问题：不确定应该放在 libs/ 还是 packages/
+
+**决策指南**:
+
+| 考虑因素             | 使用 libs/         | 使用 packages/    |
+| -------------------- | ------------------ | ----------------- |
+| **主要受众**         | 内部团队           | 外部社区          |
+| **发布频率**         | 偶尔/很少          | 定期              |
+| **版本管理**         | 跟随 monorepo      | 独立              |
+| **文档要求**         | 最小化             | 全面              |
+| **破坏性变更的影响** | 低（内部）         | 高（外部）        |
+| **示例**             | 业务逻辑、工具函数 | SDK、UI库、配置包 |
+
+**推荐**:
+
+- 从 `libs/` 开始（使用 `--publishable` 如需发布）
+- 当以下情况时移至 `packages/`：
+  - 外部用户 > 内部用户
+  - 需要独立的发布周期
+  - 包成为独立产品
 
 2. 重新生成，显式指定目录：
 
