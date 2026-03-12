@@ -50,8 +50,11 @@ fi`
 !`echo "**应用 (apps/)**:"
 ls -1 apps/ 2>/dev/null | sed 's/^/  - /' || echo "  (空)"
 echo ""
-echo "**库 (libs/)**:"
-ls -1 libs/ 2>/dev/null | sed 's/^/  - /' || echo "  (空)"`
+echo "**内部库 (libs/)**:"
+ls -1 libs/ 2>/dev/null | grep -v "^\.gitkeep$" | sed 's/^/  - /' || echo "  (空)"
+echo ""
+echo "**公共包 (packages/)**:"
+ls -1 packages/ 2>/dev/null | sed 's/^/  - /' || echo "  (空)"`
 
 ---
 
@@ -60,7 +63,16 @@ ls -1 libs/ 2>/dev/null | sed 's/^/  - /' || echo "  (空)"`
 **必须遵守的目录规则**：
 
 - **应用（Application）** → 必须放在 `apps/` 目录
-- **库（Library）** → 必须放在 `libs/` 目录
+- **内部库（Internal Library）** → 必须放在 `libs/` 目录
+- **公共包（Public Package）** → 必须放在 `packages/` 目录
+
+**目录用途说明**：
+
+| 目录        | 用途       | 特点                         | 示例                               |
+| ----------- | ---------- | ---------------------------- | ---------------------------------- |
+| `apps/`     | 应用程序   | 可部署的服务、前端应用       | `api`, `web`, `admin`              |
+| `libs/`     | 内部私有库 | 仅供项目内部使用，不对外发布 | `shared`, `utils`, `domain`        |
+| `packages/` | 外部公共包 | 可发布到 npm，供外部使用     | `tsconfig`, `sdk`, `ui-components` |
 
 所有生成器命令**必须显式指定** `--directory` 参数，双重保障目录正确性。
 

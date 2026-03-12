@@ -10,8 +10,15 @@ description: Use @oksai/generators to scaffold NestJS and React applications wit
 > **🎯 Core Convention (MUST follow)**:
 >
 > - **Applications (App)** → Must be in `apps/<name>`
-> - **Libraries (Lib)** → Must be in `libs/<name>`
+> - **Internal Libraries (Lib)** → Must be in `libs/<name>` (private, internal use only)
+> - **Public Packages (Package)** → Must be in `packages/<name>` (publishable, external use)
 > - **ALWAYS specify `--directory` explicitly** for double guarantee
+>
+> **Directory Purpose**:
+>
+> - `apps/` - Deployable applications (API, web, admin, etc.)
+> - `libs/` - Internal private libraries (shared utils, domain logic, etc.)
+> - `packages/` - Public packages publishable to npm (SDKs, config packages, UI components, etc.)
 
 ## What This Skill Covers
 
@@ -480,12 +487,14 @@ pnpm nx g @oksai/generators:<generator> <name> --directory=<correct-directory>/<
 
 ## Directory Convention Summary
 
-| Artifact Type | Default Directory | Example Command                                                       |
-| ------------- | ----------------- | --------------------------------------------------------------------- |
-| NestJS App    | `apps/<name>`     | `pnpm nx g @oksai/generators:nestjs-app api --directory=apps/api`     |
-| NestJS Lib    | `libs/<name>`     | `pnpm nx g @oksai/generators:nestjs-lib utils --directory=libs/utils` |
-| React App     | `apps/<name>`     | `pnpm nx g @oksai/generators:vite-react-app web --directory=apps/web` |
-| React Lib     | `libs/<name>`     | `pnpm nx g @oksai/generators:vite-react-lib ui --directory=libs/ui`   |
+| Artifact Type | Default Directory | Purpose              | Example Command                                                       |
+| ------------- | ----------------- | -------------------- | --------------------------------------------------------------------- |
+| NestJS App    | `apps/<name>`     | Deployable API       | `pnpm nx g @oksai/generators:nestjs-app api --directory=apps/api`     |
+| React App     | `apps/<name>`     | Deployable frontend  | `pnpm nx g @oksai/generators:vite-react-app web --directory=apps/web` |
+| NestJS Lib    | `libs/<name>`     | Internal private lib | `pnpm nx g @oksai/generators:nestjs-lib utils --directory=libs/utils` |
+| React Lib     | `libs/<name>`     | Internal private lib | `pnpm nx g @oksai/generators:vite-react-lib ui --directory=libs/ui`   |
+
+**Note**: For publishable packages intended for external use, manually create them in `packages/` directory (e.g., SDKs, shared configs, UI component libraries).
 
 ## Related Skills
 

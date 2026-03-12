@@ -5,8 +5,15 @@
 > **🎯 核心约定（必须遵守）**：
 >
 > - **应用（Application）** → 必须放在 `apps/` 目录
-> - **库（Library）** → 必须放在 `libs/` 目录
+> - **内部库（Internal Library）** → 必须放在 `libs/` 目录（私有，仅供内部使用）
+> - **公共包（Public Package）** → 必须放在 `packages/` 目录（可发布，供外部使用）
 > - **所有命令推荐显式指定** `--directory` 参数
+>
+> **目录用途**：
+>
+> - `apps/` - 可部署的应用程序（API、Web、Admin 等）
+> - `libs/` - 内部私有库（共享工具、领域逻辑等）
+> - `packages/` - 可发布到 npm 的公共包（SDK、配置包、UI 组件库等）
 
 ## 📋 目录
 
@@ -782,12 +789,33 @@ async function normalizeOptions(tree: Tree, options: Schema) {
 
 **目录约定总结**：
 
-| 项目类型    | 默认目录      | 示例                                                |
-| ----------- | ------------- | --------------------------------------------------- |
-| NestJS 应用 | `apps/<name>` | `pnpm nx g nestjs-app api --directory=apps/api`     |
-| NestJS 库   | `libs/<name>` | `pnpm nx g nestjs-lib utils --directory=libs/utils` |
-| React 应用  | `apps/<name>` | `pnpm nx g vite-react-app web --directory=apps/web` |
-| React 库    | `libs/<name>` | `pnpm nx g vite-react-lib ui --directory=libs/ui`   |
+| 项目类型    | 默认目录      | 用途       | 示例                                                |
+| ----------- | ------------- | ---------- | --------------------------------------------------- |
+| NestJS 应用 | `apps/<name>` | 可部署 API | `pnpm nx g nestjs-app api --directory=apps/api`     |
+| React 应用  | `apps/<name>` | 可部署前端 | `pnpm nx g vite-react-app web --directory=apps/web` |
+| NestJS 库   | `libs/<name>` | 内部私有库 | `pnpm nx g nestjs-lib utils --directory=libs/utils` |
+| React 库    | `libs/<name>` | 内部私有库 | `pnpm nx g vite-react-lib ui --directory=libs/ui`   |
+
+**注意**：对于需要对外发布的公共包（如 SDK、配置包、UI 组件库），请手动在 `packages/` 目录中创建，不使用生成器。
+
+**目录用途详解**：
+
+- `apps/` - 应用程序
+  - 可部署的服务（API、后台管理、前端应用等）
+  - 通常有独立的服务器或构建产物
+
+- `libs/` - 内部私有库
+  - 业务逻辑共享模块
+  - 工具函数、数据访问层
+  - 领域模型、基础设施代码
+  - **不对外发布**，仅供项目内部使用
+
+- `packages/` - 公共包（手动管理）
+  - 可发布到 npm 的包
+  - SDK、客户端库
+  - 配置包（如 `@oksai/tsconfig`）
+  - UI 组件库（对外发布）
+  - **需要独立版本管理**和发布流程
 
 **验证方法**：
 
