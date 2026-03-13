@@ -1,18 +1,12 @@
 {
   "version": "0.2.0",
   "configurations": [
-    // ============================================================
-    // 应用调试配置
-    // 说明：使用 Nx serve 调试应用，会自动监听文件变化
-    // 用法：选择配置 → F5 开始调试 → 在代码中设置断点
-    // ============================================================
-    
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug App (NestJS)",
+      "name": "Debug api with Nx",
       "runtimeExecutable": "pnpm exec",
-      "runtimeArgs": ["nx", "serve", "${input:appName}"],
+      "runtimeArgs": ["nx", "serve", "api"],
       "env": {
         "NODE_OPTIONS": "--inspect=9229"
       },
@@ -21,17 +15,16 @@
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceFolder}/apps/${input:appName}/dist/**/*.(m|c|)js",
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
         "!**/node_modules/**"
       ]
     },
-    
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug App (React + Vite)",
+      "name": "Debug api with Nx",
       "runtimeExecutable": "pnpm exec",
-      "runtimeArgs": ["nx", "serve", "${input:appName}"],
+      "runtimeArgs": ["nx", "serve", "api"],
       "env": {
         "NODE_OPTIONS": "--inspect=9230"
       },
@@ -40,154 +33,243 @@
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceFolder}/apps/${input:appName}/.vite/**/*",
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
         "!**/node_modules/**"
       ]
     },
-    
-    // ============================================================
-    // 测试调试配置
-    // 说明：调试 Jest/Vitest 单元测试
-    // 用法：选择配置 → 在测试文件中设置断点 → F5 开始调试
-    // ============================================================
-    
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Jest Tests",
+      "name": "Debug api with Nx",
       "runtimeExecutable": "pnpm exec",
-      "runtimeArgs": ["nx", "test", "${input:projectName}"],
+      "runtimeArgs": ["nx", "serve", "api"],
       "env": {
-        "NODE_OPTIONS": "--inspect=9250"
+        "NODE_OPTIONS": "--inspect=9231"
       },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceFolder}/apps/${input:projectName}/dist/**/*.(m|c|)js",
-        "${workspaceFolder}/libs/${input:projectName}/dist/**/*.(m|c|)js",
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
         "!**/node_modules/**"
       ]
     },
-    
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Vitest Tests",
+      "name": "Debug api with Nx",
       "runtimeExecutable": "pnpm exec",
-      "runtimeArgs": ["nx", "test", "${input:projectName}"],
+      "runtimeArgs": ["nx", "serve", "api"],
       "env": {
-        "NODE_OPTIONS": "--inspect=9251"
+        "NODE_OPTIONS": "--inspect=9232"
       },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceFolder}/apps/${input:projectName}/dist/**/*.(m|c|)js",
-        "${workspaceFolder}/libs/${input:projectName}/dist/**/*.(m|c|)js",
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
         "!**/node_modules/**"
       ]
     },
-    
-    // ============================================================
-    // 附加到运行中的进程
-    // 说明：附加到已经启动的 Node 进程进行调试
-    // 用法：1. 启动应用时添加 --inspect=PORT
-    //      2. 选择此配置 → F5 开始调试
-    // ============================================================
-    
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to Node Process (9229)",
-      "port": 9229,
-      "restart": true,
-      "skipFiles": ["<node_internals>/**"],
-      "sourceMaps": true,
-      "outFiles": [
-        "${workspaceFolder}/apps/*/dist/**/*.(m|c|)js",
-        "${workspaceFolder}/libs/*/dist/**/*.(m|c|)js",
-        "${workspaceFolder}/packages/*/dist/**/*.(m|c|)js",
-        "!**/node_modules/**"
-      ]
-    },
-    
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to Node Process (Custom Port)",
-      "port": "${input:customPort}",
-      "restart": true,
-      "skipFiles": ["<node_internals>/**"],
-      "sourceMaps": true
-    },
-    
-    // ============================================================
-    // E2E 测试调试配置
-    // 说明：调试 E2E 测试（需要配合 Cypress/Playwright）
-    // ============================================================
-    
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug E2E Tests",
+      "name": "Debug api with Nx",
       "runtimeExecutable": "pnpm exec",
-      "runtimeArgs": ["nx", "e2e", "${input:e2eProjectName}"],
+      "runtimeArgs": ["nx", "serve", "api"],
       "env": {
-        "NODE_OPTIONS": "--inspect=9252"
+        "NODE_OPTIONS": "--inspect=9233"
       },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "skipFiles": ["<node_internals>/**"]
-    }
-  ],
-  
-  // ============================================================
-  // 输入变量定义
-  // 说明：VSCode 会在启动调试时提示输入这些值
-  // ============================================================
-  
-  "inputs": [
-    {
-      "id": "appName",
-      "type": "pickString",
-      "description": "Select application name",
-      "options": [
-        "api",
-        "web",
-        "admin"
-      ],
-      "default": "api"
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
     },
     {
-      "id": "projectName",
-      "type": "pickString",
-      "description": "Select project name (app or lib)",
-      "options": [
-        "api",
-        "web",
-        "shared",
-        "utils"
-      ],
-      "default": "api"
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9234"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
     },
     {
-      "id": "e2eProjectName",
-      "type": "pickString",
-      "description": "Select E2E test project name",
-      "options": [
-        "api-e2e",
-        "web-e2e"
-      ],
-      "default": "api-e2e"
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9235"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
     },
     {
-      "id": "customPort",
-      "type": "promptString",
-      "description": "Enter custom debug port",
-      "default": "9229"
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9236"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9237"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9238"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9239"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9240"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9241"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9242"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api with Nx",
+      "runtimeExecutable": "pnpm exec",
+      "runtimeArgs": ["nx", "serve", "api"],
+      "env": {
+        "NODE_OPTIONS": "--inspect=9243"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/apps/api/dist/**/*.(m|c|)js",
+        "!**/node_modules/**"
+      ]
     }
   ]
 }

@@ -1,0 +1,9 @@
+export const nestJsVersion = '^11.0.0';
+export const nestJsSchematicsVersion = '^11.0.0';
+export const rxjsVersion = '^7.8.0';
+export const reflectMetadataVersion = '^0.1.13';
+export const tsLibVersion = '^2.3.0';
+export const vitestVersion = '^4.0.0';
+export const vitestCoverageV8Version = '^4.0.0';
+export const tsLoaderVersion = '^9.5.2';
+export const unpluginSwcVersion = '^1.5.9';

@@ -8,7 +8,9 @@
       "sample-lib": ["libs/sample-lib/src/index.ts"],
       "test-react-lib": ["libs/test-react-lib/src/index.ts"],
       "buildable-lib": ["libs/buildable-lib/src/index.ts"],
-      "shared-utils": ["libs/shared-utils/src/index.ts"]
+      "shared-utils": ["libs/shared-utils/src/index.ts"],
+      "my-feature": ["libs/my-feature/src/index.ts"]
     }
-  }
+  },
+  "exclude": ["node_modules", "tmp", "dist", "forks"]
 }

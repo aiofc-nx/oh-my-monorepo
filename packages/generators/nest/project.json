@@ -1,0 +1,28 @@
+{
+  "name": "@oksai/nest",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/generators/nest/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "commands": [
+          "tsc -p packages/generators/nest/tsconfig.json",
+          "cp packages/generators/nest/generators.json packages/generators/nest/dist/",
+          "mkdir -p packages/generators/nest/dist/generators/nestjs-application",
+          "mkdir -p packages/generators/nest/dist/generators/nestjs-library",
+          "mkdir -p packages/generators/nest/dist/generators/init",
+          "cp packages/generators/nest/src/generators/nestjs-application/schema.json packages/generators/nest/dist/generators/nestjs-application/",
+          "cp packages/generators/nest/src/generators/nestjs-library/schema.json packages/generators/nest/dist/generators/nestjs-library/",
+          "cp packages/generators/nest/src/generators/init/schema.json packages/generators/nest/dist/generators/init/",
+          "cp -r packages/generators/nest/src/generators/nestjs-application/files packages/generators/nest/dist/generators/nestjs-application/ 2>/dev/null || true",
+          "cp -r packages/generators/nest/src/generators/nestjs-library/files packages/generators/nest/dist/generators/nestjs-library/ 2>/dev/null || true"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:lib", "scope:internal"]
+}

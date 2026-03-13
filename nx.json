@@ -42,6 +42,9 @@
       "options": {
         "targetName": "knip"
       }
+    },
+    {
+      "plugin": "@oksai/nest"
     }
   ],
   "targetDefaults": {

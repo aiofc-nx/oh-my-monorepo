@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "OksaiNestApplicationGenerator",
+  "title": "NestJS Application Generator",
+  "description": "Create a NestJS application with Vitest and Biome",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "directory": {
+      "type": "string",
+      "description": "The directory of the new application",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Which directory do you want to create the application in?",
+      "x-priority": "important"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the application",
+      "x-priority": "important"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Add tags to the application (used for linting)"
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip formatting files",
+      "default": false,
+      "x-priority": "internal"
+    },
+    "skipPackageJson": {
+      "type": "boolean",
+      "description": "Do not add dependencies to package.json",
+      "default": false,
+      "x-priority": "internal"
+    },
+    "strict": {
+      "type": "boolean",
+      "description": "Adds strictNullChecks, noImplicitAny, strictBindCallApply, forceConsistentCasingInFileNames and noFallthroughCasesInSwitch to tsconfig",
+      "default": false
+    }
+  },
+  "required": ["directory"],
+  "additionalProperties": false
+}

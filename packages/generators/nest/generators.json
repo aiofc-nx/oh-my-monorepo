@@ -1,0 +1,27 @@
+{
+  "name": "@oksai/nest",
+  "version": "0.1",
+  "extends": ["@nx/workspace"],
+  "generators": {
+    "init": {
+      "factory": "./generators/init/init",
+      "schema": "./generators/init/schema.json",
+      "x-type": "other",
+      "description": "Initialize NestJS dependencies"
+    },
+    "nestjs-application": {
+      "factory": "./generators/nestjs-application/nestjs-application#nestjsApplicationGeneratorInternal",
+      "schema": "./generators/nestjs-application/schema.json",
+      "aliases": ["nest-app", "na"],
+      "x-type": "application",
+      "description": "Create a NestJS application with Vitest and Biome"
+    },
+    "nestjs-library": {
+      "factory": "./generators/nestjs-library/nestjs-library#nestjsLibraryGeneratorInternal",
+      "schema": "./generators/nestjs-library/schema.json",
+      "aliases": ["nest-lib", "nl"],
+      "x-type": "library",
+      "description": "Create a NestJS library with Vitest and Biome"
+    }
+  }
+}

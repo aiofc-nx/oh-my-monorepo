@@ -1,7 +1,8 @@
 packages:
-  - apps/*
   - libs/**
   - libs/*/*
+  - packages/*
+  - packages/generators/*
   - tools/*
 
 catalog:

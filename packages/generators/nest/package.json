@@ -1,0 +1,23 @@
+{
+  "name": "@oksai/nest",
+  "version": "0.0.1",
+  "description": "NestJS generators for oksai.cc monorepo with Vitest and Biome support",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "generators": "./dist/generators.json",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@nx/devkit": "^22.5.4",
+    "@nx/node": "22.5.4",
+    "@nx/js": "22.5.4",
+    "@nx/vitest": "22.5.4",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "~5.9.2"
+  }
+}
