@@ -19,6 +19,12 @@ jobs:
     with:
       node-version: '20'
       pnpm-version: '10'
+      init-commands: |
+        pnpm nx reset
+        cd packages/generators/nest && pnpm exec tsc
+        cd ../..
+        cd packages/generators/react && pnpm exec tsc
+        cd ../..
       parallel-commands-on-agents: |
         pnpm nx affected -t lint --parallel=4
       final-commands: |
@@ -35,3 +41,9 @@ jobs:
       number-of-agents: 3
       node-version: '20'
       pnpm-version: '10'
+      install-commands: |
+        pnpm install --frozen-lockfile
+        cd packages/generators/nest && pnpm exec tsc
+        cd ../..
+        cd packages/generators/react && pnpm exec tsc
+        cd ../..
