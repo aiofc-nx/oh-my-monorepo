@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "OksaiReactStoryGenerator",
+  "title": "Story Generator",
+  "description": "Create a Storybook story for a component.",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the component to create a story for.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What component would you like to create a story for?"
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "alias": "p",
+      "$default": {
+        "$source": "projectName"
+      },
+      "x-prompt": "Which project would you like to add the story to?"
+    },
+    "path": {
+      "type": "string",
+      "description": "The path at which to create the story file, relative to the project root.",
+      "format": "path"
+    },
+    "directory": {
+      "type": "string",
+      "description": "The directory where the component is located (relative to project src)."
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip formatting.",
+      "default": false
+    }
+  },
+  "required": ["name", "project"],
+  "additionalProperties": false
+}

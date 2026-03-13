@@ -12,7 +12,7 @@ argument-hint: '<功能名称>'
 $ARGUMENTS
 ```
 
-在继续之前, 你**必须**考虑用户输入(如果不为空)，本命令用于创建用户故事，用户应当提供前置输入的`vision.md`名称或者地址。如果用户输入的信息不符合上述情况，或者，如果用户没有输入（为空），你应当列举`docs/visions`目录`vision.md`名称，供用户选择。
+在继续之前, 你**必须**考虑用户输入(如果不为空)，本命令用于创建用户故事，用户应当提供前置输入的`vision.md`名称或者地址。如果用户输入的信息不符合上述情况，或者，如果用户没有输入（为空），你应当查看各项目的 `docs/specfiy/vision.md` 文件，供用户选择。
 
 ## ⚠️ 参数验证和前置检查
 
@@ -29,7 +29,8 @@ exit 1
 fi
 
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-VISION_DIR="$REPO_ROOT/docs/visions"
+PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
 
 # 查找关联的 vision 文档
 
@@ -167,9 +168,9 @@ fi
 
 ## 输出
 
-创建文件: `docs/user-stories/{project}/$ARGUMENTS.md`
+创建文件: `<project>/docs/specfiy/$ARGUMENTS.md`
 
-> 用户故事按项目分组管理，存放在 `docs/user-stories/{project}/` 目录下
+> 用户故事按项目分组管理，存放在 `<project>/docs/specfiy/` 目录下
 
 ```markdown
 # 用户故事: $ARGUMENTS
@@ -250,7 +251,7 @@ fi
 - [ ] 成功标准已量化 (SC-001, SC-002...)
 - [ ] 待澄清项已标记
 - [ ] 至少 3 个验收标准
-- [ ] 文件已保存到 `docs/user-stories/{project}/$ARGUMENTS.md`
+- [ ] 文件已保存到 `<project>/docs/specfiy/$ARGUMENTS.md`
 
 ---
 
@@ -258,9 +259,9 @@ fi
 
 **输入**: `配置项管理`
 
-**关联愿景**: `docs/visions/config-vision.md`
+**关联愿景**: `docs/specfiy/vision.mdconfig-vision.md`
 
-**输出**: `docs/user-stories/config/配置项管理.md`
+**输出**: `<project>/docs/specfiy/config/配置项管理.md`
 
 ```markdown
 # 用户故事: 配置项管理

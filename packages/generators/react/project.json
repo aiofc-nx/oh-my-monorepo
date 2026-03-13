@@ -1,0 +1,46 @@
+{
+  "name": "@oksai/react",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/generators/react/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "commands": [
+          "tsc -p packages/generators/react/tsconfig.json",
+          "cp packages/generators/react/generators.json packages/generators/react/dist/",
+          "mkdir -p packages/generators/react/dist/generators/application",
+          "mkdir -p packages/generators/react/dist/generators/library",
+          "mkdir -p packages/generators/react/dist/generators/component",
+          "mkdir -p packages/generators/react/dist/generators/routing",
+          "mkdir -p packages/generators/react/dist/generators/hook",
+          "mkdir -p packages/generators/react/dist/generators/story",
+          "mkdir -p packages/generators/react/dist/generators/storybook-configuration",
+          "mkdir -p packages/generators/react/dist/generators/redux",
+          "mkdir -p packages/generators/react/dist/generators/zustand",
+          "mkdir -p packages/generators/react/dist/generators/playwright-e2e",
+          "cp packages/generators/react/src/generators/application/schema.json packages/generators/react/dist/generators/application/",
+          "cp packages/generators/react/src/generators/library/schema.json packages/generators/react/dist/generators/library/",
+          "cp packages/generators/react/src/generators/component/schema.json packages/generators/react/dist/generators/component/",
+          "cp packages/generators/react/src/generators/routing/schema.json packages/generators/react/dist/generators/routing/",
+          "cp packages/generators/react/src/generators/hook/schema.json packages/generators/react/dist/generators/hook/",
+          "cp packages/generators/react/src/generators/story/schema.json packages/generators/react/dist/generators/story/",
+          "cp packages/generators/react/src/generators/storybook-configuration/schema.json packages/generators/react/dist/generators/storybook-configuration/",
+          "cp packages/generators/react/src/generators/redux/schema.json packages/generators/react/dist/generators/redux/",
+          "cp packages/generators/react/src/generators/zustand/schema.json packages/generators/react/dist/generators/zustand/",
+          "cp packages/generators/react/src/generators/playwright-e2e/schema.json packages/generators/react/dist/generators/playwright-e2e/",
+          "cp -r packages/generators/react/src/generators/component/files packages/generators/react/dist/generators/component/ 2>/dev/null || true",
+          "cp -r packages/generators/react/src/generators/routing/files packages/generators/react/dist/generators/routing/ 2>/dev/null || true",
+          "cp -r packages/generators/react/src/generators/story/files packages/generators/react/dist/generators/story/ 2>/dev/null || true",
+          "cp -r packages/generators/react/src/generators/redux/files packages/generators/react/dist/generators/redux/ 2>/dev/null || true",
+          "cp -r packages/generators/react/src/generators/zustand/files packages/generators/react/dist/generators/zustand/ 2>/dev/null || true",
+          "cp -r packages/generators/react/src/generators/playwright-e2e/files packages/generators/react/dist/generators/playwright-e2e/ 2>/dev/null || true"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:lib", "scope:internal"]
+}

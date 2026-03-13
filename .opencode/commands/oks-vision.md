@@ -6,16 +6,33 @@ argument-hint: '[project-name]'
 
 # 项目愿景管理
 
-管理项目愿景文档，包括查看、创建和修改功能。
+本命令用于管理项目的愿景文档，包括查看、创建和修改功能。
+
+**用户输入**
+
+```text
+$ARGUMENTS
+```
+
+在继续之前你需要通过用户的输入信息，确认用户的意图与本命令的使用范围一致。如果不一致，你应当通过交互方式引导用户。
+
+1、如果用户没有提供项目的名称或者地址，你应该全面检索本项目的各子项目名称：
+
+```bash
+pnpm nx show projects
+```
+
+通过列举方式供用户选择。
+
+如果项目尚未创建，你应当引导用户执行使用`.opencode/commands/oks-generator.md`命令。
 
 ---
 
 ## 规则说明
 
 1. **每个项目**（应用或依赖库）都应当有一份独立的愿景文档
-2. 愿景文档命名格式：`{项目名称}-vision.md`
-3. 愿景文档**统一存放**在：`docs/visions/` 目录
-4. 愿景文档包含三个核心要素：
+2. 愿景文档统一存放在：`<project>/docs/specfiy/vision.md`
+3. 愿景文档包含三个核心要素：
    - **适用范围**：项目的业务边界和使用场景
    - **使用人员**：目标用户群体和角色
    - **功能模块**：核心功能清单及优先级
@@ -47,38 +64,59 @@ argument-hint: '[project-name]'
 
 !`bash -lc '
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-VISION_DIR="$REPO_ROOT/docs/visions"
-
-# 创建愿景目录（如果不存在）
-
-mkdir -p "$VISION_DIR"
 
 echo ""
 echo "## 📂 愿景文档清单"
 echo ""
 
-# 检查是否有愿景文档
+# 获取所有项目列表
 
-if [ -z "$(ls -A "$VISION_DIR" 2>/dev/null)" ]; then
+PROJECTS=$(cd "$REPO_ROOT" && pnpm nx show projects 2>/dev/null || echo "")
+
+# 扫描项目内的愿景文档（<project>/docs/specfiy/vision.md）
+
+has_visions=false
+visions_list=""
+
+if [ -n "$PROJECTS" ]; then
+for project in $PROJECTS; do
+
+# 获取项目根目录
+
+PROJECT_ROOT=$(cd "$REPO_ROOT" && pnpm nx show project "$project" --json 2>/dev/null | grep -o "\"root\":\"[^\"]*\"" | head -1 | cut -d\" -f4)
+  if [ -n "$PROJECT_ROOT" ] && [ "$PROJECT_ROOT" != "." ]; then
+PROJECT_VISION="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+if [ -f "$PROJECT_VISION" ]; then
+mod_time=$(stat -c %y "$PROJECT_VISION" 2>/dev/null | cut -d. -f1 || stat -f "%Sm" "$PROJECT_VISION" 2>/dev/null)
+      visions_list="${visions_list}${project}|${PROJECT_ROOT}/docs/specfiy/vision.md|${mod_time}\n"
+has_visions=true
+fi
+fi
+done
+fi
+
+# 显示愿景文档列表
+
+if [ "$has_visions" = false ]; then
 echo "⚠️ **暂无愿景文档**"
 echo ""
 echo "创建方式："
-echo " /oks-vision <项目名称> # 创建新的愿景文档"
+echo " /oks-vision <项目名称> # 查看或创建愿景文档"
+echo " /oks-vision 新建 <项目名称> # 创建新的愿景文档"
+echo " /oks-generator <项目名称> # 创建新项目（自动创建开发文档）"
 echo ""
 else
-echo "| 序号 | 项目名称 | 文档名称 | 最后修改时间 |"
+echo "| 序号 | 项目名称 | 文档路径 | 最后修改时间 |"
 echo "|------|----------|----------|--------------|"
 
 index=1
-for file in "$VISION_DIR"/*-vision.md; do
-    if [ -f "$file" ]; then
-filename=$(basename "$file")
-project_name=$(echo "$filename" | sed 's/-vision\.md$//')
-      mod_time=$(stat -c %y "$file" 2>/dev/null | cut -d. -f1 || stat -f "%Sm" "$file" 2>/dev/null)
-echo "| $index | $project_name | $filename | $mod_time |"
+echo -e "$visions_list" | grep -v "^$" | while IFS="|" read -r project path time; do
+if [ -n "$project" ]; then
+echo "| $index | $project | $path | $time |"
 ((index++))
 fi
 done
+
 echo ""
 fi
 
@@ -100,18 +138,25 @@ echo ""
 请选择操作：
 1. 输入项目名称查看/修改愿景文档（例如：/oks-vision user-center）
 2. 输入 "新建 <项目名称>" 创建新的愿景文档（例如：/oks-vision 新建 payment-gateway）
+3. 如果项目尚未创建，请使用 /oks-generator 命令（会自动创建开发文档）
 ```
 
 #### 情况 B：已有参数 - 处理具体项目
 
 !`bash -lc '
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-VISION_DIR="$REPO_ROOT/docs/visions"
 ARGUMENTS="$ARGUMENTS"
+
+# 获取项目根目录的辅助函数
+
+get_project_root() {
+local project_name="$1"
+cd "$REPO_ROOT" && pnpm nx show project "$project_name" --json 2>/dev/null | grep -o "\"root\":\"[^\"]\*\"" | head -1 | cut -d\" -f4
+}
 
 # 解析参数
 
-if [["$ARGUMENTS" == "新建"*]] || [["$ARGUMENTS" == "create"*]]; then
+if [["$ARGUMENTS" == "新建"*]] || [["$ARGUMENTS" == "create"*]] || [["$ARGUMENTS" == "new"*]]; then
 
 # 创建新模式
 
@@ -127,11 +172,29 @@ echo ""
 exit 1
 fi
 
-VISION_FILE="$VISION_DIR/${PROJECT_NAME}-vision.md"
+# 获取项目根目录
 
-if [ -f "$VISION_FILE" ]; then
+PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
+
+if [ -z "$PROJECT_ROOT" ] || [ "$PROJECT_ROOT" = "." ]; then
+echo ""
+echo "⚠️ **项目 $PROJECT_NAME 不存在**"
+echo ""
+echo "请先创建项目："
+echo " /oks-generator $PROJECT_NAME"
+echo ""
+exit 1
+fi
+
+# 检查愿景文档是否存在
+
+PROJECT_VISION="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+
+if [ -f "$PROJECT_VISION" ]; then
 echo ""
 echo "⚠️ **项目 $PROJECT_NAME 的愿景文档已存在**"
+echo ""
+echo "📄 文档位置: $PROJECT_ROOT/docs/specfiy/vision.md"
 echo ""
 echo "查看或修改：/oks-vision $PROJECT_NAME"
 echo ""
@@ -142,6 +205,7 @@ echo ""
 echo "## 📝 创建愿景文档"
 echo ""
 echo "**项目名称**: $PROJECT_NAME"
+echo "**文档位置**: $PROJECT_ROOT/docs/specfiy/vision.md"
 echo ""
 echo "---"
 echo ""
@@ -172,21 +236,51 @@ if [ -z "$PROJECT_NAME" ]; then
 exit 0
 fi
 
-VISION_FILE="$VISION_DIR/${PROJECT_NAME}-vision.md"
+# 获取项目根目录
 
-if [ ! -f "$VISION_FILE" ]; then
+PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
+
+if [ -z "$PROJECT_ROOT" ] || [ "$PROJECT_ROOT" = "." ]; then
 echo ""
-echo "⚠️ **项目 $PROJECT_NAME 的愿景文档不存在**"
+echo "⚠️ **项目 $PROJECT_NAME 不存在**"
 echo ""
-echo "创建新文档：/oks-vision 新建 $PROJECT_NAME"
+echo "请先创建项目："
+echo " /oks-generator $PROJECT_NAME"
 echo ""
 exit 1
 fi
 
+# 检查愿景文档
+
+PROJECT_VISION="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+
+if [ ! -f "$PROJECT_VISION" ]; then
+echo ""
+echo "⚠️ **项目 $PROJECT_NAME 的愿景文档不存在**"
+echo ""
+echo "📄 预期位置: $PROJECT_ROOT/docs/specfiy/vision.md"
+echo ""
+echo "创建方式："
+echo ""
+echo "1. 手动创建愿景文档："
+echo " /oks-vision 新建 $PROJECT_NAME"
+echo ""
+echo "2. 如果项目刚创建，开发文档模板应该已包含 vision.md："
+echo " ls $PROJECT_ROOT/docs/specfiy/"
+echo ""
+exit 1
+fi
+
+# 显示愿景文档
+
 echo ""
 echo "## 📖 项目愿景：$PROJECT_NAME"
-  echo ""
-  cat "$VISION_FILE"
+echo ""
+echo "📄 **文档位置**: $PROJECT_ROOT/docs/specfiy/vision.md"
+echo ""
+echo "---"
+echo ""
+cat "$PROJECT_VISION"
 echo ""
 echo "---"
 echo ""
@@ -201,7 +295,7 @@ echo "- **调整优先级**：\"将预算管理调整为 P1 优先级\""
 echo "- **完全重写**：\"重新生成愿景文档\""
 echo ""
 fi
-`
+`]
 
 ---
 
@@ -306,7 +400,7 @@ fi
 ```
 用户: /oks-vision user-center
 
-AI: [显示 user-center-vision.md 的内容]
+AI: [显示 user-center/docs/specfiy/vision.md 的内容]
 
     可用操作：
     - 修改适用范围
@@ -329,7 +423,7 @@ AI: 请提供以下信息：
      使用人员：财务专员、财务主管、运营人员。
      功能：支付请求处理、支付回调、退款处理、对账。
 
-AI: [根据信息生成 payment-gateway-vision.md]
+AI: [在 payment-gateway/docs/specfiy/vision.md 创建愿景文档]
 ```
 
 ### 示例 3：修改愿景文档
@@ -338,38 +432,40 @@ AI: [根据信息生成 payment-gateway-vision.md]
 用户: /oks-vision user-center
      添加功能模块：用户行为分析，用于统计用户操作记录
 
-AI: [更新 user-center-vision.md，在功能模块表中添加新行]
+AI: [更新 user-center/docs/specfiy/vision.md，在功能模块表中添加新行]
     ✅ 已添加功能模块：M-004 用户行为分析（P2）
 ```
 
 ---
 
-## 🔗 集成检查
-
-**创建新项目时的强制检查**：
-
-在使用 `/oks-new` 创建新项目时，系统会自动检查：
-
-1. `docs/visions/` 目录是否存在对应的愿景文档
-2. 如果不存在，**必须先创建**愿景文档
-3. 愿景文档创建完成后，才能继续项目初始化
-
-如果缺少愿景文档，AI 将提示用户先执行 `/oks-vision 新建 <项目名>` 创建愿景文档。
-
----
-
 ## 📂 存储位置
 
-所有愿景文档统一存放在 `docs/visions/` 目录下，文件命名格式为 `{项目名称}-vision.md`
+所有愿景文档统一存放在各项目的 `docs/specfiy/` 目录下：
+
+```
+apps/<project>/
+└── docs/
+    └── specfiy/
+        ├── vision.md         # 愿景文档
+        ├── design.md         # 设计文档
+        ├── implementation.md # 实现文档
+        └── ...
+
+libs/<project>/
+└── docs/
+    └── specfiy/
+        ├── vision.md         # 愿景文档
+        └── ...
+```
 
 ---
 
 ## 📝 相关命令
 
-| 命令                        | 说明                         |
-| --------------------------- | ---------------------------- |
-| `/oks-vision`               | 查看愿景文档列表             |
-| `/oks-vision <项目名>`      | 查看/修改指定项目愿景        |
-| `/oks-vision 新建 <项目名>` | 创建新的愿景文档             |
-| `/oks-new`                  | 创建新项目（会检查愿景文档） |
-| `/oks-status`               | 查看项目状态                 |
+| 命令                        | 说明                       |
+| --------------------------- | -------------------------- |
+| `/oks-vision`               | 查看愿景文档列表           |
+| `/oks-vision <项目名>`      | 查看/修改指定项目愿景      |
+| `/oks-vision 新建 <项目名>` | 创建新的愿景文档           |
+| `/oks-generator`            | 创建新项目（NestJS/React） |
+| `/oks-status`               | 查看项目状态               |

@@ -12,6 +12,7 @@
     "biomejs.biome",
     "yzane.markdown-pdf",
     "firsttris.vscode-jest-runner",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint"
   ]
 }

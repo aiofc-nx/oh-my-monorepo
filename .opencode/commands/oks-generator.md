@@ -1,5 +1,5 @@
 ---
-description: 使用 @oksai/generators 创建新项目（应用或依赖库）
+description: 使用 @oksai/nest 和 @oksai/react 创建新项目
 agent: build
 argument-hint: '<项目名称>'
 ---
@@ -29,7 +29,7 @@ fi`
 
 # 🚀 创建新项目
 
-使用 `@oksai/generators` 创建应用或依赖库。
+使用 `@oksai/nest` 和 `@oksai/react` 创建应用或依赖库。
 
 **项目名称**: **$ARGUMENTS**
 
@@ -37,12 +37,12 @@ fi`
 
 ## 📋 可用生成器
 
-| 类型            | 说明     | 生成器                             | 技术栈                            |
-| --------------- | -------- | ---------------------------------- | --------------------------------- |
-| **NestJS 应用** | 后端服务 | `@oksai/generators:nestjs-app`     | Webpack + Vitest + SWC            |
-| **NestJS 库**   | 后端库   | `@oksai/generators:nestjs-lib`     | TypeScript + Vitest               |
-| **React 应用**  | 前端应用 | `@oksai/generators:vite-react-app` | Vite + TypeScript + Tailwind 可选 |
-| **React 库**    | 前端库   | `@oksai/generators:vite-react-lib` | Vite + TypeScript                 |
+| 类型            | 说明     | 生成器                           | 技术栈                   |
+| --------------- | -------- | -------------------------------- | ------------------------ |
+| **NestJS 应用** | 后端服务 | `@oksai/nest:nestjs-application` | Webpack + Vitest + Biome |
+| **NestJS 库**   | 后端库   | `@oksai/nest:nestjs-library`     | TypeScript + Vitest      |
+| **React 应用**  | 前端应用 | `@oksai/react:application`       | Vite + Vitest + Biome    |
+| **React 库**    | 前端库   | `@oksai/react:library`           | Vite + TypeScript        |
 
 ---
 
@@ -81,93 +81,144 @@ ls -1 packages/ 2>/dev/null | sed 's/^/  - /' || echo "  (空)"`
 
 ## ✅ AI 执行指南
 
-### 步骤 1: 确定项目类型
+### 步骤 1: 确认项目名称
 
-**询问用户**:
+项目名称已设置为：**$ARGUMENTS**
 
-1. 项目类型: NestJS / React 应用还是库?
-2. 样式方案 (仅 React): CSS / Tailwind / None
-3. 是否需要构建 (仅库): buildable / publishable
-4. **库的用途 (重要)**:
-   - **内部库 (libs/)**: 仅供 monorepo 内部使用，使用生成器创建
-   - **公共包 (packages/)**: 需要发布到 npm 供外部使用，手动创建
+### 步骤 2: 询问项目配置
+
+请向用户询问以下信息（使用交互式问题）：
+
+#### 2.1 项目类型选择
+
+**问题**: 请选择要创建的项目类型：
+
+| 选项            | 说明       | 目录位置      | 技术栈                            |
+| --------------- | ---------- | ------------- | --------------------------------- |
+| **NestJS 应用** | 后端服务   | `apps/<name>` | NestJS + Webpack + Vitest + Biome |
+| **NestJS 库**   | 后端共享库 | `libs/<name>` | NestJS + TypeScript + Vitest      |
+| **React 应用**  | 前端应用   | `apps/<name>` | React + Vite + Vitest + Biome     |
+| **React 库**    | 前端共享库 | `libs/<name>` | React + Vite + TypeScript         |
+
+#### 2.2 React 项目配置（仅当选择 React 项目时）
+
+**样式方案选择**:
+
+| 选项                  | 说明         | 适用场景                       |
+| --------------------- | ------------ | ------------------------------ |
+| **CSS**               | 默认样式     | 简单项目，快速开发             |
+| **SCSS**              | CSS 预处理器 | 需要变量、嵌套、混入等高级特性 |
+| **styled-components** | CSS-in-JS    | 组件化样式，动态样式           |
+| **none**              | 不使用样式   | 无样式项目                     |
+
+#### 2.3 NestJS 库配置（仅当选择 NestJS 库时）
+
+**需要哪些功能**:
+
+| 选项              | 说明                         |
+| ----------------- | ---------------------------- |
+| **Controller**    | 添加控制器（处理 HTTP 请求） |
+| **Service**       | 添加服务（业务逻辑）         |
+| **Global Module** | 创建全局模块                 |
+
+#### 2.4 库的用途（仅当选择库类型时）
 
 **决策指南**:
 
-| 场景               | 使用 libs/ (生成器)  | 使用 packages/ (手动) |
-| ------------------ | -------------------- | --------------------- |
-| 主要受众是内部团队 | ✅                   | ❌                    |
-| 主要受众是外部社区 | ❌                   | ✅                    |
-| 偶尔发布到 npm     | ✅ (+ --publishable) | ❌                    |
-| 定期独立发布       | ❌                   | ✅                    |
-| 版本跟随 monorepo  | ✅                   | ❌                    |
-| 需要独立版本管理   | ❌                   | ✅                    |
+| 场景               | 推荐选择                     | 说明                      |
+| ------------------ | ---------------------------- | ------------------------- |
+| 主要受众是内部团队 | ✅ `libs/` (生成器)          | 仅供 monorepo 内部使用    |
+| 主要受众是外部社区 | ✅ `packages/` (手动创建)    | 需要发布到 npm 供外部使用 |
+| 偶尔发布到 npm     | ✅ `libs/` + `--publishable` | 版本跟随 monorepo         |
+| 定期独立发布       | ✅ `packages/` (手动创建)    | 需要独立版本管理          |
 
-### 步骤 2: 使用 @oksai/generators（推荐）
+**重要提示**:
+
+- 如果用户选择创建**公共包 (packages/)**，告知用户这需要手动创建，生成器仅支持 `apps/` 和 `libs/`
+- 推荐使用 `libs/` + `--publishable` 选项，除非有特殊的独立发布需求
+
+### 步骤 3: 生成项目配置摘要
+
+在执行生成器之前，向用户展示配置摘要：
+
+```
+📝 项目配置摘要
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+项目名称: <name>
+项目类型: <NestJS 应用 / NestJS 库 / React 应用 / React 库>
+目录位置: <apps/ 或 libs/><name>
+样式方案: <仅 React>
+附加选项: <Controller / Service / Global Module - 仅 NestJS 库>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+确认创建吗？
+```
+
+### 步骤 4: 使用生成器
 
 #### NestJS 应用
 
 ```bash
-# 一键创建，自动配置（推荐：显式指定目录）
-pnpm nx g @oksai/generators:nestjs-app <name> --directory=apps/<name>
+# 创建 NestJS 应用
+pnpm nx g @oksai/nest:nestjs-application --directory=apps/<name>
 ```
 
 **自动配置**:
 
 - ✅ Webpack 构建
-- ✅ Vitest 测试
-- ✅ SWC 编译器
-- ✅ 使用 `@oksai/tsconfig/nestjs-esm.json`
-- ✅ 默认目录：`apps/<name>`
+- ✅ Vitest 测试（unplugin-swc 装饰器支持）
+- ✅ Biome Lint
+- ✅ TypeScript 装饰器支持
 
 #### NestJS 库
 
 ```bash
-# 创建 NestJS 库（推荐：显式指定目录）
-pnpm nx g @oksai/generators:nestjs-lib <name> --directory=libs/<name>
+# 创建 NestJS 库
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/<name>
 
-# 创建可构建的库
-pnpm nx g @oksai/generators:nestjs-lib <name> --directory=libs/<name> --buildable
+# 创建带 controller 和 service 的库
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/<name> --service --controller
 
-# 创建可发布的库
-pnpm nx g @oksai/generators:nestjs-lib <name> --directory=libs/<name> --publishable --importPath=@myorg/<name>
+# 创建全局模块
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/<name> --service --global
 ```
+
+**别名**: `nestjs-application` → `nest-app`, `na`
+**别名**: `nestjs-library` → `nest-lib`, `nl`
 
 #### React 应用
 
 ```bash
-# 创建 React 应用（默认 CSS，推荐：显式指定目录）
-pnpm nx g @oksai/generators:vite-react-app <name> --directory=apps/<name>
+# 创建 React 应用（默认 CSS）
+pnpm nx g @oksai/react:application --directory=apps/<name>
 
-# 创建带 Tailwind 的 React 应用
-pnpm nx g @oksai/generators:vite-react-app <name> --directory=apps/<name> --style=tailwind
+# 创建带 SCSS 的 React 应用
+pnpm nx g @oksai/react:application --directory=apps/<name> --style=scss
 
-# 创建带路由的 React 应用
-pnpm nx g @oksai/generators:vite-react-app <name> --directory=apps/<name> --routing
+# 创建带 styled-components 的 React 应用
+pnpm nx g @oksai/react:application --directory=apps/<name> --style=styled-components
 ```
 
 **自动配置**:
 
 - ✅ Vite 构建
 - ✅ Vitest 测试
+- ✅ Biome Lint
 - ✅ TypeScript 严格模式
-- ✅ CSS Modules / Tailwind CSS
-- ✅ 默认目录：`apps/<name>`
+- ✅ Testing Library
+
+**别名**: `application` → `app`
 
 #### React 库
 
 ```bash
-# 创建 React 库（推荐：显式指定目录）
-pnpm nx g @oksai/generators:vite-react-lib <name> --directory=libs/<name>
-
-# 创建可构建的 React 库
-pnpm nx g @oksai/generators:vite-react-lib <name> --directory=libs/<name> --buildable
-
-# 创建可发布的 React 库
-pnpm nx g @oksai/generators:vite-react-lib <name> --directory=libs/<name> --publishable --importPath=@myorg/<name>
+# 创建 React 库
+pnpm nx g @oksai/react:library --directory=libs/<name>
 ```
 
-### 步骤 3: 验证项目生成（必须执行）
+**别名**: `library` → `lib`
+
+### 步骤 5: 验证项目生成（必须执行）
 
 **验证项目是否在正确的目录**：
 
@@ -189,7 +240,145 @@ pnpm nx show project <name>
 rm -rf <name> <name>-e2e
 
 # 重新生成，显式指定目录
-pnpm nx g @oksai/generators:<generator> <name> --directory=<correct-directory>/<name>
+pnpm nx g @oksai/<package>:<generator> --directory=<correct-directory>/<name>
+```
+
+### 步骤 6: 添加开发文档模板（必须执行）
+
+> ⚠️ **重要**: 此步骤不可跳过，确保所有新项目都有开发文档模板
+
+项目创建成功后，**必须**为新项目添加开发文档模板。
+
+#### 6.1 默认配置
+
+| 配置项   | 默认值                    | 说明               |
+| -------- | ------------------------- | ------------------ |
+| 模板     | `tp_nestjs_mvc`           | 通用开发文档模板   |
+| 目标目录 | `<project>/docs/specfiy/` | 固定位置，统一管理 |
+
+**默认模板包含**:
+
+- `AGENTS.md` - AI 助手开发指南
+- `design.md` - 设计文档
+- `implementation.md` - 实现进度跟踪
+- `decisions.md` - 架构决策记录（ADR）
+- `bdd-scenarios.md` - BDD 测试场景
+- `user-story.md` - 用户故事
+- `vision.md` - 愿景文档
+
+#### 6.2 用户选择（可选）
+
+向用户询问模板选择：
+
+> 📋 **开发文档模板配置**
+>
+> 默认使用 `tp_nestjs_mvc` 模板，目标位置: `<project>/docs/specfiy/`
+>
+> 是否使用默认配置？
+>
+> - ✅ **是** - 使用默认模板 `tp_nestjs_mvc`
+> - 🔄 **选择其他模板** - 从可用模板中选择
+
+#### 6.3 可用模板列表
+
+!`echo "📋 **可用模板**:"
+echo ""
+ls -1 oks-coding-system/templates/ 2>/dev/null | grep -v "README\|NAMING" | while read dir; do
+  if [ -d "oks-coding-system/templates/$dir" ]; then
+    echo "- **$dir**"
+  fi
+done`
+
+| 模板            | 适用场景           | 包含文件                                              |
+| --------------- | ------------------ | ----------------------------------------------------- |
+| `tp_nestjs_mvc` | NestJS 应用/库开发 | AGENTS.md, design.md, implementation.md, decisions.md |
+| `user-login`    | 示例参考           | 完整功能示例                                          |
+
+#### 6.4 执行步骤（必须执行）
+
+**无论用户是否选择，都必须执行此步骤**：
+
+1. **确定配置**：
+   - 如果用户未选择 → 使用默认模板 `tp_nestjs_mvc`
+   - 如果用户选择其他模板 → 使用用户选择的模板
+
+2. **复制模板到固定目录**：
+
+```bash
+# 固定配置
+TEMPLATE_NAME="tp_nestjs_mvc"  # 或用户选择的模板
+PROJECT_PATH="<project-path>"  # apps/<name> 或 libs/<name>
+TARGET_DIR="$PROJECT_PATH/docs/specfiy"
+
+# 创建目标目录
+mkdir -p "$TARGET_DIR"
+
+# 复制模板文件
+cp -r oks-coding-system/templates/$TEMPLATE_NAME/* "$TARGET_DIR/"
+
+echo "✅ 已将模板文件复制到 $TARGET_DIR"
+```
+
+3. **自动替换占位符**：
+
+**AI 助手必须自动执行占位符替换**：
+
+| 占位符           | 替换为     | 获取方式                 |
+| ---------------- | ---------- | ------------------------ |
+| `{功能名称}`     | 项目名称   | 从步骤 1 获取            |
+| `{功能名称英文}` | 项目英文名 | 同项目名称               |
+| `{FEATURE}`      | 功能标识   | 同项目名称               |
+| `{日期}`         | 创建日期   | `date +%Y-%m-%d`         |
+| `{作者}`         | 作者名称   | 从 git config 获取或询问 |
+
+```bash
+# AI 助手执行：自动替换占位符
+PROJECT_NAME="<name>"
+DATE=$(date +%Y-%m-%d)
+AUTHOR=$(git config user.name 2>/dev/null || echo "Developer")
+
+# 替换所有 .md 文件中的占位符
+find "$TARGET_DIR" -name "*.md" -type f -exec sed -i \
+  -e "s/{功能名称}/$PROJECT_NAME/g" \
+  -e "s/{功能名称英文}/$PROJECT_NAME/g" \
+  -e "s/{FEATURE}/$PROJECT_NAME/g" \
+  -e "s/{日期}/$DATE/g" \
+  -e "s/{作者}/$AUTHOR/g" {} \;
+
+echo "✅ 占位符替换完成"
+```
+
+#### 6.5 验证模板安装
+
+```bash
+# 验证模板是否成功安装
+ls -la "<project-path>/docs/specfiy/"
+
+# 应该看到以下文件:
+# AGENTS.md
+# design.md
+# implementation.md
+# decisions.md
+# bdd-scenarios.md
+# user-story.md
+# vision.md
+```
+
+#### 6.6 完成提示
+
+向用户展示：
+
+```
+✅ 开发文档模板已添加
+
+📁 位置: <project>/docs/specfiy/
+📝 模板: tp_nestjs_mvc
+📄 文件: 7 个
+
+下一步:
+  1. 查看设计文档: cat <project>/docs/specfiy/design.md
+  2. 填写需求: 告诉 AI "请审查代码库并填写 docs/specfiy/design.md"
+  3. 开始开发: pnpm nx dev <name>
 ```
 
 ---
@@ -198,33 +387,45 @@ pnpm nx g @oksai/generators:<generator> <name> --directory=<correct-directory>/<
 
 ### NestJS 应用选项
 
-| 选项         | 类型    | 默认值                    | 说明                         |
-| ------------ | ------- | ------------------------- | ---------------------------- |
-| `name`       | string  | -                         | 应用名称（必填）             |
-| `directory`  | string  | `apps/<name>`             | 应用目录（**建议显式指定**） |
-| `tags`       | string  | `type:app,framework:nest` | 项目标签                     |
-| `skipFormat` | boolean | false                     | 跳过格式化                   |
+| 选项         | 类型    | 默认值  | 说明                     |
+| ------------ | ------- | ------- | ------------------------ |
+| `directory`  | string  | -       | 应用目录（**必须指定**） |
+| `name`       | string  | -       | 应用名称                 |
+| `tags`       | string  | -       | 项目标签                 |
+| `strict`     | boolean | `false` | 启用 TypeScript 严格模式 |
+| `skipFormat` | boolean | `false` | 跳过格式化               |
+
+### NestJS 库选项
+
+| 选项          | 类型    | 默认值  | 说明                         |
+| ------------- | ------- | ------- | ---------------------------- |
+| `directory`   | string  | -       | 库目录（**必须指定**）       |
+| `name`        | string  | -       | 库名称                       |
+| `buildable`   | boolean | `false` | 创建可构建的库               |
+| `publishable` | boolean | `false` | 创建可发布的库               |
+| `importPath`  | string  | -       | npm 包名（publishable 必填） |
+| `controller`  | boolean | `false` | 添加 controller              |
+| `service`     | boolean | `false` | 添加 service                 |
+| `global`      | boolean | `false` | 创建全局模块                 |
 
 ### React 应用选项
 
-| 选项            | 类型    | 默认值                                  | 说明                            |
-| --------------- | ------- | --------------------------------------- | ------------------------------- |
-| `name`          | string  | -                                       | 应用名称（必填）                |
-| `directory`     | string  | `apps/<name>`                           | 应用目录（**建议显式指定**）    |
-| `style`         | string  | `css`                                   | 样式方案：css / tailwind / none |
-| `routing`       | boolean | false                                   | 添加 React Router               |
-| `inSourceTests` | boolean | false                                   | 在源码中编写测试                |
-| `tags`          | string  | `type:app,framework:react,bundler:vite` | 项目标签                        |
+| 选项         | 类型    | 默认值  | 说明                                               |
+| ------------ | ------- | ------- | -------------------------------------------------- |
+| `directory`  | string  | -       | 应用目录（**必须指定**）                           |
+| `name`       | string  | -       | 应用名称                                           |
+| `style`      | string  | `css`   | 样式：css / scss / less / styled-components / none |
+| `tags`       | string  | -       | 项目标签                                           |
+| `skipFormat` | boolean | `false` | 跳过格式化                                         |
 
-### 库选项（NestJS / React 通用）
+### React 库选项
 
-| 选项          | 类型    | 默认值        | 说明                         |
-| ------------- | ------- | ------------- | ---------------------------- |
-| `name`        | string  | -             | 库名称（必填）               |
-| `directory`   | string  | `libs/<name>` | 库目录（**建议显式指定**）   |
-| `buildable`   | boolean | false         | 创建可构建的库               |
-| `publishable` | boolean | false         | 创建可发布的库               |
-| `importPath`  | string  | -             | npm 包名（publishable 必填） |
+| 选项        | 类型    | 默认值  | 说明                   |
+| ----------- | ------- | ------- | ---------------------- |
+| `directory` | string  | -       | 库目录（**必须指定**） |
+| `name`      | string  | -       | 库名称                 |
+| `style`     | string  | `css`   | 样式方案               |
+| `skipTests` | boolean | `false` | 跳过测试文件           |
 
 ---
 
@@ -234,50 +435,22 @@ pnpm nx g @oksai/generators:<generator> <name> --directory=<correct-directory>/<
 
 ```
 - 框架: NestJS
-- 构建: Webpack（生产就绪）
-- 测试: Vitest（快速）
-- 编译: SWC（比 tsc 快 20x+）
-- Linter: Biome（无 ESLint）
-- 模块: ESM（面向 NestJS v12）
+- 构建: Webpack + ts-loader
+- 测试: Vitest + unplugin-swc（装饰器支持）
+- Linter: Biome
+- TypeScript: 装饰器支持（experimentalDecorators, emitDecoratorMetadata）
 ```
 
 ### React 技术栈
 
 ```
 - 框架: React 19
-- 构建: Vite（快速 HMR）
-- 测试: Vitest（快速）
-- 样式: CSS Modules / Tailwind CSS
-- Linter: Biome（无 ESLint）
+- 构建: Vite
+- 测试: Vitest + Testing Library
+- 样式: CSS / SCSS / Less / styled-components / @emotion/styled
+- Linter: Biome
 - TypeScript: 严格模式
 ```
-
----
-
-## 🏷️ 标签建议
-
-| 标签              | 说明         |
-| ----------------- | ------------ |
-| `type:app`        | 应用程序     |
-| `type:lib`        | 库           |
-| `type:e2e`        | E2E 测试项目 |
-| `framework:nest`  | NestJS 框架  |
-| `framework:react` | React 框架   |
-| `bundler:vite`    | Vite 构建    |
-| `bundler:webpack` | Webpack 构建 |
-| `publishable`     | 可发布到 npm |
-| `internal`        | 内部使用     |
-
----
-
-## 📚 @oksai/tsconfig 可用配置
-
-| 配置文件              | 适用场景            | 备注                        |
-| --------------------- | ------------------- | --------------------------- |
-| `nestjs-esm.json`     | NestJS 应用/库      | ⭐ 推荐，面向 NestJS 12 ESM |
-| `node-library.json`   | Node.js 库/应用     | Express、Fastify 等         |
-| `react-library.json`  | React 库/应用       | React 18+                   |
-| `tanstack-start.json` | TanStack Start 应用 | Next.js 替代方案            |
 
 ---
 
@@ -294,7 +467,9 @@ pnpm nx build <name>
 pnpm nx test <name>
 
 # 开发模式（应用）
-pnpm nx serve <name>
+# React 应用使用 dev，NestJS 应用使用 serve
+pnpm nx dev <name>      # React 应用
+pnpm nx serve <name>    # NestJS 应用
 ```
 
 ---
@@ -303,139 +478,125 @@ pnpm nx serve <name>
 
 ### 创建 NestJS 应用
 
-!`echo "**命令**: /oks-generator my-api"
-echo ""
-echo "AI 将执行:"
-echo '```bash'
-echo "# 创建 NestJS 应用（显式指定目录）"
-echo "pnpm nx g @oksai/generators:nestjs-app my-api --directory=apps/my-api"
-echo ""
-echo "# 验证"
-echo "pnpm nx build my-api"
-echo "pnpm nx test my-api"
-echo '```'`
+```bash
+# 创建 NestJS 应用
+pnpm nx g @oksai/nest:nestjs-application --directory=apps/api
 
----
+# 验证
+pnpm nx build api
+pnpm nx test api
+pnpm nx serve api
+```
 
-### 创建 React 应用（Tailwind）
+### 创建带 Controller 和 Service 的 NestJS 库
 
-!`echo "**命令**: /oks-generator my-app --style=tailwind"
-echo ""
-echo "AI 将执行:"
-echo '```bash'
-echo "# 创建带 Tailwind 的 React 应用（显式指定目录）"
-echo "pnpm nx g @oksai/generators:vite-react-app my-app --directory=apps/my-app --style=tailwind"
-echo ""
-echo "# 验证"
-echo "pnpm nx build my-app"
-echo "pnpm nx test my-app"
-echo "pnpm nx serve my-app"
-echo '```'`
+```bash
+# 创建库
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/user --service --controller
 
----
+# 验证
+pnpm nx test user
+```
 
-### 创建可发布的 React 库
+### 创建 React 应用
 
-!`echo "**命令**: /oks-generator my-lib --publishable"
-echo ""
-echo "AI 将执行:"
-echo '```bash'
-echo "# 创建可发布的 React 库（显式指定目录）"
-echo "pnpm nx g @oksai/generators:vite-react-lib my-lib \\"
-echo "  --directory=libs/my-lib \\"
-echo "  --publishable \\"
-echo "  --importPath=@myorg/my-lib"
-echo ""
-echo "# 构建"
-echo "pnpm nx build my-lib"
-echo ""
-echo "# 发布到 npm"
-echo "cd dist/libs/my-lib && npm publish"
-echo '```'`
+```bash
+# 创建 React 应用
+pnpm nx g @oksai/react:application --directory=apps/web
 
----
+# 验证
+pnpm nx build web
+pnpm nx test web
+pnpm nx dev web    # 注意：React 使用 dev 而不是 serve
+```
 
-### 创建 NestJS 库
+### 创建 React 库
 
-!`echo "**命令**: /oks-generator shared-utils"
-echo ""
-echo "AI 将执行:"
-echo '```bash'
-echo "# 创建 NestJS 库（显式指定目录）"
-echo "pnpm nx g @oksai/generators:nestjs-lib shared-utils --directory=libs/shared-utils"
-echo ""
-echo "# 验证"
-echo "pnpm nx test shared-utils"
-echo '```'`
+```bash
+# 创建 React 库
+pnpm nx g @oksai/react:library --directory=libs/shared-ui
 
----
-
-### 创建公共包（手动）
-
-**注意**: 公共包（packages/）不使用生成器，需要手动创建。
-
-!`echo "**命令**: 手动创建公共包"
-echo ""
-echo "示例：创建 @myorg/my-sdk 公共包"
-echo '```bash'
-echo "# 1. 创建目录结构"
-echo "mkdir -p packages/my-sdk/src"
-echo ""
-echo "# 2. 创建 package.json"
-echo "cat > packages/my-sdk/package.json <<'\''EOF'\''"
-echo "{"
-echo "  \"name\": \"@myorg/my-sdk\","
-echo "  \"version\": \"1.0.0\","
-echo "  \"main\": \"dist/index.js\","
-echo "  \"types\": \"dist/index.d.ts\","
-echo "  \"files\": [\"dist\"]"
-echo "}"
-echo "EOF"
-echo ""
-echo "# 3. 创建源代码"
-echo "echo \"export const hello = () => 'Hello';\" > packages/my-sdk/src/index.ts"
-echo ""
-echo "# 4. 配置 tsconfig.json"
-echo "cat > packages/my-sdk/tsconfig.json <<'\''EOF'\''"
-echo "{"
-echo "  \"extends\": \"@oksai/tsconfig/base.json\","
-echo "  \"compilerOptions\": {"
-echo "    \"outDir\": \"dist\","
-echo "    \"rootDir\": \"src\""
-echo "  },"
-echo "  \"include\": [\"src/**/*\"]"
-echo "}"
-echo "EOF"
-echo ""
-echo "# 5. 构建和发布"
-echo "cd packages/my-sdk"
-echo "npx tsc"
-echo "npm publish"
-echo '```'`
+# 验证
+pnpm nx test shared-ui
+```
 
 ---
 
 ## 🚫 已移除的手动步骤
 
-使用 `@oksai/generators` 后，**无需手动更新**：
+使用生成器后，**无需手动更新**：
 
 - ❌ ~~更新 tsconfig.json~~
 - ❌ ~~配置 Vitest~~
-- ❌ ~~添加 .babelrc~~
-- ❌ ~~配置 SWC~~
-- ❌ ~~创建 vitest.config.ts~~
+- ❌ ~~配置装饰器~~
+- ❌ ~~创建 project.json~~
 
 **所有配置自动完成！**
+
+---
+
+## 🔧 其他生成器
+
+### @oksai/react 额外生成器
+
+| 生成器                    | 别名 | 说明                     |
+| ------------------------- | ---- | ------------------------ |
+| `component`               | `c`  | 创建 React 组件          |
+| `hook`                    | `h`  | 创建 React Hook          |
+| `routing`                 | -    | 添加路由                 |
+| `storybook-configuration` | -    | 添加 Storybook           |
+| `story`                   | -    | 创建组件 Story           |
+| `redux`                   | -    | 添加 Redux Toolkit       |
+| `zustand`                 | -    | 添加 Zustand             |
+| `playwright-e2e`          | -    | 添加 Playwright E2E 测试 |
+
+```bash
+# 创建组件
+pnpm nx g @oksai/react:component --name=Button --project=web
+
+# 创建 Hook
+pnpm nx g @oksai/react:hook --name=useCounter --project=web
+
+# 添加路由
+pnpm nx g @oksai/react:routing --project=web
+
+# 添加 Storybook
+pnpm nx g @oksai/react:storybook-configuration --project=web
+
+# 添加 Redux Toolkit
+pnpm nx g @oksai/react:redux --project=web
+
+# 添加 Zustand
+pnpm nx g @oksai/react:zustand --project=web --name=counter
+
+# 添加 E2E 测试
+pnpm nx g @oksai/react:playwright-e2e --project=web
+```
+
+---
+
+## 🎉 @oksai 插件的优势
+
+| 特性           | 官方 @nx/xxx     | @oksai/nest & @oksai/react |
+| -------------- | ---------------- | -------------------------- |
+| **配置复杂度** | 高（需手动配置） | ✅ 低（一键生成）          |
+| **代码量**     | ~25,000+ 行      | ✅ ~3,000 行               |
+| **Linter**     | ESLint           | ✅ Biome（更快）           |
+| **测试框架**   | Jest/Vitest      | ✅ Vitest（更快）          |
+| **TypeScript** | 需手动配置       | ✅ 自动配置                |
+| **装饰器支持** | 需手动配置       | ✅ 开箱即用                |
+| **学习曲线**   | 陡峭             | ✅ 平缓                    |
 
 ---
 
 ## 📚 相关文档
 
 - [Nx 官方文档](https://nx.dev)
+- [@oksai/nest README](packages/generators/nest/README.md)
+- [@oksai/react README](packages/generators/react/README.md)
 - [NestJS 文档](https://docs.nestjs.com)
 - [Vite 文档](https://vite.dev)
 - [Vitest 文档](https://vitest.dev)
-- [Tailwind CSS 文档](https://tailwindcss.com)
 
 ---
 
@@ -451,105 +612,19 @@ echo '```'`
 
    # 内部库应该在 libs/ 目录
    ls libs/<name>
-
-   # 公共包应该在 packages/ 目录（手动创建）
-   ls packages/<name>
    ```
 
-2. **开发**: `pnpm nx serve <name>` (应用)
-3. **构建**: `pnpm nx build <name>`
-4. **测试**: `pnpm nx test <name>`
-5. **代码检查**: `pnpm nx lint <name>` (使用 Biome)
-6. **继续开发**: 使用 `/oks-tdd <功能名>` 开始 TDD 开发
-
----
-
-## 🔧 故障排查
-
-### 问题：项目生成在根目录而非 apps/、libs/ 或 packages/
-
-**原因**: 未显式指定 `--directory` 参数
-
-**解决方案**:
-
-1. 删除错误的项目：
+2. **开发文档模板**: 如已添加，查看项目中的 `docs/` 目录
 
    ```bash
-   rm -rf <name> <name>-e2e
+   # 查看文档模板
+   cat apps/<name>/docs/AGENTS.md
+
+   # 开始设计文档
+   # 告诉 AI: "请审查代码库并填写 apps/<name>/docs/design.md"
    ```
 
-2. 重新生成，显式指定目录：
-
-   ```bash
-   # 应用
-   pnpm nx g @oksai/generators:nestjs-app <name> --directory=apps/<name>
-
-   # 内部库
-   pnpm nx g @oksai/generators:nestjs-lib <name> --directory=libs/<name>
-
-   # 公共包（不使用生成器，手动创建）
-   mkdir -p packages/<name>
-   ```
-
-3. 验证目录：
-   ```bash
-   ls apps/<name>   # 应用应该在 apps/
-   ls libs/<name>   # 内部库应该在 libs/
-   ls packages/<name>  # 公共包应该在 packages/
-   ```
-
-### 问题：不确定应该放在 libs/ 还是 packages/
-
-**决策指南**:
-
-| 考虑因素             | 使用 libs/         | 使用 packages/    |
-| -------------------- | ------------------ | ----------------- |
-| **主要受众**         | 内部团队           | 外部社区          |
-| **发布频率**         | 偶尔/很少          | 定期              |
-| **版本管理**         | 跟随 monorepo      | 独立              |
-| **文档要求**         | 最小化             | 全面              |
-| **破坏性变更的影响** | 低（内部）         | 高（外部）        |
-| **示例**             | 业务逻辑、工具函数 | SDK、UI库、配置包 |
-
-**推荐**:
-
-- 从 `libs/` 开始（使用 `--publishable` 如需发布）
-- 当以下情况时移至 `packages/`：
-  - 外部用户 > 内部用户
-  - 需要独立的发布周期
-  - 包成为独立产品
-
-2. 重新生成，显式指定目录：
-
-   ```bash
-   # 应用
-   pnpm nx g @oksai/generators:nestjs-app <name> --directory=apps/<name>
-
-   # 库
-   pnpm nx g @oksai/generators:nestjs-lib <name> --directory=libs/<name>
-   ```
-
-### 问题：生成器提示目录已存在
-
-**原因**: 之前生成的项目未清理干净
-
-**解决方案**:
-
-```bash
-# 清理并重新生成
-rm -rf apps/<name> apps/<name>-e2e
-pnpm nx g @oksai/generators:nestjs-app <name> --directory=apps/<name>
-```
-
----
-
-## 🎉 @oksai/generators 的优势
-
-| 特性             | 官方 @nx/xxx     | @oksai/generators           |
-| ---------------- | ---------------- | --------------------------- |
-| **配置复杂度**   | 高（需手动配置） | ✅ 低（一键生成）           |
-| **Bundler 选择** | 多种选择         | ✅ 最佳实践（Vite/Webpack） |
-| **Linter**       | ESLint           | ✅ Biome（更快）            |
-| **测试框架**     | Jest/Vitest      | ✅ Vitest（更快）           |
-| **TypeScript**   | 需手动配置       | ✅ 自动配置                 |
-| **学习曲线**     | 陡峭             | ✅ 平缓                     |
+3. **开发**: `pnpm nx dev <name>` (应用)
+4. **构建**: `pnpm nx build <name>`
+5. **测试**: `pnpm nx test <name>`
+6. **代码检查**: `pnpm nx lint <name>` (使用 Biome)

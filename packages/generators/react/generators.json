@@ -1,0 +1,61 @@
+{
+  "name": "@oksai/react",
+  "version": "0.0.0",
+  "extends": ["@nx/workspace"],
+  "generators": {
+    "application": {
+      "factory": "./generators/application/application",
+      "schema": "./generators/application/schema.json",
+      "aliases": ["app"],
+      "description": "Create a React application with Vite."
+    },
+    "library": {
+      "factory": "./generators/library/library",
+      "schema": "./generators/library/schema.json",
+      "aliases": ["lib"],
+      "description": "Create a React library."
+    },
+    "component": {
+      "factory": "./generators/component/component",
+      "schema": "./generators/component/schema.json",
+      "aliases": ["c"],
+      "description": "Create a React component."
+    },
+    "routing": {
+      "factory": "./generators/routing/routing",
+      "schema": "./generators/routing/schema.json",
+      "description": "Add routing to a React application."
+    },
+    "hook": {
+      "factory": "./generators/hook/hook",
+      "schema": "./generators/hook/schema.json",
+      "aliases": ["h"],
+      "description": "Create a React hook."
+    },
+    "storybook-configuration": {
+      "factory": "./generators/storybook-configuration/storybook-configuration",
+      "schema": "./generators/storybook-configuration/schema.json",
+      "description": "Add Storybook to a React project."
+    },
+    "story": {
+      "factory": "./generators/story/story",
+      "schema": "./generators/story/schema.json",
+      "description": "Create a Storybook story for a component."
+    },
+    "redux": {
+      "factory": "./generators/redux/redux",
+      "schema": "./generators/redux/schema.json",
+      "description": "Add Redux Toolkit state management to a React project."
+    },
+    "zustand": {
+      "factory": "./generators/zustand/zustand",
+      "schema": "./generators/zustand/schema.json",
+      "description": "Add Zustand state management to a React project."
+    },
+    "playwright-e2e": {
+      "factory": "./generators/playwright-e2e/playwright-e2e",
+      "schema": "./generators/playwright-e2e/schema.json",
+      "description": "Add Playwright E2E testing to a React project."
+    }
+  }
+}

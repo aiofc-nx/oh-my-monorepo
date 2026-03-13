@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "OksaiReactHookGenerator",
+  "title": "React Hook Generator",
+  "description": "Create a React hook.",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the hook.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the hook?"
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "alias": "p",
+      "x-prompt": "Which project would you like to add the hook to?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory where the hook will be created.",
+      "alias": "d"
+    },
+    "skipTests": {
+      "type": "boolean",
+      "description": "Skip test file.",
+      "default": false
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip formatting.",
+      "default": false
+    }
+  },
+  "required": ["name", "project"],
+  "additionalProperties": false
+}

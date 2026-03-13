@@ -1,11 +1,11 @@
 ---
 name: oksai-generators
-description: Use @oksai/generators to scaffold NestJS and React applications with pre-configured best practices. TRIGGER when user wants to create new apps, libs, projects, or mentions scaffolding with @oksai generators. Trigger words - create app, create lib, new project, scaffold, generate, NestJS app, React app, Vite React, Tailwind React. ✨ Zero-config scaffolding with best practices for @oksai/generators.
+description: Use @oksai/nest and @oksai/react to scaffold NestJS and React applications with pre-configured best practices. TRIGGER when user wants to create new apps, libs, projects, or mentions scaffolding with @oksai generators. Trigger words - create app, create lib, new project, scaffold, generate, NestJS app, React app, Vite React. ✨ Zero-config scaffolding with best practices.
 ---
 
-# @oksai/generators
+# @oksai/nest & @oksai/react
 
-`@oksai/generators` is a custom collection of Nx generators optimized for modern web development with NestJS and React. It provides zero-config generators with best practices built-in.
+Custom Nx generators optimized for modern web development with NestJS and React. Provides zero-config generators with best practices built-in.
 
 > **🎯 Core Convention (MUST follow)**:
 >
@@ -26,28 +26,47 @@ Use this skill when the user wants to:
 
 - Create a NestJS application or library
 - Create a React application or library
-- Set up projects with Vite, TypeScript, Vitest, and Tailwind CSS
+- Create React components, hooks, stories
+- Add state management (Redux, Zustand)
+- Add Storybook, E2E testing
 - Generate production-ready code without manual configuration
 
 ## Available Generators
 
-| Generator        | Description        | Tech Stack                              |
-| ---------------- | ------------------ | --------------------------------------- |
-| `nestjs-app`     | NestJS application | Webpack + Vitest + SWC                  |
-| `nestjs-lib`     | NestJS library     | TypeScript + Vitest                     |
-| `vite-react-app` | React application  | Vite + TypeScript + Tailwind (optional) |
-| `vite-react-lib` | React library      | Vite + TypeScript                       |
+### @oksai/nest
+
+| Generator            | Aliases          | Description        | Tech Stack                  |
+| -------------------- | ---------------- | ------------------ | --------------------------- |
+| `nestjs-application` | `nest-app`, `na` | NestJS application | Webpack + Vitest + Biome    |
+| `nestjs-library`     | `nest-lib`, `nl` | NestJS library     | TypeScript + Vitest + Biome |
+| `init`               | -                | Initialize deps    | -                           |
+
+### @oksai/react
+
+| Generator                 | Aliases | Description            | Tech Stack            |
+| ------------------------- | ------- | ---------------------- | --------------------- |
+| `application`             | `app`   | React application      | Vite + Vitest + Biome |
+| `library`                 | `lib`   | React library          | Vite + Vitest + Biome |
+| `component`               | `c`     | React component        | -                     |
+| `hook`                    | `h`     | React hook             | -                     |
+| `routing`                 | -       | Add routing            | react-router          |
+| `storybook-configuration` | -       | Add Storybook          | Storybook 8           |
+| `story`                   | -       | Create component story | -                     |
+| `redux`                   | -       | Add Redux Toolkit      | @reduxjs/toolkit      |
+| `zustand`                 | -       | Add Zustand            | zustand               |
+| `playwright-e2e`          | -       | Add Playwright E2E     | @playwright/test      |
 
 ## Key Advantages
 
-| Feature            | Official @nx/xxx    | @oksai/generators      |
-| ------------------ | ------------------- | ---------------------- |
-| **Configuration**  | High (manual setup) | ✅ Low (zero-config)   |
-| **Bundler**        | Multiple choices    | ✅ Best practices only |
-| **Linter**         | ESLint              | ✅ Biome (faster)      |
-| **Testing**        | Jest/Vitest         | ✅ Vitest (faster)     |
-| **TypeScript**     | Manual config       | ✅ Auto-configured     |
-| **Learning Curve** | Steep               | ✅ Gentle              |
+| Feature               | Official @nx/xxx    | @oksai/nest & @oksai/react |
+| --------------------- | ------------------- | -------------------------- |
+| **Code Size**         | ~25,000+ lines      | ✅ ~3,000 lines            |
+| **Configuration**     | High (manual setup) | ✅ Low (zero-config)       |
+| **Linter**            | ESLint              | ✅ Biome (faster)          |
+| **Testing**           | Jest/Vitest         | ✅ Vitest (faster)         |
+| **Decorator Support** | Manual              | ✅ Auto-configured         |
+| **TypeScript**        | Manual config       | ✅ Auto-configured         |
+| **Learning Curve**    | Steep               | ✅ Gentle                  |
 
 ## Steps
 
@@ -60,10 +79,12 @@ Ask the user:
 3. **Library Options** (if applicable):
    - Buildable? (has its own build step)
    - Publishable? (publishing to npm)
+   - Controller/Service? (NestJS only)
 4. **React-specific Options**:
-   - Style: CSS / Tailwind / None
-   - Routing? (React Router)
-   - In-source tests?
+   - Style: CSS / SCSS / Less / styled-components / none
+   - Add routing?
+   - Add Storybook?
+   - Add state management?
 
 **Important**: Determine the correct directory based on artifact type:
 
@@ -75,17 +96,21 @@ Ask the user:
 Choose based on the user's needs:
 
 ```bash
-# NestJS Application
-@oksai/generators:nestjs-app
+# NestJS
+@oksai/nest:nestjs-application  # or: nest-app, na
+@oksai/nest:nestjs-library      # or: nest-lib, nl
 
-# NestJS Library
-@oksai/generators:nestjs-lib
-
-# React Application
-@oksai/generators:vite-react-app
-
-# React Library
-@oksai/generators:vite-react-lib
+# React
+@oksai/react:application        # or: app
+@oksai/react:library            # or: lib
+@oksai/react:component          # or: c
+@oksai/react:hook               # or: h
+@oksai/react:routing
+@oksai/react:storybook-configuration
+@oksai/react:story
+@oksai/react:redux
+@oksai/react:zustand
+@oksai/react:playwright-e2e
 ```
 
 ### 3. Check Generator Options
@@ -93,12 +118,15 @@ Choose based on the user's needs:
 View available options:
 
 ```bash
-# List all generators
-pnpm nx list @oksai/generators
+# List NestJS generators
+pnpm nx list @oksai/nest
+
+# List React generators
+pnpm nx list @oksai/react
 
 # Get help for specific generator
-pnpm nx g @oksai/generators:nestjs-app --help
-pnpm nx g @oksai/generators:vite-react-app --help
+pnpm nx g @oksai/nest:nestjs-application --help
+pnpm nx g @oksai/react:application --help
 ```
 
 ### 4. Dry-Run First
@@ -107,16 +135,13 @@ pnpm nx g @oksai/generators:vite-react-app --help
 
 ```bash
 # NestJS app
-pnpm nx g @oksai/generators:nestjs-app my-api --directory=apps/my-api --dry-run
+pnpm nx g @oksai/nest:nestjs-application --directory=apps/api --dry-run
 
-# React app with Tailwind
-pnpm nx g @oksai/generators:vite-react-app my-app --directory=apps/my-app --style=tailwind --dry-run
+# React app
+pnpm nx g @oksai/react:application --directory=apps/web --dry-run
 
-# Buildable React lib
-pnpm nx g @oksai/generators:vite-react-lib my-lib --directory=libs/my-lib --buildable --dry-run
-
-# NestJS lib
-pnpm nx g @oksai/generators:nestjs-lib shared-types --directory=libs/shared-types --dry-run
+# React component
+pnpm nx g @oksai/react:component --name=Button --project=web --dry-run
 ```
 
 Review the output carefully. Check:
@@ -124,7 +149,6 @@ Review the output carefully. Check:
 - ✅ **File locations are in the correct directory** (`apps/` or `libs/`)
 - ✅ Project name matches expectations
 - ✅ Configuration files are included
-- ✅ E2E project (for apps) is in correct location
 
 ### 5. Run Generator
 
@@ -133,102 +157,126 @@ Execute the generator with appropriate options. **ALWAYS specify `--directory` e
 #### NestJS Application
 
 ```bash
-# Basic (explicit directory)
-pnpm nx g @oksai/generators:nestjs-app my-api --directory=apps/my-api
+# Basic
+pnpm nx g @oksai/nest:nestjs-application --directory=apps/api
+
+# With alias
+pnpm nx g @oksai/nest:na --directory=apps/api
 
 # With tags
-pnpm nx g @oksai/generators:nestjs-app my-api --directory=apps/my-api --tags=type:app,domain:user
+pnpm nx g @oksai/nest:nestjs-application --directory=apps/api --tags=type:app,domain:user
 ```
 
 **Auto-configured:**
 
-- ✅ Webpack bundler
-- ✅ Vitest testing
-- ✅ SWC compiler
-- ✅ `@oksai/tsconfig/nestjs-esm.json`
-- ✅ `vitest.config.ts`
-- ✅ Default directory: `apps/<name>`
+- ✅ Webpack bundler + ts-loader
+- ✅ Vitest testing with unplugin-swc (decorator support)
+- ✅ Biome linting
+- ✅ TypeScript decorators (`experimentalDecorators`, `emitDecoratorMetadata`)
 
 #### NestJS Library
 
 ```bash
 # Basic (non-buildable)
-pnpm nx g @oksai/generators:nestjs-lib my-lib --directory=libs/my-lib
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/shared
+
+# With controller and service
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/user --service --controller
+
+# Global module
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/config --service --global
 
 # Buildable
-pnpm nx g @oksai/generators:nestjs-lib my-lib --directory=libs/my-lib --buildable
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/utils --buildable
 
 # Publishable
-pnpm nx g @oksai/generators:nestjs-lib my-lib \
-  --directory=libs/my-lib \
-  --publishable \
-  --importPath=@myorg/my-lib
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/core \
+  --publishable --importPath=@myorg/core
 ```
-
-**Auto-configured:**
-
-- ✅ TypeScript compilation
-- ✅ Vitest testing
-- ✅ `@oksai/tsconfig/nestjs-esm.json`
-- ✅ Default directory: `libs/<name>`
 
 #### React Application
 
 ```bash
 # Basic (CSS)
-pnpm nx g @oksai/generators:vite-react-app my-app --directory=apps/my-app
+pnpm nx g @oksai/react:application --directory=apps/web
 
-# With Tailwind CSS
-pnpm nx g @oksai/generators:vite-react-app my-app --directory=apps/my-app --style=tailwind
+# With SCSS
+pnpm nx g @oksai/react:application --directory=apps/web --style=scss
 
-# With routing
-pnpm nx g @oksai/generators:vite-react-app my-app --directory=apps/my-app --routing
-
-# With in-source tests
-pnpm nx g @oksai/generators:vite-react-app my-app --directory=apps/my-app --inSourceTests
-
-# Combined options
-pnpm nx g @oksai/generators:vite-react-app my-app \
-  --directory=apps/my-app \
-  --style=tailwind \
-  --routing
+# With styled-components
+pnpm nx g @oksai/react:application --directory=apps/web --style=styled-components
 ```
 
 **Auto-configured:**
 
 - ✅ Vite bundler
-- ✅ Vitest testing
+- ✅ Vitest testing + Testing Library
+- ✅ Biome linting
 - ✅ TypeScript strict mode
-- ✅ CSS Modules or Tailwind CSS
-- ✅ Biome (no ESLint)
-- ✅ Default directory: `apps/<name>`
 
 #### React Library
 
 ```bash
-# Basic (non-buildable)
-pnpm nx g @oksai/generators:vite-react-lib my-lib --directory=libs/my-lib
+# Basic
+pnpm nx g @oksai/react:library --directory=libs/shared-ui
 
-# With Tailwind
-pnpm nx g @oksai/generators:vite-react-lib my-lib --directory=libs/my-lib --style=tailwind
-
-# Buildable
-pnpm nx g @oksai/generators:vite-react-lib my-lib --directory=libs/my-lib --buildable
-
-# Publishable
-pnpm nx g @oksai/generators:vite-react-lib my-lib \
-  --directory=libs/my-lib \
-  --publishable \
-  --importPath=@myorg/my-lib \
-  --style=tailwind
+# With SCSS
+pnpm nx g @oksai/react:library --directory=libs/shared-ui --style=scss
 ```
 
-**Auto-configured:**
+#### React Component
 
-- ✅ Vite bundler (if buildable)
-- ✅ Vitest testing
-- ✅ TypeScript strict mode
-- ✅ Default directory: `libs/<name>`
+```bash
+# Basic component
+pnpm nx g @oksai/react:component --name=Button --project=web
+
+# With styled-components
+pnpm nx g @oksai/react:component --name=Button --project=web --style=styled-components
+
+# Skip tests
+pnpm nx g @oksai/react:component --name=Button --project=web --skipTests
+```
+
+#### React Hook
+
+```bash
+# Create hook
+pnpm nx g @oksai/react:hook --name=useCounter --project=web
+```
+
+#### React Routing
+
+```bash
+# Add React Router
+pnpm nx g @oksai/react:routing --project=web
+```
+
+#### Storybook
+
+```bash
+# Add Storybook
+pnpm nx g @oksai/react:storybook-configuration --project=web
+
+# Create story for component
+pnpm nx g @oksai/react:story --name=Button --project=web
+```
+
+#### State Management
+
+```bash
+# Add Redux Toolkit
+pnpm nx g @oksai/react:redux --project=web
+
+# Add Zustand
+pnpm nx g @oksai/react:zustand --project=web --name=counter
+```
+
+#### E2E Testing
+
+```bash
+# Add Playwright E2E
+pnpm nx g @oksai/react:playwright-e2e --project=web
+```
 
 ### 6. Verify Generated Code
 
@@ -252,7 +300,7 @@ pnpm nx show project <project-name>
 rm -rf <name> <name>-e2e
 
 # Regenerate with explicit directory
-pnpm nx g @oksai/generators:<generator> <name> --directory=<correct-directory>/<name>
+pnpm nx g @oksai/<package>:<generator> --directory=<correct-directory>/<name>
 ```
 
 **Then run verification targets:**
@@ -267,30 +315,15 @@ pnpm nx test <project-name>
 # Lint (using Biome)
 pnpm nx lint <project-name>
 
-# Type check
-pnpm nx typecheck <project-name>
+# Serve (for apps)
+pnpm nx serve <project-name>
 ```
 
-### 7. Modify as Needed
-
-Generated code provides a solid foundation. Customize as needed:
-
-- Add business logic
-- Update configurations
-- Add dependencies
-- Create additional files
-
-**Important:** If you remove generated test files, either write replacements or remove the `test` target from `project.json`.
-
-### 8. Format Code
+### 7. Format Code
 
 Format all generated/modified files:
 
 ```bash
-# Format with Prettier (if configured)
-pnpm nx format:write
-
-# Or with Biome
 pnpm biome format --write .
 ```
 
@@ -300,153 +333,120 @@ pnpm biome format --write .
 
 ```bash
 # Create backend
-pnpm nx g @oksai/generators:nestjs-app my-api --directory=apps/my-api
+pnpm nx g @oksai/nest:nestjs-application --directory=apps/api
 
 # Create frontend
-pnpm nx g @oksai/generators:vite-react-app my-web --directory=apps/my-web --style=tailwind
+pnpm nx g @oksai/react:application --directory=apps/web
+
+# Add Storybook to frontend
+pnpm nx g @oksai/react:storybook-configuration --project=web
 
 # Verify
-pnpm nx build my-api my-web
-pnpm nx test my-api my-web
+pnpm nx build api web
+pnpm nx test api web
 ```
 
 ### Scenario 2: Shared Library for Monorepo
 
 ```bash
-# Create shared types
-pnpm nx g @oksai/generators:nestjs-lib shared-types --directory=libs/shared-types
+# Create shared NestJS library
+pnpm nx g @oksai/nest:nestjs-library --directory=libs/shared --service --controller
 
-# Create shared UI components
-pnpm nx g @oksai/generators:vite-react-lib shared-ui --directory=libs/shared-ui --style=tailwind
+# Create shared React UI library
+pnpm nx g @oksai/react:library --directory=libs/shared-ui
 
 # Verify
-pnpm nx test shared-types shared-ui
+pnpm nx test shared shared-ui
 ```
 
-### Scenario 3: Publishable Library (Internal)
-
-**Note**: This creates a library for internal monorepo sharing with publish capability. For external public packages, see Scenario 4.
+### Scenario 3: React App with All Features
 
 ```bash
-# Create library with publish capability (still in libs/)
-pnpm nx g @oksai/generators:vite-react-lib my-component-lib \
-  --directory=libs/my-component-lib \
-  --publishable \
-  --importPath=@myorg/my-component-lib \
-  --style=tailwind
+# Create app
+pnpm nx g @oksai/react:application --directory=apps/web
 
-# Build
-pnpm nx build my-component-lib
+# Add features
+pnpm nx g @oksai/react:routing --project=web
+pnpm nx g @oksai/react:storybook-configuration --project=web
+pnpm nx g @oksai/react:redux --project=web
+pnpm nx g @oksai/react:playwright-e2e --project=web
 
-# Publish to npm (optional, for internal sharing)
-cd dist/libs/my-component-lib
-npm publish
+# Create components
+pnpm nx g @oksai/react:component --name=Button --project=web
+pnpm nx g @oksai/react:story --name=Button --project=web
+
+# Create hooks
+pnpm nx g @oksai/react:hook --name=useAuth --project=web
 ```
-
-### Scenario 4: Public Package (External)
-
-**For packages intended for external/public use**, create them manually in `packages/`:
-
-```bash
-# 1. Create directory structure
-mkdir -p packages/my-sdk/src
-
-# 2. Create package.json
-cat > packages/my-sdk/package.json <<'EOF'
-{
-  "name": "@myorg/my-sdk",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": ["dist"]
-}
-EOF
-
-# 3. Create source files
-echo "export const hello = () => 'Hello';" > packages/my-sdk/src/index.ts
-
-# 4. Configure tsconfig.json
-cat > packages/my-sdk/tsconfig.json <<'EOF'
-{
-  "extends": "@oksai/tsconfig/base.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src"
-  },
-  "include": ["src/**/*"]
-}
-EOF
-
-# 5. Build and publish
-cd packages/my-sdk
-npx tsc
-npm publish
-```
-
-**When to use `packages/` vs `libs/`**:
-
-- **Use `libs/`** + `--publishable`:
-  - Shared within monorepo, occasionally published to npm
-  - Managed by Nx generators
-  - Version follows monorepo conventions
-
-- **Use `packages/`** (manual):
-  - Designed for external/public use
-  - Independent versioning and release cycle
-  - Examples: SDKs, config packages, UI component libraries
 
 ## Generator Options Reference
 
-### NestJS App Options
+### @oksai/nest - NestJS App Options
 
-| Option       | Type    | Default                   | Description                                     |
-| ------------ | ------- | ------------------------- | ----------------------------------------------- |
-| `name`       | string  | -                         | Application name (required)                     |
-| `directory`  | string  | `apps/<name>`             | Output directory (**recommend explicit value**) |
-| `tags`       | string  | `type:app,framework:nest` | Project tags                                    |
-| `skipFormat` | boolean | `false`                   | Skip formatting                                 |
+| Option       | Type    | Default | Description                     |
+| ------------ | ------- | ------- | ------------------------------- |
+| `directory`  | string  | -       | Output directory (**required**) |
+| `name`       | string  | -       | Application name                |
+| `tags`       | string  | -       | Project tags                    |
+| `strict`     | boolean | `false` | TypeScript strict mode          |
+| `skipFormat` | boolean | `false` | Skip formatting                 |
 
-### NestJS Lib Options
+### @oksai/nest - NestJS Lib Options
 
-| Option        | Type    | Default                   | Description                                     |
-| ------------- | ------- | ------------------------- | ----------------------------------------------- |
-| `name`        | string  | -                         | Library name (required)                         |
-| `directory`   | string  | `libs/<name>`             | Output directory (**recommend explicit value**) |
-| `buildable`   | boolean | `false`                   | Add build target                                |
-| `publishable` | boolean | `false`                   | Configure for npm publishing                    |
-| `importPath`  | string  | -                         | npm package name (required if publishable)      |
-| `tags`        | string  | `type:lib,framework:nest` | Project tags                                    |
+| Option        | Type    | Default | Description                     |
+| ------------- | ------- | ------- | ------------------------------- |
+| `directory`   | string  | -       | Output directory (**required**) |
+| `name`        | string  | -       | Library name                    |
+| `buildable`   | boolean | `false` | Add build target                |
+| `publishable` | boolean | `false` | Configure for npm publishing    |
+| `importPath`  | string  | -       | npm package name                |
+| `controller`  | boolean | `false` | Add controller                  |
+| `service`     | boolean | `false` | Add service                     |
+| `global`      | boolean | `false` | Global module                   |
 
-### React App Options
+### @oksai/react - React App Options
 
-| Option          | Type    | Default                                 | Description                                     |
-| --------------- | ------- | --------------------------------------- | ----------------------------------------------- |
-| `name`          | string  | -                                       | Application name (required)                     |
-| `directory`     | string  | `apps/<name>`                           | Output directory (**recommend explicit value**) |
-| `style`         | string  | `css`                                   | Style: `css` / `tailwind` / `none`              |
-| `routing`       | boolean | `false`                                 | Add React Router                                |
-| `inSourceTests` | boolean | `false`                                 | In-source testing                               |
-| `tags`          | string  | `type:app,framework:react,bundler:vite` | Project tags                                    |
+| Option       | Type    | Default | Description                                         |
+| ------------ | ------- | ------- | --------------------------------------------------- |
+| `directory`  | string  | -       | Output directory (**required**)                     |
+| `name`       | string  | -       | Application name                                    |
+| `style`      | string  | `css`   | Style: css / scss / less / styled-components / none |
+| `tags`       | string  | -       | Project tags                                        |
+| `skipFormat` | boolean | `false` | Skip formatting                                     |
 
-### React Lib Options
+### @oksai/react - React Lib Options
 
-| Option        | Type    | Default                                 | Description                                     |
-| ------------- | ------- | --------------------------------------- | ----------------------------------------------- |
-| `name`        | string  | -                                       | Library name (required)                         |
-| `directory`   | string  | `libs/<name>`                           | Output directory (**recommend explicit value**) |
-| `style`       | string  | `css`                                   | Style: `css` / `tailwind` / `none`              |
-| `buildable`   | boolean | `false`                                 | Add build target                                |
-| `publishable` | boolean | `false`                                 | Configure for npm publishing                    |
-| `importPath`  | string  | -                                       | npm package name (required if publishable)      |
-| `tags`        | string  | `type:lib,framework:react,bundler:vite` | Project tags                                    |
+| Option      | Type    | Default | Description                                         |
+| ----------- | ------- | ------- | --------------------------------------------------- |
+| `directory` | string  | -       | Output directory (**required**)                     |
+| `name`      | string  | -       | Library name                                        |
+| `style`     | string  | `css`   | Style: css / scss / less / styled-components / none |
+| `skipTests` | boolean | `false` | Skip test files                                     |
+
+### @oksai/react - Component Options
+
+| Option      | Type    | Default | Description                                         |
+| ----------- | ------- | ------- | --------------------------------------------------- |
+| `name`      | string  | -       | Component name (**required**)                       |
+| `project`   | string  | -       | Project name (**required**)                         |
+| `directory` | string  | -       | Directory within project                            |
+| `style`     | string  | `css`   | Style: css / scss / less / styled-components / none |
+| `skipTests` | boolean | `false` | Skip test files                                     |
+| `export`    | boolean | `true`  | Export from index.ts                                |
+| `flat`      | boolean | `false` | Create in source root                               |
+
+### @oksai/react - Hook Options
+
+| Option      | Type    | Default | Description                 |
+| ----------- | ------- | ------- | --------------------------- |
+| `name`      | string  | -       | Hook name (**required**)    |
+| `project`   | string  | -       | Project name (**required**) |
+| `directory` | string  | `hooks` | Directory within project    |
+| `skipTests` | boolean | `false` | Skip test file              |
 
 ## Troubleshooting
 
 ### Project Generated in Wrong Directory
-
-**Symptom**: Project created in root directory instead of `apps/` or `libs/`
-
-**Cause**: Missing or incorrect `--directory` parameter
 
 **Solution**:
 
@@ -455,101 +455,51 @@ npm publish
 rm -rf <name> <name>-e2e
 
 # 2. Regenerate with explicit directory
-# For applications
-pnpm nx g @oksai/generators:nestjs-app <name> --directory=apps/<name>
-
-# For libraries
-pnpm nx g @oksai/generators:nestjs-lib <name> --directory=libs/<name>
+pnpm nx g @oksai/nest:nestjs-application --directory=apps/<name>
+pnpm nx g @oksai/react:application --directory=apps/<name>
 
 # 3. Verify location
-ls apps/<name> || ls libs/<name>
+ls apps/<name>
 ```
 
 ### Generator Not Found
 
 ```bash
-# Verify package is installed
-pnpm nx list @oksai/generators
+# Verify packages are built
+pnpm nx build @oksai/nest
+pnpm nx build @oksai/react
 
-# Rebuild generators
-cd tools/generators
-pnpm build
+# List available generators
+pnpm nx list @oksai/nest
+pnpm nx list @oksai/react
 ```
 
-### Tailwind Not Working
+### Decorator Issues in NestJS Tests
 
-For React apps with `--style=tailwind`:
+The generators use `unplugin-swc` for decorator support in Vitest:
 
-```bash
-# Verify Tailwind config exists
-cat apps/<name>/tailwind.config.js
-
-# Check styles.css has Tailwind directives
-cat apps/<name>/src/styles.css
+```typescript
+// vitest.config.ts - auto-configured
+plugins: [
+  swc.vite({
+    jsc: {
+      parser: { syntax: 'typescript', decorators: true },
+      transform: { legacyDecorator: true, decoratorMetadata: true },
+    },
+  }),
+],
 ```
 
 ### Build Failures
 
 ```bash
 # Check project configuration
-pnpm nx show project <name> --web
-
-# Verify dependencies
-pnpm install
+pnpm nx show project <name>
 
 # Clear cache and rebuild
 pnpm nx reset
 pnpm nx build <name> --skip-nx-cache
 ```
-
-### Test Failures
-
-```bash
-# Run tests with verbose output
-pnpm nx test <name> --reporter=verbose
-
-# Check Vitest config
-cat apps/<name>/vite.config.mts
-```
-
-### Directory Already Exists
-
-**Symptom**: Generator reports directory already exists
-
-**Cause**: Previous failed generation or incomplete cleanup
-
-**Solution**:
-
-```bash
-# Remove all related directories
-rm -rf apps/<name> apps/<name>-e2e libs/<name> packages/<name>
-
-# Regenerate
-pnpm nx g @oksai/generators:<generator> <name> --directory=<correct-directory>/<name>
-```
-
-### Unsure Whether to Use libs/ or packages/
-
-**Question**: Should my library go in `libs/` or `packages/`?
-
-**Decision Guide**:
-
-| Criteria                       | Use `libs/`           | Use `packages/`        |
-| ------------------------------ | --------------------- | ---------------------- |
-| **Primary audience**           | Internal team         | External community     |
-| **Publishing frequency**       | Rarely/Occasionally   | Regularly              |
-| **Version management**         | Follows monorepo      | Independent            |
-| **Documentation requirements** | Minimal               | Comprehensive          |
-| **Breaking changes impact**    | Low (internal)        | High (external)        |
-| **Examples**                   | Business logic, utils | SDKs, UI libs, configs |
-
-**Recommendation**:
-
-- Start in `libs/` with `--publishable` if needed
-- Move to `packages/` when:
-  - External users > internal users
-  - Independent release cycle is required
-  - Package becomes a standalone product
 
 ## Best Practices
 
@@ -562,20 +512,18 @@ pnpm nx g @oksai/generators:<generator> <name> --directory=<correct-directory>/<
    - `packages/` for public packages (create manually)
 5. **Use tags** - Organize projects with meaningful tags
 6. **Follow naming conventions** - Use kebab-case for project names
-7. **Keep libs non-buildable by default** - Only add build steps when necessary
-8. **Test after generating** - Verify generated code passes all checks
-9. **Customize after generation** - Generators provide a foundation, not the final product
+7. **Test after generating** - Verify generated code passes all checks
 
 ## Directory Convention Summary
 
-| Artifact Type | Default Directory | Purpose              | Example Command                                                       |
-| ------------- | ----------------- | -------------------- | --------------------------------------------------------------------- |
-| NestJS App    | `apps/<name>`     | Deployable API       | `pnpm nx g @oksai/generators:nestjs-app api --directory=apps/api`     |
-| React App     | `apps/<name>`     | Deployable frontend  | `pnpm nx g @oksai/generators:vite-react-app web --directory=apps/web` |
-| NestJS Lib    | `libs/<name>`     | Internal private lib | `pnpm nx g @oksai/generators:nestjs-lib utils --directory=libs/utils` |
-| React Lib     | `libs/<name>`     | Internal private lib | `pnpm nx g @oksai/generators:vite-react-lib ui --directory=libs/ui`   |
-
-**Note**: For publishable packages intended for external use, manually create them in `packages/` directory (e.g., SDKs, shared configs, UI component libraries).
+| Artifact Type | Generator                            | Directory     |
+| ------------- | ------------------------------------ | ------------- |
+| NestJS App    | `@oksai/nest:nestjs-application`     | `apps/<name>` |
+| NestJS Lib    | `@oksai/nest:nestjs-library`         | `libs/<name>` |
+| React App     | `@oksai/react:application`           | `apps/<name>` |
+| React Lib     | `@oksai/react:library`               | `libs/<name>` |
+| Component     | `@oksai/react:component --project=X` | in project    |
+| Hook          | `@oksai/react:hook --project=X`      | in project    |
 
 ## Related Skills
 

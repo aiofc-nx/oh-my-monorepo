@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "OksaiReactInitGenerator",
+  "title": "Init Generator",
+  "description": "Initialize the @oksai/react plugin.",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip formatting files",
+      "default": false,
+      "x-priority": "internal"
+    },
+    "skipPackageJson": {
+      "type": "boolean",
+      "description": "Do not add dependencies to package.json",
+      "default": false,
+      "x-priority": "internal"
+    }
+  },
+  "additionalProperties": false
+}

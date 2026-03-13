@@ -84,15 +84,57 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 echo "**工作流状态**:"
 echo ""
 
-# 检查各阶段文件
+# 获取项目根目录的辅助函数
 
-VISION_DIR="$REPO_ROOT/docs/visions"
-USER_STORY_DIR="$REPO_ROOT/docs/user-stories"
-DESIGN_DIR="$REPO_ROOT/docs/designs"
+get_project_root() {
+local project_name="$1"
+  cd "$REPO_ROOT" && pnpm nx show project "$project_name" --json 2>/dev/null | \
+ grep -o '"root":"[^"]\*"' | head -1 | cut -d\" -f4
+}
+
+# 获取所有项目列表
+
+PROJECTS=$(cd "$REPO_ROOT" && pnpm nx show projects 2>/dev/null || echo "")
+
+# 查找包含此功能的项目
+
+PROJECT_NAME=""
+PROJECT_ROOT=""
+
+for project in $PROJECTS; do
+  root=$(get_project_root "$project")
+  if [ -n "$root" ] && [ "$root" != "." ]; then # 检查项目的愿景文档是否包含此功能
+if [ -f "$REPO_ROOT/$root/docs/specfiy/vision.md" ] && \
+ grep -qi "$FEATURE" "$REPO_ROOT/$root/docs/specfiy/vision.md" 2>/dev/null; then
+      PROJECT_NAME="$project"
+PROJECT_ROOT="$root"
+break
+fi
+fi
+done
+
+# 如果没找到，尝试使用第一个有文档的项目
+
+if [ -z "$PROJECT_NAME" ] && [ -n "$PROJECTS" ]; then
+for project in $PROJECTS; do
+    root=$(get_project_root "$project")
+    if [ -n "$root" ] && [ "$root" != "." ] && [ -f "$REPO_ROOT/$root/docs/specfiy/vision.md" ]; then
+PROJECT_NAME="$project"
+      PROJECT_ROOT="$root"
+break
+fi
+done
+fi
+
+if [ -n "$PROJECT_NAME" ]; then
+echo "**项目**: $PROJECT_NAME"
+fi
+
+echo ""
 
 # 阶段一：愿景
 
-if ls "$VISION_DIR"/\*-vision.md 2>/dev/null | head -1 | xargs -I {} test -f {} 2>/dev/null; then
+if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md" ]; then
 echo "✅ 阶段一: 愿景文档"
 S1="✅"
 else
@@ -102,14 +144,7 @@ fi
 
 # 阶段二：用户故事
 
-FOUND_US=false
-for dir in "$USER_STORY_DIR"/*/; do
-    if [ -d "$dir" ] && [ -f "${dir}$FEATURE.md" ]; then
-FOUND_US=true
-break
-fi
-done
-if $FOUND_US || [ -f "$USER_STORY_DIR/$FEATURE.md" ]; then
+if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/user-story.md" ]; then
 echo "✅ 阶段二: 用户故事"
 S2="✅"
 else
@@ -119,14 +154,7 @@ fi
 
 # 阶段三：技术设计
 
-FOUND_DESIGN=false
-for dir in "$DESIGN_DIR"/*/; do
-    if [ -d "$dir" ] && [ -f "${dir}$FEATURE.md" ]; then
-FOUND_DESIGN=true
-break
-fi
-done
-if $FOUND_DESIGN || [ -f "$DESIGN_DIR/$FEATURE.md" ]; then
+if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/design.md" ]; then
 echo "✅ 阶段三: 技术设计"
 S3="✅"
 else
@@ -136,7 +164,7 @@ fi
 
 # 阶段四：BDD
 
-if [ -f "$REPO_ROOT/features/$FEATURE.feature" ]; then
+if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/bdd-scenarios.md" ]; then
 echo "✅ 阶段四: BDD 场景"
 S4="✅"
 else
@@ -245,7 +273,7 @@ fi
 
 **命令**: `/oks-vision`
 
-**产出**: `docs/visions/{project}-vision.md`
+**产出**: `<project>/docs/specfiy/vision.md`
 
 **完成条件**: 愿景文档包含适用范围、使用人员、功能模块
 
@@ -255,7 +283,7 @@ fi
 
 **命令**: `/oks-user-story $ARGUMENTS`
 
-**产出**: `docs/user-stories/{project}/{feature}.md`
+**产出**: `<project>/docs/specfiy/user-story.md`
 
 **完成条件**: 符合 INVEST 原则，验收标准明确
 
@@ -265,7 +293,7 @@ fi
 
 **命令**: `/oks-design $ARGUMENTS`
 
-**产出**: `docs/designs/{project}/{feature}.md`
+**产出**: `<project>/docs/specfiy/design.md`
 
 **完成条件**: 数据库设计、API 设计、数据流设计完成
 
@@ -275,7 +303,7 @@ fi
 
 **命令**: `/oks-bdd $ARGUMENTS`
 
-**产出**: `features/{feature}.feature`
+**产出**: `<project>/docs/specfiy/bdd-scenarios.md` 和 `<project>/features/{feature}.feature`
 
 **完成条件**: 至少 5 个场景（Happy/Error/Edge）
 
@@ -287,7 +315,7 @@ fi
 
 **命令**: `/oks-tdd $ARGUMENTS`
 
-**产出**: `src/modules/{module}/entities/`
+**产出**: `<project>/src/modules/{module}/entities/`
 
 **完成条件**: 领域实体测试覆盖率 > 80%
 
@@ -297,7 +325,7 @@ fi
 
 **命令**: `/oks-implementation $ARGUMENTS`
 
-**产出**: `src/modules/{module}/services/`, `controllers/`, `repositories/`
+**产出**: `<project>/src/modules/{module}/services/`, `controllers/`, `repositories/`
 
 **完成条件**: 服务层测试覆盖率 > 80%，所有 BDD 场景通过
 

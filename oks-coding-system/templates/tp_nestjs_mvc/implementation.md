@@ -62,12 +62,12 @@
 
 ## 相关资源
 
-| 文档     | 位置                                       |
-| -------- | ------------------------------------------ |
-| 项目愿景 | `docs/visions/{project}-vision.md`         |
-| 用户故事 | `docs/user-stories/{project}/{feature}.md` |
-| 技术设计 | `docs/designs/{project}/{feature}.md`      |
-| 决策记录 | `features/{feature}/decisions.md`          |
+| 文档     | 位置                         |
+| -------- | ---------------------------- |
+| 项目愿景 | `docs/specfiy/vision.md`     |
+| 用户故事 | `docs/specfiy/user-story.md` |
+| 技术设计 | `docs/specfiy/design.md`     |
+| 决策记录 | `docs/specfiy/decisions.md`  |
 
 > **进度查看**: 运行 `/oks-workflow {功能名称} --status` 查看各阶段完成状态
 

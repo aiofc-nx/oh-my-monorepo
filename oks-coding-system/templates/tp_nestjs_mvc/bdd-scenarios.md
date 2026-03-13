@@ -474,11 +474,11 @@ pnpm test:e2e features/{feature}.feature --reporter=verbose
 
 | 文档             | 路径                                        |
 | ---------------- | ------------------------------------------- |
-| 项目愿景         | `docs/visions/{project}-vision.md`          |
-| 用户故事         | `docs/user-stories/{project}/{feature}.md`  |
-| 技术设计         | `docs/designs/{project}/{feature}.md`       |
-| 实现进度         | `features/{feature}/implementation.md`      |
-| AI 助手指南      | `features/{feature}/AGENTS.md`              |
+| 项目愿景         | `docs/specfiy/vision.md`                    |
+| 用户故事         | `docs/specfiy/user-story.md`                |
+| 技术设计         | `docs/specfiy/design.md`                    |
+| 实现进度         | `docs/specfiy/implementation.md`            |
+| AI 助手指南      | `docs/specfiy/AGENTS.md`                    |
 | Gherkin 语法参考 | https://cucumber.io/docs/gherkin/reference/ |
 
 ---

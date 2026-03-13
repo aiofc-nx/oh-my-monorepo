@@ -1,0 +1,15 @@
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { <%= className %> } from './<%= fileName %>';
+
+describe('<%= className %>', () => {
+  it('should render successfully', () => {
+    const { baseElement } = render(<<%= className %> />);
+    expect(baseElement).toBeTruthy();
+  });
+
+  it('should render children', () => {
+    render(<<%= className %>>Test content</<%= className %>>);
+    expect(screen.getByText('Test content')).toBeTruthy();
+  });
+});

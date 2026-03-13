@@ -26,5 +26,23 @@ export function updateProject(tree: Tree, options: NormalizedOptions): void {
     },
   };
 
+  project.targets.serve = {
+    continuous: true,
+    executor: 'nx:run-commands',
+    defaultConfiguration: 'development',
+    dependsOn: ['build'],
+    options: {
+      command: `node ${options.projectRoot}/dist/main.js`,
+    },
+    configurations: {
+      development: {
+        command: `node ${options.projectRoot}/dist/main.js`,
+      },
+      production: {
+        command: `node ${options.projectRoot}/dist/main.js`,
+      },
+    },
+  };
+
   updateProjectConfiguration(tree, options.projectName, project);
 }

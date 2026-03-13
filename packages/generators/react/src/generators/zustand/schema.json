@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "OksaiReactZustandGenerator",
+  "title": "Zustand Generator",
+  "description": "Add Zustand state management to a React project.",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "alias": "p",
+      "$default": {
+        "$source": "projectName"
+      },
+      "x-prompt": "Which project would you like to add Zustand to?"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the store.",
+      "default": "store",
+      "x-prompt": "What name would you like to use for the store?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "The directory to create the store in (relative to project src).",
+      "default": "store"
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip formatting.",
+      "default": false
+    },
+    "skipPackageJson": {
+      "type": "boolean",
+      "description": "Skip adding dependencies.",
+      "default": false
+    }
+  },
+  "required": ["project"],
+  "additionalProperties": false
+}

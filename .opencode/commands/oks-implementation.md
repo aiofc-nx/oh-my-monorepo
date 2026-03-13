@@ -88,7 +88,8 @@ fi
 
 !`
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-VISION_DIR="$REPO_ROOT/docs/visions"
+PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -111,15 +112,15 @@ fi
 
 # 检查设计文档
 
-if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/docs/designs/$PROJECT_NAME/$ARGUMENTS.md" ]; then
-echo "**技术设计**: ✅ docs/designs/$PROJECT_NAME/$ARGUMENTS.md"
+if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md" ]; then
+echo "**技术设计**: ✅ <project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md"
 echo ""
 echo "从设计文档中获取："
 echo "- API 接口定义 → 控制器和 DTO"
 echo "- 数据库表结构 → Repository 映射"
 echo "- 数据流设计 → 服务层调用链"
-elif [ -f "$REPO_ROOT/docs/designs/$ARGUMENTS.md" ]; then
-echo "**技术设计**: ✅ docs/designs/$ARGUMENTS.md"
+elif [ -f "$REPO_ROOT/<project>/docs/specfiy/$ARGUMENTS.md" ]; then
+echo "**技术设计**: ✅ <project>/docs/specfiy/$ARGUMENTS.md"
 else
 echo "**技术设计**: ⚠️ 不存在（建议先运行 /oks-design $ARGUMENTS）"
 fi

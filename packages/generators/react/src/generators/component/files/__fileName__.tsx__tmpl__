@@ -1,0 +1,30 @@
+<% if(styledComponent) { %>
+import styled from '<%= style %>';
+
+const Styled<%= className %> = styled.div`
+  padding: 1rem;
+`;
+<% } %>
+<% if(hasStyles && !styledComponent) { %>
+import './<%= fileName %>.<%= styleExtension %>';
+<% } %>
+
+export interface <%= className %>Props {
+  children?: React.ReactNode;
+}
+
+export function <%= className %>({ children }: <%= className %>Props) {
+  return (
+    <% if(styledComponent) { %>
+    <Styled<%= className %>>
+      {children}
+    </Styled<%= className %>>
+    <% } else { %>
+    <div className="<%= fileName %>">
+      {children}
+    </div>
+    <% } %>
+  );
+}
+
+export default <%= className %>;

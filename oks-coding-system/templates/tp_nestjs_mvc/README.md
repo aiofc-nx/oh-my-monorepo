@@ -87,7 +87,7 @@
 
 **命令**: `/oks-vision`
 
-**产出**: `docs/visions/{project}-vision.md`
+**产出**: `docs/specfiy/vision.md`
 
 **内容**: 产品愿景、目标用户、核心功能
 
@@ -95,7 +95,7 @@
 
 **命令**: `/oks-user-story {功能名称}`
 
-**产出**: `docs/user-stories/{project}/{feature}.md`
+**产出**: `docs/specfiy/user-story.md`
 
 **内容**: INVEST 用户故事、功能需求、验收标准
 
@@ -103,7 +103,7 @@
 
 **命令**: `/oks-design {功能名称}`
 
-**产出**: `docs/designs/{project}/{feature}.md`
+**产出**: `docs/specfiy/design.md`
 
 **内容**: 数据库设计、API 设计、组件设计、边界情况
 

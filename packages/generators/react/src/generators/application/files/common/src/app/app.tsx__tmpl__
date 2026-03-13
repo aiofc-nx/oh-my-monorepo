@@ -1,0 +1,21 @@
+import './app.<%= style %>';
+<% if(routing) { %>
+import { Link } from 'react-router-dom';
+<% } %>
+
+export function App() {
+  return (
+    <div className="app">
+      <h1>Welcome to <%= className %>!</h1>
+      <% if(routing) { %>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+      </nav>
+      <% } %>
+      <p>Start building amazing things.</p>
+    </div>
+  );
+}
+
+export default App;

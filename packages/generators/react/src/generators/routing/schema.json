@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "OksaiReactRoutingGenerator",
+  "title": "React Routing Generator",
+  "description": "Add routing to a React application.",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project to add routing to.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Which project would you like to add routing to?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory where routes will be created.",
+      "default": "src/routes"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of routing to use.",
+      "default": "react-router",
+      "enum": ["react-router", "tanstack-router"],
+      "x-prompt": "Which router would you like to use?"
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip formatting files.",
+      "default": false
+    },
+    "skipPackageJson": {
+      "type": "boolean",
+      "description": "Skip adding dependencies.",
+      "default": false
+    }
+  },
+  "required": ["project"],
+  "additionalProperties": false
+}

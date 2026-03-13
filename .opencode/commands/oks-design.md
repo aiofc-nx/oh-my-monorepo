@@ -5,7 +5,7 @@ argument-hint: '<功能名称>'
 ---
 
 **重要约定**
-本命令用于创建技术设计方案，你继续之前优先阅读 `docs/designs/tech-stack.md` 文档。
+本命令用于创建技术设计方案，你继续之前优先阅读 `docs/guides/tech-stack.md` 文档。
 
 ## 分析用户意图
 
@@ -18,7 +18,7 @@ $ARGUMENTS
 在继续之前, 你**必须**考虑用户输入(如果不为空)，用户应当提供明确的信息，包括但不限于：
 
 - 具体的项目名称或模块名称。
-- 采用的技术栈清单（如果用户没有提供或提供的信息不全，以`docs/designs/tech-stack.md`文档为依据）。
+- 采用的技术栈清单（如果用户没有提供或提供的信息不全，以`docs/guides/tech-stack.md`文档为依据）。
 - 开发将使用的架构约定（如果用户没有提供或提供的信息不全，后端项目默认使用Nestjs MVC 框架，前端项目默认使用React框架）。
 
 如果用户输入的信息不符合上述情况，或者，用户输入的信息不全，或者，如果用户没有输入（为空），你应当主动引导用户提供相关信息。
@@ -29,7 +29,7 @@ $ARGUMENTS
 
 #### 0. 先读取技术基线
 
-在追问用户前，先阅读 `docs/designs/tech-stack.md`，将其作为默认技术基线。  
+在追问用户前，先阅读 `docs/guides/tech-stack.md`，将其作为默认技术基线。  
 若用户未明确说明技术栈，默认采用该文档中的约定，不得自行臆测。
 
 #### 1. 最小信息收集（必答）
@@ -37,7 +37,7 @@ $ARGUMENTS
 你至少需要补齐以下信息后，才能进入设计阶段：
 
 - **项目/模块归属**：功能落在哪个项目、子系统或目录（如 `apps/*`、`libs/*`）。
-- **技术栈来源**：用户明确指定，或确认"按 `docs/designs/tech-stack.md` 执行"。
+- **技术栈来源**：用户明确指定，或确认"按 `docs/guides/tech-stack.md` 执行"。
 - **架构约定**：本次遵循的架构模式（如分层、DDD、CQRS、事件驱动等）。
 
 #### 2. 推荐提问顺序
@@ -45,13 +45,13 @@ $ARGUMENTS
 按以下顺序提问，避免来回反复：
 
 1. **范围确认**：本次设计聚焦哪个模块？是否有明确 In/Out Scope？
-2. **技术确认**：是否沿用 `docs/designs/tech-stack.md`？若有例外，请列出差异项。
+2. **技术确认**：是否沿用 `docs/guides/tech-stack.md`？若有例外，请列出差异项。
 3. **架构确认**：是否沿用现有架构约定？若调整，请给出本次调整原因。
 
 #### 3. 可直接复用的话术模板
 
 - 「请确认该功能归属的项目/模块（可附代码目录）。」
-- 「技术栈是否按 `docs/designs/tech-stack.md` 默认执行？如有差异请直接列出。」
+- 「技术栈是否按 `docs/guides/tech-stack.md` 默认执行？如有差异请直接列出。」
 - 「本次设计沿用哪种架构约定（例如 DDD/CQRS/分层）？是否需要新增约束？」
 
 #### 4. 信息不足时的兜底策略
@@ -65,7 +65,7 @@ $ARGUMENTS
 满足以下条件后立即停止追问，开始生成设计文档：
 
 - 已明确模块边界（至少知道本轮设计对象与不包含范围）。
-- 已确定技术栈依据（用户输入或 `docs/designs/tech-stack.md`）。
+- 已确定技术栈依据（用户输入或 `docs/guides/tech-stack.md`）。
 - 已确定架构约定（沿用或调整）及其影响范围。
 
 若仍不满足，明确列出缺失项并用 checklist 引导用户补齐，不要直接进入设计写作。
@@ -79,7 +79,7 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 
 # 检查技术栈文档
 
-TECH_STACK_FILE="$REPO_ROOT/docs/designs/tech-stack.md"
+TECH_STACK_FILE="$REPO_ROOT/docs/guides/tech-stack.md"
 if [ -f "$TECH_STACK_FILE" ]; then
 echo "**技术栈文档**: ✅ $TECH_STACK_FILE"
 else
@@ -88,7 +88,8 @@ fi
 
 # 查找关联的 vision 文档
 
-VISION_DIR="$REPO_ROOT/docs/visions"
+PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -112,7 +113,7 @@ fi
 # 检查 vision 文档
 
 if [ -n "$PROJECT_NAME" ]; then
-echo "**愿景文档**: ✅ docs/visions/$PROJECT_NAME-vision.md"
+echo "**愿景文档**: ✅ <project>/docs/specfiy/vision.md"
 else
 echo "**愿景文档**: ⚠️ 未确定关联项目"
 fi
@@ -120,9 +121,9 @@ fi
 # 确定用户故事路径
 
 if [ -n "$PROJECT_NAME" ]; then
-USER_STORY_PATH="$REPO_ROOT/docs/user-stories/$PROJECT_NAME/$ARGUMENTS.md"
+USER_STORY_PATH="$REPO_ROOT/<project>/docs/specfiy/user-story.md"
 else
-    USER_STORY_PATH="$REPO_ROOT/docs/user-stories/$ARGUMENTS.md"
+    USER_STORY_PATH="$REPO_ROOT/<project>/docs/specfiy/user-story.md"
 fi
 
 # 输出检查结果
@@ -138,9 +139,9 @@ fi
 
 在开始设计前，检查以下文档是否存在：
 
-1. **技术栈文档**：`docs/designs/tech-stack.md` - 作为技术选型依据（如不存在，使用默认栈）
-2. **愿景文档**：`docs/visions/*.md` - 如果不存在，提示用户先创建
-3. **用户故事**：`docs/user-stories/{project}/$ARGUMENTS.md` - 如果不存在，提示用户优先创建
+1. **技术栈文档**：`docs/guides/tech-stack.md` - 作为技术选型依据（如不存在，使用默认栈）
+2. **愿景文档**：`<project>/docs/specfiy/vision.md` - 如果不存在，提示用户先创建
+3. **用户故事**：`<project>/docs/specfiy/user-story.md` - 如果不存在，提示用户优先创建
 
 ---
 
@@ -169,7 +170,8 @@ fi
 
 !`
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-VISION_DIR="$REPO_ROOT/docs/visions"
+PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -206,9 +208,9 @@ fi
 
 # 创建设计目录
 
-mkdir -p "$REPO_ROOT/docs/designs/${PROJECT_NAME:-\_draft}"
+mkdir -p "$REPO_ROOT/<project>/docs/specfiy/${PROJECT_NAME:-\_draft}"
 
-echo "**设计文档路径**: docs/designs/${PROJECT_NAME:-_draft}/$ARGUMENTS.md"
+echo "**设计文档路径**: <project>/docs/specfiy/${PROJECT_NAME:-_draft}/$ARGUMENTS.md"
 `
 
 ### 1. 读取关联文档
@@ -262,9 +264,9 @@ echo "**设计文档路径**: docs/designs/${PROJECT_NAME:-_draft}/$ARGUMENTS.md
 
 ## 输出
 
-创建文件: `docs/designs/{project}/$ARGUMENTS.md`
+创建文件: `<project>/docs/specfiy/$ARGUMENTS.md`
 
-> 设计文档按项目分组管理，存放在 `docs/designs/{project}/` 目录下
+> 设计文档按项目分组管理，存放在 `<project>/docs/specfiy/` 目录下
 > {project} 从关联的 vision 文档自动获取，或由用户指定
 
 ````markdown
@@ -637,7 +639,7 @@ interface Response {
 - [ ] 边界情况已识别和处理
 - [ ] 技术风险已评估
 - [ ] 范围外内容已明确
-- [ ] 文件已保存到 `docs/designs/{project}/$ARGUMENTS.md`
+- [ ] 文件已保存到 `<project>/docs/specfiy/$ARGUMENTS.md`
 
 ---
 
@@ -655,10 +657,10 @@ interface Response {
 **输入**: `/oks-design 配置项管理`
 
 **关联文档**:
-- 愿景: `docs/visions/config-vision.md`
-- 用户故事: `docs/user-stories/配置项管理.md` (如存在)
+- 愿景: `config/docs/specfiy/vision.md`
+- 用户故事: `config/docs/specfiy/user-story.md` (如存在)
 
-**输出**: `docs/designs/config/配置项管理.md`
+**输出**: `<project>/docs/specfiy/config/配置项管理.md`
 
 ---
 

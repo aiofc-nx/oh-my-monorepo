@@ -24,7 +24,7 @@ argument-hint: ''
 | `/oks-tdd`            | TDD 开发循环                    | 阶段 5 |
 | `/oks-implementation` | 实现服务层                      | 阶段 6 |
 | `/oks-optimization`   | 代码优化                        | 阶段 7 |
-| `/oks-new`            | 创建新项目（应用/库）           | 辅助   |
+| `/oks-generator`      | 创建新项目（NestJS/React）      | 辅助   |
 | `/oks-list`           | 查看项目列表                    | 辅助   |
 | `/oks-status`         | 查看项目状态                    | 辅助   |
 
@@ -144,7 +144,7 @@ argument-hint: ''
 /oks-vision 新建 <项目名>      # 创建新愿景
 ```
 
-**产出**: `docs/visions/{project}-vision.md`
+**产出**: `<project>/docs/specfiy/vision.md`
 
 **示例**:
 
@@ -165,7 +165,7 @@ argument-hint: ''
 /oks-user-story <功能名称>
 ```
 
-**产出**: `docs/user-stories/{project}/{feature}.md`
+**产出**: `<project>/docs/specfiy/user-story.md`
 
 **示例**:
 
@@ -186,7 +186,7 @@ argument-hint: ''
 /oks-design <功能名称>
 ```
 
-**产出**: `docs/designs/{project}/{feature}.md`
+**产出**: `<project>/docs/specfiy/design.md`
 
 **内容**: 数据库设计、API 设计、组件设计、数据流设计
 
@@ -386,11 +386,11 @@ docs/
 
 ## 🔗 相关命令
 
-| 命令          | 说明         |
-| ------------- | ------------ |
-| `/oks-list`   | 查看所有项目 |
-| `/oks-status` | 查看项目状态 |
-| `/oks-new`    | 创建新项目   |
+| 命令             | 说明                       |
+| ---------------- | -------------------------- |
+| `/oks-list`      | 查看所有项目               |
+| `/oks-status`    | 查看项目状态               |
+| `/oks-generator` | 创建新项目（NestJS/React） |
 
 ---
 

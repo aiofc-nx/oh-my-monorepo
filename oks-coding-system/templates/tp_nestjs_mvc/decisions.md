@@ -247,13 +247,13 @@
 
 ## 相关资源
 
-| 文档         | 路径                                       |
-| ------------ | ------------------------------------------ |
-| 项目愿景     | `docs/visions/{project}-vision.md`         |
-| 用户故事     | `docs/user-stories/{project}/{feature}.md` |
-| 技术设计     | `docs/designs/{project}/{feature}.md`      |
-| 实现进度     | `features/{feature}/implementation.md`     |
-| ADR 最佳实践 | https://adr.github.io/                     |
+| 文档         | 路径                             |
+| ------------ | -------------------------------- |
+| 项目愿景     | `docs/specfiy/vision.md`         |
+| 用户故事     | `docs/specfiy/user-story.md`     |
+| 技术设计     | `docs/specfiy/design.md`         |
+| 实现进度     | `docs/specfiy/implementation.md` |
+| ADR 最佳实践 | https://adr.github.io/           |
 
 ---
 

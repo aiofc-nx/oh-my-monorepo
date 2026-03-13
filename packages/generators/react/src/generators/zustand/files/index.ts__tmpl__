@@ -1,0 +1,1 @@
+export { use<%= className %>Store } from './useStore';

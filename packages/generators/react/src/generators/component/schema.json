@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "OksaiReactComponentGenerator",
+  "title": "React Component Generator",
+  "description": "Generate a React component in an existing project.",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the component.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the component?"
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "alias": "p",
+      "x-prompt": "Which project would you like to add the component to?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory where the component will be created.",
+      "alias": "d"
+    },
+    "style": {
+      "type": "string",
+      "description": "The file extension or preprocessor to use for style files.",
+      "default": "css",
+      "enum": [
+        "css",
+        "scss",
+        "less",
+        "styled-components",
+        "@emotion/styled",
+        "none"
+      ],
+      "x-prompt": "Which stylesheet format would you like to use?"
+    },
+    "skipTests": {
+      "type": "boolean",
+      "description": "Skip creating test files.",
+      "default": false
+    },
+    "export": {
+      "type": "boolean",
+      "description": "Export the component from the project's index.ts file.",
+      "default": true
+    },
+    "flat": {
+      "type": "boolean",
+      "description": "Create the component in the source root without an additional folder.",
+      "default": false
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip formatting files.",
+      "default": false
+    },
+    "pascalCaseFiles": {
+      "type": "boolean",
+      "description": "Use PascalCase for file names.",
+      "default": false
+    }
+  },
+  "required": ["name", "project"],
+  "additionalProperties": false
+}
