@@ -9,6 +9,7 @@
       "outputs": ["{projectRoot}/dist"],
       "options": {
         "commands": [
+          "mkdir -p packages/generators/react/dist",
           "tsc -p packages/generators/react/tsconfig.json",
           "cp packages/generators/react/generators.json packages/generators/react/dist/",
           "mkdir -p packages/generators/react/dist/generators/application",

@@ -9,6 +9,7 @@
       "outputs": ["{projectRoot}/dist"],
       "options": {
         "commands": [
+          "mkdir -p packages/generators/nest/dist",
           "tsc -p packages/generators/nest/tsconfig.json",
           "cp packages/generators/nest/generators.json packages/generators/nest/dist/",
           "mkdir -p packages/generators/nest/dist/generators/nestjs-application",
