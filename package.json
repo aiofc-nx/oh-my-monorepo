@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "pnpm exec tsc -p packages/generators/nest/tsconfig.json && pnpm exec tsc -p packages/generators/react/tsconfig.json",
     "build": "nx run-many -t build --all",
     "build:affected": "nx affected -t build",
     "test": "nx run-many -t test --all",
