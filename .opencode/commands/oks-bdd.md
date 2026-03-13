@@ -53,7 +53,7 @@ fi
 !`
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
-VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specify/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -85,10 +85,10 @@ echo "**项目**: ${PROJECT_NAME:-未确定}"
 
 # 根据项目名确定用户故事路径
 
-if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md" ]; then
-echo "**用户故事**: ✅ <project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md"
-elif [ -f "$REPO_ROOT/<project>/docs/specfiy/$ARGUMENTS.md" ]; then
-echo "**用户故事**: ✅ <project>/docs/specfiy/$ARGUMENTS.md"
+if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md" ]; then
+echo "**用户故事**: ✅ <project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md"
+elif [ -f "$REPO_ROOT/<project>/docs/specify/$ARGUMENTS.md" ]; then
+echo "**用户故事**: ✅ <project>/docs/specify/$ARGUMENTS.md"
 else
 echo "**用户故事**: ❌ 不存在"
 fi
@@ -101,7 +101,7 @@ fi
 !`
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
-VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specify/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -124,20 +124,20 @@ fi
 
 # 检查用户故事
 
-if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md" ]; then
-USER_STORY_STATUS="✅ <project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md"
-elif [ -f "$REPO_ROOT/<project>/docs/specfiy/$ARGUMENTS.md" ]; then
-USER_STORY_STATUS="✅ <project>/docs/specfiy/$ARGUMENTS.md"
+if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md" ]; then
+USER_STORY_STATUS="✅ <project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md"
+elif [ -f "$REPO_ROOT/<project>/docs/specify/$ARGUMENTS.md" ]; then
+USER_STORY_STATUS="✅ <project>/docs/specify/$ARGUMENTS.md"
 else
 USER_STORY_STATUS="❌ 不存在（必需）"
 fi
 
 # 检查设计文档
 
-if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md" ]; then
-DESIGN_STATUS="✅ <project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md"
-elif [ -f "$REPO_ROOT/<project>/docs/specfiy/$ARGUMENTS.md" ]; then
-DESIGN_STATUS="✅ <project>/docs/specfiy/$ARGUMENTS.md"
+if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md" ]; then
+DESIGN_STATUS="✅ <project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md"
+elif [ -f "$REPO_ROOT/<project>/docs/specify/$ARGUMENTS.md" ]; then
+DESIGN_STATUS="✅ <project>/docs/specify/$ARGUMENTS.md"
 else
 DESIGN_STATUS="⚠️ 不存在（推荐）"
 fi
@@ -236,7 +236,7 @@ echo "- [ ] **技术设计**: $DESIGN_STATUS"
 
 ### 1. 读取用户故事
 
-从 `<project>/docs/specfiy/$ARGUMENTS.md` 读取：
+从 `<project>/docs/specify/$ARGUMENTS.md` 读取：
 
 - 故事描述
 - 验收标准

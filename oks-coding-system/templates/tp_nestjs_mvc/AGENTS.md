@@ -19,7 +19,7 @@
 ```
 <project>/
 └── docs/
-    ├── specfiy/                    # 规格文档（开发过程文档）
+    ├── specify/                    # 规格文档（开发过程文档）
     │   ├── AGENTS.md              # AI 助手指南（本文件）
     │   ├── vision.md              # 项目愿景
     │   ├── user-story.md          # 用户故事
@@ -48,7 +48,7 @@
 
 | 目录            | 用途     | 内容说明                           |
 | --------------- | -------- | ---------------------------------- |
-| `specfiy/`      | 规格文档 | 愿景、设计、实现等开发过程文档     |
+| `specify/`      | 规格文档 | 愿景、设计、实现等开发过程文档     |
 | `api/`          | API 文档 | 接口文档、Swagger UI、OpenAPI 规范 |
 | `guides/`       | 开发指南 | 环境搭建、开发规范、部署指南       |
 | `architecture/` | 架构文档 | 系统架构、模块设计、技术选型       |
@@ -62,19 +62,19 @@
 ### 文档更新规则
 
 1. **每次修改代码时**，同步更新相关文档
-2. **添加新功能时**，更新 `specfiy/implementation.md`
-3. **做出技术决策时**，记录到 `specfiy/decisions.md`
+2. **添加新功能时**，更新 `specify/implementation.md`
+3. **做出技术决策时**，记录到 `specify/decisions.md`
 4. **修改 API 时**，更新 `api/openapi.yaml`
 
 ---
 
 ## 开始前必读
 
-1. **阅读愿景文档**: `docs/specfiy/vision.md`
-2. **阅读用户故事**: `docs/specfiy/user-story.md`
-3. **阅读技术设计**: `docs/specfiy/design.md`
-4. **查看当前进度**: `docs/specfiy/implementation.md`（如存在）
-5. **检查决策记录**: `docs/specfiy/decisions.md`（如存在）
+1. **阅读愿景文档**: `docs/specify/vision.md`
+2. **阅读用户故事**: `docs/specify/user-story.md`
+3. **阅读技术设计**: `docs/specify/design.md`
+4. **查看当前进度**: `docs/specify/implementation.md`（如存在）
+5. **检查决策记录**: `docs/specify/decisions.md`（如存在）
 
 ---
 
@@ -125,7 +125,7 @@
 
 ### BDD 测试
 
-- 参考 `docs/specfiy/bdd-scenarios.md`
+- 参考 `docs/specify/bdd-scenarios.md`
 - 所有场景必须通过
 - 使用 Gherkin 语法
 
@@ -151,10 +151,10 @@ pnpm nx test {project-name} --coverage
 
 ### 必须做
 
-- ✅ 遵循 `docs/specfiy/design.md` 中的设计
+- ✅ 遵循 `docs/specify/design.md` 中的设计
 - ✅ 编写测试（TDD 方式）
-- ✅ 更新实现进度到 `docs/specfiy/implementation.md`
-- ✅ 记录重要决策到 `docs/specfiy/decisions.md`
+- ✅ 更新实现进度到 `docs/specify/implementation.md`
+- ✅ 记录重要决策到 `docs/specify/decisions.md`
 - ✅ 保持代码覆盖率 > 80%
 
 ### 禁止做
@@ -175,19 +175,19 @@ pnpm nx test {project-name} --coverage
 
 | 阶段     | 命令                | 必需前置               | 产出文档                              |
 | -------- | ------------------- | ---------------------- | ------------------------------------- |
-| 愿景     | /oks-vision         | 无                     | `docs/specfiy/vision.md`              |
-| 用户故事 | /oks-user-story     | 愿景（推荐）           | `docs/specfiy/user-story.md`          |
-| 技术设计 | /oks-design         | 用户故事               | `docs/specfiy/design.md`              |
-| BDD 场景 | /oks-bdd            | 用户故事、设计（推荐） | `docs/specfiy/bdd-scenarios.md`       |
+| 愿景     | /oks-vision         | 无                     | `docs/specify/vision.md`              |
+| 用户故事 | /oks-user-story     | 愿景（推荐）           | `docs/specify/user-story.md`          |
+| 技术设计 | /oks-design         | 用户故事               | `docs/specify/design.md`              |
+| BDD 场景 | /oks-bdd            | 用户故事、设计（推荐） | `docs/specify/bdd-scenarios.md`       |
 | TDD 开发 | /oks-tdd            | 用户故事、设计（推荐） | `src/modules/{module}/entities/*.ts`  |
 | 服务实现 | /oks-implementation | TDD 阶段               | `src/modules/{module}/services/*.ts`  |
-| 代码优化 | /oks-optimization   | 服务实现               | 更新 `docs/specfiy/implementation.md` |
+| 代码优化 | /oks-optimization   | 服务实现               | 更新 `docs/specify/implementation.md` |
 
 ---
 
 ## 边界情况
 
-参考 `docs/specfiy/design.md` 中的边界情况章节，确保以下场景已处理：
+参考 `docs/specify/design.md` 中的边界情况章节，确保以下场景已处理：
 
 ### 输入边界
 
@@ -215,8 +215,8 @@ pnpm nx test {project-name} --coverage
 - [ ] 代码覆盖率 > 80%
 - [ ] 无 TypeScript 错误
 - [ ] 无 Biome 错误
-- [ ] 实现进度已更新（`docs/specfiy/implementation.md`）
-- [ ] 重要决策已记录（`docs/specfiy/decisions.md`）
+- [ ] 实现进度已更新（`docs/specify/implementation.md`）
+- [ ] 重要决策已记录（`docs/specify/decisions.md`）
 
 ---
 
@@ -224,12 +224,12 @@ pnpm nx test {project-name} --coverage
 
 | 文档     | 路径                             |
 | -------- | -------------------------------- |
-| 项目愿景 | `docs/specfiy/vision.md`         |
-| 用户故事 | `docs/specfiy/user-story.md`     |
-| 技术设计 | `docs/specfiy/design.md`         |
-| 实现进度 | `docs/specfiy/implementation.md` |
-| 决策记录 | `docs/specfiy/decisions.md`      |
-| BDD 场景 | `docs/specfiy/bdd-scenarios.md`  |
+| 项目愿景 | `docs/specify/vision.md`         |
+| 用户故事 | `docs/specify/user-story.md`     |
+| 技术设计 | `docs/specify/design.md`         |
+| 实现进度 | `docs/specify/implementation.md` |
+| 决策记录 | `docs/specify/decisions.md`      |
+| BDD 场景 | `docs/specify/bdd-scenarios.md`  |
 | 文档索引 | `docs/README.md`                 |
 
 ---
@@ -256,10 +256,10 @@ pnpm nx test {project-name} --coverage
 
 ```bash
 # 更新实现进度
-# 直接编辑 docs/specfiy/implementation.md
+# 直接编辑 docs/specify/implementation.md
 
 # 记录技术决策
-# 直接编辑 docs/specfiy/decisions.md
+# 直接编辑 docs/specify/decisions.md
 ```
 
 ---

@@ -254,7 +254,7 @@ pnpm nx g @oksai/<package>:<generator> --directory=<correct-directory>/<name>
 | 配置项   | 默认值                    | 说明               |
 | -------- | ------------------------- | ------------------ |
 | 模板     | `tp_nestjs_mvc`           | 通用开发文档模板   |
-| 目标目录 | `<project>/docs/specfiy/` | 固定位置，统一管理 |
+| 目标目录 | `<project>/docs/specify/` | 固定位置，统一管理 |
 
 **默认模板包含**:
 
@@ -272,7 +272,7 @@ pnpm nx g @oksai/<package>:<generator> --directory=<correct-directory>/<name>
 
 > 📋 **开发文档模板配置**
 >
-> 默认使用 `tp_nestjs_mvc` 模板，目标位置: `<project>/docs/specfiy/`
+> 默认使用 `tp_nestjs_mvc` 模板，目标位置: `<project>/docs/specify/`
 >
 > 是否使用默认配置？
 >
@@ -308,7 +308,7 @@ done`
 # 固定配置
 TEMPLATE_NAME="tp_nestjs_mvc"  # 或用户选择的模板
 PROJECT_PATH="<project-path>"  # apps/<name> 或 libs/<name>
-TARGET_DIR="$PROJECT_PATH/docs/specfiy"
+TARGET_DIR="$PROJECT_PATH/docs/specify"
 
 # 创建目标目录
 mkdir -p "$TARGET_DIR"
@@ -352,7 +352,7 @@ echo "✅ 占位符替换完成"
 
 ```bash
 # 验证模板是否成功安装
-ls -la "<project-path>/docs/specfiy/"
+ls -la "<project-path>/docs/specify/"
 
 # 应该看到以下文件:
 # AGENTS.md
@@ -371,13 +371,13 @@ ls -la "<project-path>/docs/specfiy/"
 ```
 ✅ 开发文档模板已添加
 
-📁 位置: <project>/docs/specfiy/
+📁 位置: <project>/docs/specify/
 📝 模板: tp_nestjs_mvc
 📄 文件: 7 个
 
 下一步:
-  1. 查看设计文档: cat <project>/docs/specfiy/design.md
-  2. 填写需求: 告诉 AI "请审查代码库并填写 docs/specfiy/design.md"
+  1. 查看设计文档: cat <project>/docs/specify/design.md
+  2. 填写需求: 告诉 AI "请审查代码库并填写 docs/specify/design.md"
   3. 开始开发: pnpm nx dev <name>
 ```
 

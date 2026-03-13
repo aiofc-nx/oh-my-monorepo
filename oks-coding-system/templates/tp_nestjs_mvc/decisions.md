@@ -249,10 +249,10 @@
 
 | 文档         | 路径                             |
 | ------------ | -------------------------------- |
-| 项目愿景     | `docs/specfiy/vision.md`         |
-| 用户故事     | `docs/specfiy/user-story.md`     |
-| 技术设计     | `docs/specfiy/design.md`         |
-| 实现进度     | `docs/specfiy/implementation.md` |
+| 项目愿景     | `docs/specify/vision.md`         |
+| 用户故事     | `docs/specify/user-story.md`     |
+| 技术设计     | `docs/specify/design.md`         |
+| 实现进度     | `docs/specify/implementation.md` |
 | ADR 最佳实践 | https://adr.github.io/           |
 
 ---

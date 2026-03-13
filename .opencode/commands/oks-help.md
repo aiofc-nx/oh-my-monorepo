@@ -144,7 +144,7 @@ argument-hint: ''
 /oks-vision 新建 <项目名>      # 创建新愿景
 ```
 
-**产出**: `<project>/docs/specfiy/vision.md`
+**产出**: `<project>/docs/specify/vision.md`
 
 **示例**:
 
@@ -165,7 +165,7 @@ argument-hint: ''
 /oks-user-story <功能名称>
 ```
 
-**产出**: `<project>/docs/specfiy/user-story.md`
+**产出**: `<project>/docs/specify/user-story.md`
 
 **示例**:
 
@@ -186,7 +186,7 @@ argument-hint: ''
 /oks-design <功能名称>
 ```
 
-**产出**: `<project>/docs/specfiy/design.md`
+**产出**: `<project>/docs/specify/design.md`
 
 **内容**: 数据库设计、API 设计、组件设计、数据流设计
 

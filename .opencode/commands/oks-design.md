@@ -89,7 +89,7 @@ fi
 # 查找关联的 vision 文档
 
 PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
-VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specify/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -104,16 +104,16 @@ done
 # 如果只有一个 vision，使用它
 
 if [ -z "$PROJECT_NAME" ]; then
-VISION_COUNT=$(ls -1 "$VISION_DIR"/_-vision.md 2>/dev/null | wc -l)
+VISION*COUNT=$(ls -1 "$VISION_DIR"/*-vision.md 2>/dev/null | wc -l)
 if [ "$VISION_COUNT" -eq 1 ]; then
-PROJECT_NAME=$(basename $(ls -1 "$VISION_DIR"/_-vision.md | head -1) -vision.md)
+PROJECT*NAME=$(basename $(ls -1 "$VISION_DIR"/*-vision.md | head -1) -vision.md)
 fi
 fi
 
 # 检查 vision 文档
 
 if [ -n "$PROJECT_NAME" ]; then
-echo "**愿景文档**: ✅ <project>/docs/specfiy/vision.md"
+echo "**愿景文档**: ✅ <project>/docs/specify/vision.md"
 else
 echo "**愿景文档**: ⚠️ 未确定关联项目"
 fi
@@ -121,9 +121,9 @@ fi
 # 确定用户故事路径
 
 if [ -n "$PROJECT_NAME" ]; then
-USER_STORY_PATH="$REPO_ROOT/<project>/docs/specfiy/user-story.md"
+USER_STORY_PATH="$REPO_ROOT/<project>/docs/specify/user-story.md"
 else
-    USER_STORY_PATH="$REPO_ROOT/<project>/docs/specfiy/user-story.md"
+    USER_STORY_PATH="$REPO_ROOT/<project>/docs/specify/user-story.md"
 fi
 
 # 输出检查结果
@@ -140,8 +140,8 @@ fi
 在开始设计前，检查以下文档是否存在：
 
 1. **技术栈文档**：`docs/guides/tech-stack.md` - 作为技术选型依据（如不存在，使用默认栈）
-2. **愿景文档**：`<project>/docs/specfiy/vision.md` - 如果不存在，提示用户先创建
-3. **用户故事**：`<project>/docs/specfiy/user-story.md` - 如果不存在，提示用户优先创建
+2. **愿景文档**：`<project>/docs/specify/vision.md` - 如果不存在，提示用户先创建
+3. **用户故事**：`<project>/docs/specify/user-story.md` - 如果不存在，提示用户优先创建
 
 ---
 
@@ -171,7 +171,7 @@ fi
 !`
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
-VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specify/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -208,9 +208,9 @@ fi
 
 # 创建设计目录
 
-mkdir -p "$REPO_ROOT/<project>/docs/specfiy/${PROJECT_NAME:-\_draft}"
+mkdir -p "$REPO_ROOT/<project>/docs/specify/${PROJECT_NAME:-\_draft}"
 
-echo "**设计文档路径**: <project>/docs/specfiy/${PROJECT_NAME:-_draft}/$ARGUMENTS.md"
+echo "**设计文档路径**: <project>/docs/specify/${PROJECT_NAME:-_draft}/$ARGUMENTS.md"
 `
 
 ### 1. 读取关联文档
@@ -264,9 +264,9 @@ echo "**设计文档路径**: <project>/docs/specfiy/${PROJECT_NAME:-_draft}/$AR
 
 ## 输出
 
-创建文件: `<project>/docs/specfiy/$ARGUMENTS.md`
+创建文件: `<project>/docs/specify/$ARGUMENTS.md`
 
-> 设计文档按项目分组管理，存放在 `<project>/docs/specfiy/` 目录下
+> 设计文档按项目分组管理，存放在 `<project>/docs/specify/` 目录下
 > {project} 从关联的 vision 文档自动获取，或由用户指定
 
 ````markdown
@@ -639,7 +639,7 @@ interface Response {
 - [ ] 边界情况已识别和处理
 - [ ] 技术风险已评估
 - [ ] 范围外内容已明确
-- [ ] 文件已保存到 `<project>/docs/specfiy/$ARGUMENTS.md`
+- [ ] 文件已保存到 `<project>/docs/specify/$ARGUMENTS.md`
 
 ---
 
@@ -657,10 +657,10 @@ interface Response {
 **输入**: `/oks-design 配置项管理`
 
 **关联文档**:
-- 愿景: `config/docs/specfiy/vision.md`
-- 用户故事: `config/docs/specfiy/user-story.md` (如存在)
+- 愿景: `config/docs/specify/vision.md`
+- 用户故事: `config/docs/specify/user-story.md` (如存在)
 
-**输出**: `<project>/docs/specfiy/config/配置项管理.md`
+**输出**: `<project>/docs/specify/config/配置项管理.md`
 
 ---
 

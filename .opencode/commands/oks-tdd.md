@@ -122,7 +122,7 @@ echo "- 1 个或以下 → ❌ 建议跳过 TDD，直接用 /oks-implementation"
 !`
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
-VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specify/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -145,15 +145,15 @@ fi
 
 # 检查设计文档
 
-if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md" ]; then
-echo "**技术设计**: ✅ <project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md"
+if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md" ]; then
+echo "**技术设计**: ✅ <project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md"
 echo ""
 echo "建议从设计文档中获取："
 echo "- 数据库表结构 → 映射为实体属性"
 echo "- 业务规则 → 编写测试用例"
 echo "- 验证规则 → 实体验证逻辑"
-elif [ -f "$REPO_ROOT/<project>/docs/specfiy/$ARGUMENTS.md" ]; then
-echo "**技术设计**: ✅ <project>/docs/specfiy/$ARGUMENTS.md"
+elif [ -f "$REPO_ROOT/<project>/docs/specify/$ARGUMENTS.md" ]; then
+echo "**技术设计**: ✅ <project>/docs/specify/$ARGUMENTS.md"
 else
 echo "**技术设计**: ⚠️ 不存在（建议先运行 /oks-design $ARGUMENTS）"
 fi

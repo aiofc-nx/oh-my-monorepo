@@ -104,8 +104,8 @@ PROJECT_ROOT=""
 for project in $PROJECTS; do
   root=$(get_project_root "$project")
   if [ -n "$root" ] && [ "$root" != "." ]; then # 检查项目的愿景文档是否包含此功能
-if [ -f "$REPO_ROOT/$root/docs/specfiy/vision.md" ] && \
- grep -qi "$FEATURE" "$REPO_ROOT/$root/docs/specfiy/vision.md" 2>/dev/null; then
+if [ -f "$REPO_ROOT/$root/docs/specify/vision.md" ] && \
+ grep -qi "$FEATURE" "$REPO_ROOT/$root/docs/specify/vision.md" 2>/dev/null; then
       PROJECT_NAME="$project"
 PROJECT_ROOT="$root"
 break
@@ -118,7 +118,7 @@ done
 if [ -z "$PROJECT_NAME" ] && [ -n "$PROJECTS" ]; then
 for project in $PROJECTS; do
     root=$(get_project_root "$project")
-    if [ -n "$root" ] && [ "$root" != "." ] && [ -f "$REPO_ROOT/$root/docs/specfiy/vision.md" ]; then
+    if [ -n "$root" ] && [ "$root" != "." ] && [ -f "$REPO_ROOT/$root/docs/specify/vision.md" ]; then
 PROJECT_NAME="$project"
       PROJECT_ROOT="$root"
 break
@@ -134,7 +134,7 @@ echo ""
 
 # 阶段一：愿景
 
-if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md" ]; then
+if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specify/vision.md" ]; then
 echo "✅ 阶段一: 愿景文档"
 S1="✅"
 else
@@ -144,7 +144,7 @@ fi
 
 # 阶段二：用户故事
 
-if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/user-story.md" ]; then
+if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specify/user-story.md" ]; then
 echo "✅ 阶段二: 用户故事"
 S2="✅"
 else
@@ -154,7 +154,7 @@ fi
 
 # 阶段三：技术设计
 
-if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/design.md" ]; then
+if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specify/design.md" ]; then
 echo "✅ 阶段三: 技术设计"
 S3="✅"
 else
@@ -164,7 +164,7 @@ fi
 
 # 阶段四：BDD
 
-if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/bdd-scenarios.md" ]; then
+if [ -n "$PROJECT_ROOT" ] && [ -f "$REPO_ROOT/$PROJECT_ROOT/docs/specify/bdd-scenarios.md" ]; then
 echo "✅ 阶段四: BDD 场景"
 S4="✅"
 else
@@ -273,7 +273,7 @@ fi
 
 **命令**: `/oks-vision`
 
-**产出**: `<project>/docs/specfiy/vision.md`
+**产出**: `<project>/docs/specify/vision.md`
 
 **完成条件**: 愿景文档包含适用范围、使用人员、功能模块
 
@@ -283,7 +283,7 @@ fi
 
 **命令**: `/oks-user-story $ARGUMENTS`
 
-**产出**: `<project>/docs/specfiy/user-story.md`
+**产出**: `<project>/docs/specify/user-story.md`
 
 **完成条件**: 符合 INVEST 原则，验收标准明确
 
@@ -293,7 +293,7 @@ fi
 
 **命令**: `/oks-design $ARGUMENTS`
 
-**产出**: `<project>/docs/specfiy/design.md`
+**产出**: `<project>/docs/specify/design.md`
 
 **完成条件**: 数据库设计、API 设计、数据流设计完成
 
@@ -303,7 +303,7 @@ fi
 
 **命令**: `/oks-bdd $ARGUMENTS`
 
-**产出**: `<project>/docs/specfiy/bdd-scenarios.md` 和 `<project>/features/{feature}.feature`
+**产出**: `<project>/docs/specify/bdd-scenarios.md` 和 `<project>/features/{feature}.feature`
 
 **完成条件**: 至少 5 个场景（Happy/Error/Edge）
 

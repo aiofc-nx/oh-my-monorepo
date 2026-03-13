@@ -1,7 +1,7 @@
 ---
 description: 代码优化和性能调优
 agent: build
-argument-hint: "<功能名称>"
+argument-hint: '<功能名称>'
 ---
 
 ## ⚠️ 参数验证
@@ -63,7 +63,7 @@ fi
 !`
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
-VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specfiy/vision.md"
+VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specify/vision.md"
 PROJECT_NAME=""
 
 # 尝试从 vision 文档获取项目名
@@ -86,13 +86,13 @@ fi
 
 # 检查设计文档中的性能目标
 
-if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md" ]; then
-echo "**技术设计**: ✅ <project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md"
+if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md" ]; then
+echo "**技术设计**: ✅ <project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md"
 echo ""
 echo "从设计文档中获取性能目标："
-grep -A 5 "性能目标\|性能设计" "$REPO_ROOT/<project>/docs/specfiy/$PROJECT_NAME/$ARGUMENTS.md" 2>/dev/null | head -10 || echo "- 未找到性能目标定义"
-elif [ -f "$REPO_ROOT/<project>/docs/specfiy/$ARGUMENTS.md" ]; then
-    echo "**技术设计**: ✅ <project>/docs/specfiy/$ARGUMENTS.md"
+grep -A 5 "性能目标\|性能设计" "$REPO_ROOT/<project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md" 2>/dev/null | head -10 || echo "- 未找到性能目标定义"
+elif [ -f "$REPO_ROOT/<project>/docs/specify/$ARGUMENTS.md" ]; then
+    echo "**技术设计**: ✅ <project>/docs/specify/$ARGUMENTS.md"
 else
 echo "**技术设计**: ⚠️ 不存在"
 fi
@@ -124,7 +124,7 @@ fi`
 | **架构优化** | 耦合度 < 0.3     | 中     |
 | **安全加固** | 0 安全漏洞       | 高     |
 
-> **性能目标来源**: 从设计文档 `<project>/docs/specfiy/{project}/{feature}.md` 的"性能设计"章节获取
+> **性能目标来源**: 从设计文档 `<project>/docs/specify/{project}/{feature}.md` 的"性能设计"章节获取
 
 ---
 
@@ -321,7 +321,7 @@ git checkout -- <modified-file>
 ### 示例 1: 缓存优化
 
 ```typescript
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CachedTokenService extends TokenService {

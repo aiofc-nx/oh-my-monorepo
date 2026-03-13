@@ -64,10 +64,10 @@
 
 | 文档     | 位置                         |
 | -------- | ---------------------------- |
-| 项目愿景 | `docs/specfiy/vision.md`     |
-| 用户故事 | `docs/specfiy/user-story.md` |
-| 技术设计 | `docs/specfiy/design.md`     |
-| 决策记录 | `docs/specfiy/decisions.md`  |
+| 项目愿景 | `docs/specify/vision.md`     |
+| 用户故事 | `docs/specify/user-story.md` |
+| 技术设计 | `docs/specify/design.md`     |
+| 决策记录 | `docs/specify/decisions.md`  |
 
 > **进度查看**: 运行 `/oks-workflow {功能名称} --status` 查看各阶段完成状态
 
