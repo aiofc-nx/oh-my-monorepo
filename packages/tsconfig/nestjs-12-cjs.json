@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "oksai.cc Base Config",
+  "display": "oksai.cc NestJS 12 (CommonJS)",
   "compilerOptions": {
     "composite": true,
     "declaration": true,
@@ -11,19 +11,17 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "inlineSources": false,
     "isolatedModules": true,
     "lib": ["ES2022"],
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noEmit": true,
+    "noEmit": false,
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
     "strictBindCallApply": true,
@@ -32,8 +30,9 @@
     "strictPropertyInitialization": true,
     "target": "ES2022",
     "resolveJsonModule": true,
-    "verbatimModuleSyntax": true,
-    "customConditions": ["oh-my-monorepo"]
+    "sourceMap": true,
+    "types": ["node", "vitest/globals"]
   },
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.e2e.ts"]
 }

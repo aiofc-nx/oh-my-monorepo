@@ -1,0 +1,7 @@
+{
+  "extends": "@oksai/tsconfig/nestjs-12-cjs.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  }
+}

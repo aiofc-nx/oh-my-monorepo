@@ -4,6 +4,59 @@ agent: build
 argument-hint: '<功能名称>'
 ---
 
+# TDD 开发循环
+
+**本命令用途**：使用 Red-Green-Refactor 循环开发领域模型（实体、值对象、业务规则）。
+
+**使用范围**：
+
+- ✅ 开发领域实体（Entity）
+- ✅ 开发值对象（Value Object）
+- ✅ 实现业务规则和状态机
+- ❌ 不适用于：纯 CRUD 操作、数据传递对象（DTO）、配置读取
+
+**用户输入**：`$ARGUMENTS`
+
+在继续之前，你**必须**确认用户提供的信息与本命令的使用范围一致：
+
+- 用户想开发领域模型？
+- 功能包含业务规则（而非纯数据传递）？
+- 如果不适用，建议用户跳过 TDD 或使用其他命令
+
+---
+
+## 分析用户意图
+
+**用户输入**: $ARGUMENTS
+
+在继续之前，你**必须**考虑用户输入：
+
+### 意图识别
+
+1. **功能名称**：用户想开发哪个功能的领域模型？
+2. **开发范围**：是实体？值对象？还是业务规则？
+3. **测试策略**：用户对覆盖率有什么期望？
+
+### 信息收集
+
+如果用户输入不完整，询问以下信息：
+
+| 优先级 | 问题               | 目的         |
+| ------ | ------------------ | ------------ |
+| 1      | 开发哪个功能？     | 确定功能范围 |
+| 2      | 需要哪些领域对象？ | 确定开发目标 |
+| 3      | 有无特殊业务规则？ | 确定测试重点 |
+
+### 收敛标准
+
+满足以下条件后立即开始执行：
+
+- [ ] 已确定功能名称
+- [ ] 已确认用户故事存在（或用户确认跳过）
+- [ ] 已明确至少 1 个领域对象
+
+---
+
 ## ⚠️ 参数验证
 
 !`if [ -z "$ARGUMENTS" ]; then
@@ -137,9 +190,9 @@ done
 # 如果只有一个 vision，使用它
 
 if [ -z "$PROJECT_NAME" ]; then
-VISION*COUNT=$(ls -1 "$VISION_DIR"/*-vision.md 2>/dev/null | wc -l)
+VISION_COUNT=$(ls -1 "$VISION_DIR"/_-vision.md 2>/dev/null | wc -l)
 if [ "$VISION_COUNT" -eq 1 ]; then
-PROJECT*NAME=$(basename $(ls -1 "$VISION_DIR"/*-vision.md | head -1) -vision.md)
+PROJECT_NAME=$(basename $(ls -1 "$VISION_DIR"/_-vision.md | head -1) -vision.md)
 fi
 fi
 

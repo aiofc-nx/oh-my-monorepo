@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/schema",
   "$id": "OksaiNestApplicationGenerator",
   "title": "NestJS Application Generator",
-  "description": "Create a NestJS application with Vitest and Biome",
+  "description": "Create a NestJS application with ESM, Vitest, and Biome",
   "cli": "nx",
   "type": "object",
   "properties": {
@@ -20,6 +20,22 @@
       "type": "string",
       "description": "The name of the application",
       "x-priority": "important"
+    },
+    "bundler": {
+      "type": "string",
+      "description": "Build bundler to use (Webpack is recommended for NestJS server-side applications)",
+      "enum": ["webpack", "vite"],
+      "default": "webpack",
+      "x-prompt": "Which bundler would you like to use?",
+      "x-priority": "important"
+    },
+    "validation": {
+      "type": "string",
+      "description": "Validation library for request validation (Standard Schema support)",
+      "enum": ["zod", "valibot", "arktype", "class-validator"],
+      "default": "zod",
+      "x-prompt": "Which validation library would you like to use?",
+      "x-priority": "secondary"
     },
     "tags": {
       "type": "string",
@@ -39,8 +55,8 @@
     },
     "strict": {
       "type": "boolean",
-      "description": "Adds strictNullChecks, noImplicitAny, strictBindCallApply, forceConsistentCasingInFileNames and noFallthroughCasesInSwitch to tsconfig",
-      "default": false
+      "description": "Enable TypeScript strict mode with all strict checks",
+      "default": true
     }
   },
   "required": ["directory"],

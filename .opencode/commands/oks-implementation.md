@@ -4,6 +4,59 @@ agent: build
 argument-hint: '<功能名称>'
 ---
 
+# 代码实现
+
+**本命令用途**：实现服务层（Service）、控制器（Controller）和数据访问层（Repository）。
+
+**使用范围**：
+
+- ✅ 实现 Service 层业务逻辑协调
+- ✅ 实现 Controller 层 HTTP 请求处理
+- ✅ 实现 Repository 层数据访问
+- ❌ 不适用于：领域实体开发（用 `/oks-tdd`）、纯配置文件
+
+**用户输入**：`$ARGUMENTS`
+
+在继续之前，你**必须**确认用户提供的信息与本命令的使用范围一致：
+
+- 用户想实现服务层/控制器？
+- TDD 阶段已完成（领域实体存在）？
+- 如果用户想开发领域实体，引导使用 `/oks-tdd`
+
+---
+
+## 分析用户意图
+
+**用户输入**: $ARGUMENTS
+
+在继续之前，你**必须**考虑用户输入：
+
+### 意图识别
+
+1. **功能名称**：用户想实现哪个功能？
+2. **实现范围**：是服务层？控制器？还是完整实现？
+3. **技术细节**：用户是否指定了特殊的技术要求？
+
+### 信息收集
+
+如果用户输入不完整，询问以下信息：
+
+| 优先级 | 问题               | 目的         |
+| ------ | ------------------ | ------------ |
+| 1      | 实现哪个功能？     | 确定功能范围 |
+| 2      | TDD 阶段是否完成？ | 确认前置条件 |
+| 3      | 需要哪些额外服务？ | 确定依赖关系 |
+
+### 收敛标准
+
+满足以下条件后立即开始执行：
+
+- [ ] 已确定功能名称
+- [ ] 已确认 TDD 阶段完成（领域实体存在）
+- [ ] 测试覆盖率 > 80%
+
+---
+
 ## ⚠️ 参数验证
 
 !`if [ -z "$ARGUMENTS" ]; then
@@ -26,7 +79,7 @@ fi`
 RESULT=$(bash oks-coding-system/scripts/check-prerequisites.sh --json --stage=implementation --feature="$ARGUMENTS" 2>&1)
 if echo "$RESULT" | grep -q '"error"'; then
   MISSING=$(echo "$RESULT" | grep -o '"missing":\[[^]]*\]' | sed 's/"missing":\[/缺失: /; s/\]//; s/", "/\n  - /g' | sed 's/"//g')
-  SUGGEST=$(echo "$RESULT" | grep -o '"suggestions":\[[^]]\*\]' | sed 's/"suggestions":\[/建议: /; s/\]//; s/", "/\n → /g' | sed 's/"//g')
+SUGGEST=$(echo "$RESULT" | grep -o '"suggestions":\[[^]]*\]' | sed 's/"suggestions":\[/建议: /; s/\]//; s/", "/\n → /g' | sed 's/"//g')
   echo ""
   echo "❌ **前置条件未满足**"
   echo ""
@@ -104,9 +157,9 @@ done
 # 如果只有一个 vision，使用它
 
 if [ -z "$PROJECT_NAME" ]; then
-VISION*COUNT=$(ls -1 "$VISION_DIR"/*-vision.md 2>/dev/null | wc -l)
+VISION_COUNT=$(ls -1 "$VISION_DIR"/\*-vision.md 2>/dev/null | wc -l)
 if [ "$VISION_COUNT" -eq 1 ]; then
-PROJECT*NAME=$(basename $(ls -1 "$VISION_DIR"/*-vision.md | head -1) -vision.md)
+PROJECT_NAME=$(basename $(ls -1 "$VISION_DIR"/\*-vision.md | head -1) -vision.md)
 fi
 fi
 
@@ -710,9 +763,10 @@ vi.mocked(mockRepo.findById).mockResolvedValue({ id: '1' });
 
 完成代码实现后，可以：
 
-1. **继续优化**: 运行 `/oks-optimization $ARGUMENTS` 进行代码优化
-2. **运行所有测试**: 运行 `pnpm vitest run` 验证所有测试通过
-3. **提交代码**: 运行 `git add . && git commit` 提交代码
+1. **E2E 测试**: 运行 `/oks-e2e $ARGUMENTS` 进行端到端测试
+2. **代码优化**: 运行 `/oks-optimization $ARGUMENTS` 进行代码优化
+3. **运行所有测试**: 运行 `pnpm vitest run` 验证所有测试通过
+4. **提交代码**: 运行 `git add . && git commit` 提交代码
 
 ---
 
