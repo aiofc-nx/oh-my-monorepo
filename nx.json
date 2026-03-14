@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "nxCloudId": "69aedabbe41d732166547db0",
+  "nxCloudId": "69b54c2bfcf5a70ca9a0e4fc",
   "useDaemonProcess": true,
   "parallel": 3,
   "useInferencePlugins": true,
