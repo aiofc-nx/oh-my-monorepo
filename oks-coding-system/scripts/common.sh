@@ -440,6 +440,3 @@ validate_project_initialized() {
     
     return 0
 }
-    
-    return 0
-}

@@ -1,6 +1,8 @@
 export interface NestjsApplicationGeneratorSchema {
   directory: string;
   name?: string;
+  bundler?: 'vite' | 'webpack';
+  validation?: 'zod' | 'valibot' | 'arktype' | 'class-validator';
   tags?: string;
   skipFormat?: boolean;
   skipPackageJson?: boolean;

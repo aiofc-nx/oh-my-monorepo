@@ -14,38 +14,24 @@ argument-hint: ''
 
 ## 📋 命令总览
 
-| 命令                  | 功能                            | 阶段   |
-| --------------------- | ------------------------------- | ------ |
-| `/oks-workflow`       | 完整工作流（自动执行 1-7 阶段） | 全局   |
-| `/oks-vision`         | 项目愿景文档                    | 阶段 1 |
-| `/oks-user-story`     | 用户故事设计                    | 阶段 2 |
-| `/oks-design`         | 技术设计                        | 阶段 3 |
-| `/oks-bdd`            | BDD 场景设计                    | 阶段 4 |
-| `/oks-tdd`            | TDD 开发循环                    | 阶段 5 |
-| `/oks-implementation` | 实现服务层                      | 阶段 6 |
-| `/oks-optimization`   | 代码优化                        | 阶段 7 |
-| `/oks-generator`      | 创建新项目（NestJS/React）      | 辅助   |
-| `/oks-list`           | 查看项目列表                    | 辅助   |
-| `/oks-status`         | 查看项目状态                    | 辅助   |
+| 命令                  | 功能                       | 阶段   |
+| --------------------- | -------------------------- | ------ |
+| `/oks-vision`         | 项目愿景文档               | 阶段 1 |
+| `/oks-user-story`     | 用户故事设计               | 阶段 2 |
+| `/oks-design`         | 技术设计                   | 阶段 3 |
+| `/oks-bdd`            | BDD 场景设计               | 阶段 4 |
+| `/oks-tdd`            | TDD 开发循环               | 阶段 5 |
+| `/oks-implementation` | 实现服务层                 | 阶段 6 |
+| `/oks-e2e`            | E2E 端到端测试             | 阶段 7 |
+| `/oks-optimization`   | 代码优化                   | 阶段 8 |
+| `/oks-generator`      | 创建新项目（NestJS/React） | 辅助   |
+| `/oks-list`           | 查看项目列表               | 辅助   |
 
 ---
 
 ## 🚀 快速开始
 
-### 方式 1: 完整工作流（推荐）
-
-```bash
-/oks-workflow <功能名称>
-```
-
-**示例**:
-
-```bash
-/oks-workflow 用户登录
-/oks-workflow 购物车功能
-```
-
-### 方式 2: 分阶段执行
+### 方式 1: 分阶段执行（推荐）
 
 ```bash
 # 阶段 1: 愿景文档
@@ -88,49 +74,14 @@ argument-hint: ''
     ↓
 阶段六: 服务实现     /oks-implementation
     ↓
-阶段七: 代码优化     /oks-optimization (可跳过)
+阶段七: E2E 测试     /oks-e2e (可跳过)
+    ↓
+阶段八: 代码优化     /oks-optimization (可跳过)
 ```
 
 ---
 
 ## 📝 命令详解
-
-### `/oks-workflow`
-
-完整的开发工作流，自动执行阶段 1-7。
-
-**语法**:
-
-```bash
-/oks-workflow <功能名称> [选项]
-```
-
-**选项**:
-
-| 选项              | 说明                   |
-| ----------------- | ---------------------- |
-| `--skip-bdd`      | 跳过阶段 4（BDD 场景） |
-| `--skip-optimize` | 跳过阶段 7（代码优化） |
-| `--from=<阶段>`   | 从指定阶段开始         |
-| `--status`        | 查看当前进度           |
-
-**示例**:
-
-```bash
-# 完整工作流
-/oks-workflow 用户登录
-
-# 快速模式（跳过 BDD 和优化）
-/oks-workflow 用户登录 --skip-bdd --skip-optimize
-
-# 从设计阶段开始
-/oks-workflow 用户登录 --from=design
-
-# 查看进度
-/oks-workflow 用户登录 --status
-```
-
----
 
 ### `/oks-vision`
 
@@ -285,6 +236,42 @@ argument-hint: ''
 
 ---
 
+### `/oks-e2e`
+
+端到端测试（Playwright）。
+
+**语法**:
+
+```bash
+/oks-e2e <功能名称>
+```
+
+**前置条件**:
+
+- ✅ 服务实现已完成
+- ✅ 本地服务可启动
+
+**产出**:
+
+- `e2e/{feature}.spec.ts` - E2E 测试文件
+
+**测试类型**:
+
+| 类型     | 说明             |
+| -------- | ---------------- |
+| 用户流程 | 完整业务流程验证 |
+| 页面交互 | UI 组件交互测试  |
+| API 集成 | 多服务集成测试   |
+
+**示例**:
+
+```bash
+/oks-e2e 用户登录
+/oks-e2e 购物车功能
+```
+
+---
+
 ### `/oks-optimization`
 
 代码质量与性能优化。
@@ -339,48 +326,54 @@ docs/
 ### 场景 1: 新功能开发
 
 ```bash
-# 完整流程
-/oks-workflow 用户登录
+# 阶段 1: 创建愿景
+/oks-vision 新建 user-center
+
+# 阶段 2-8: 逐步执行
+/oks-user-story 用户登录
+/oks-design 用户登录
+/oks-bdd 用户登录        # 可跳过
+/oks-tdd 用户登录
+/oks-implementation 用户登录
+/oks-e2e 用户登录        # 可跳过
+/oks-optimization 用户登录  # 可跳过
 ```
 
 ### 场景 2: 快速原型
 
 ```bash
-# 跳过 BDD 和优化
-/oks-workflow 原型功能 --skip-bdd --skip-optimize
+# 跳过 BDD、E2E 和优化
+/oks-vision 新建 prototype-app
+/oks-user-story 原型功能
+/oks-design 原型功能
+/oks-tdd 原型功能
+/oks-implementation 原型功能
 ```
 
-### 场景 3: 只补充设计
+### 场景 3: 补充设计
 
 ```bash
-# 从设计阶段开始
-/oks-workflow 某功能 --from=design
+# 直接运行设计命令
+/oks-design 某功能
 ```
 
 ### 场景 4: 补写测试
 
 ```bash
-# 从 TDD 阶段开始
-/oks-workflow 某功能 --from=tdd
-```
-
-### 场景 5: 查看进度
-
-```bash
-/oks-workflow 某功能 --status
+# 直接运行 TDD 命令
+/oks-tdd 某功能
 ```
 
 ---
 
 ## 💡 最佳实践
 
-| 实践           | 说明                     |
-| -------------- | ------------------------ |
-| **先写愿景**   | 每个项目先创建愿景文档   |
-| **设计先行**   | 技术设计完成后再编码     |
-| **测试驱动**   | TDD 确保代码质量         |
-| **分阶段验证** | 每个阶段完成后运行测试   |
-| **记录进度**   | 使用 `--status` 查看状态 |
+| 实践           | 说明                   |
+| -------------- | ---------------------- |
+| **先写愿景**   | 每个项目先创建愿景文档 |
+| **设计先行**   | 技术设计完成后再编码   |
+| **测试驱动**   | TDD 确保代码质量       |
+| **分阶段验证** | 每个阶段完成后运行测试 |
 
 ---
 
@@ -389,12 +382,11 @@ docs/
 | 命令             | 说明                       |
 | ---------------- | -------------------------- |
 | `/oks-list`      | 查看所有项目               |
-| `/oks-status`    | 查看项目状态               |
 | `/oks-generator` | 创建新项目（NestJS/React） |
 
 ---
 
 **OKS** = **O**penCode **K**nowledge **S**ystem
 
-**版本**: 2.0.0  
-**更新日期**: 2026-03-12
+**版本**: 3.1.0  
+**更新日期**: 2026-03-14

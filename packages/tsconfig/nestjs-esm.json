@@ -1,20 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "oksai.cc NestJS Application (ESM)",
-  "extends": "./base.json",
-  "compilerOptions": {
-    "module": "ES2022",
-    "moduleResolution": "Bundler",
-    "target": "ES2022",
-    "sourceMap": true,
-    "incremental": true,
-    "noEmit": false,
-    "types": ["node", "@nestjs/core"],
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.e2e.ts"]
+  "display": "oksai.cc NestJS Application (ESM) - DEPRECATED",
+  "description": "DEPRECATED: Use nestjs-12-esm.json instead. This config will be removed in the next major version.",
+  "extends": "./nestjs-12-esm.json"
 }

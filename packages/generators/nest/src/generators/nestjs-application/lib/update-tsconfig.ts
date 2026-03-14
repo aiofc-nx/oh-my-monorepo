@@ -18,6 +18,8 @@ export function updateTsConfig(tree: Tree, options: NormalizedOptions): void {
       emitDecoratorMetadata: true,
       target: 'es2021',
       moduleResolution: 'node',
+      module: 'commonjs',
+      verbatimModuleSyntax: false,
     };
 
     if (options.strict) {

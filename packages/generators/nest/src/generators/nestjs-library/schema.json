@@ -2,13 +2,13 @@
   "$schema": "https://json-schema.org/schema",
   "$id": "OksaiNestLibraryGenerator",
   "title": "NestJS Library Generator",
-  "description": "Create a NestJS library with Vitest and Biome",
+  "description": "Create a NestJS library with ESM, Vitest, and Biome",
   "cli": "nx",
   "type": "object",
   "examples": [
     {
       "command": "nx g @oksai/nest:nestjs-library --directory=libs/mylib",
-      "description": "Generate libs/mylib"
+      "description": "Generate libs/mylib with ESM"
     }
   ],
   "properties": {
@@ -55,6 +55,22 @@
       "type": "boolean",
       "description": "Add the Global decorator to the generated module.",
       "default": false
+    },
+    "bundler": {
+      "type": "string",
+      "description": "Build bundler to use for buildable/publishable libraries",
+      "enum": ["vite", "tsc"],
+      "default": "vite",
+      "x-prompt": "Which bundler would you like to use? (Vite is recommended for ESM libraries)",
+      "x-priority": "important"
+    },
+    "validation": {
+      "type": "string",
+      "description": "Validation library for request validation (Standard Schema support)",
+      "enum": ["zod", "valibot", "arktype", "class-validator"],
+      "default": "zod",
+      "x-prompt": "Which validation library would you like to use?",
+      "x-priority": "secondary"
     },
     "unitTestRunner": {
       "type": "string",

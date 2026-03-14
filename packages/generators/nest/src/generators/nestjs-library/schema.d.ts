@@ -7,6 +7,8 @@ export interface NestjsLibraryGeneratorSchema {
   importPath?: string;
   publishable?: boolean;
   service?: boolean;
+  bundler?: 'vite' | 'tsc';
+  validation?: 'zod' | 'valibot' | 'arktype' | 'class-validator';
   skipFormat?: boolean;
   skipTsConfig?: boolean;
   skipPackageJson?: boolean;

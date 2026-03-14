@@ -34,9 +34,13 @@ export async function normalizeOptions(
     useProjectJson: options.useProjectJson ?? !isUsingTsSolutionSetup(tree),
     projectName,
     projectRoot,
+    bundler: options.bundler ?? 'webpack',
+    validation: options.validation ?? 'zod',
     skipFormat: options.skipFormat ?? false,
     skipPackageJson: options.skipPackageJson ?? false,
-    strict: options.strict ?? false,
-    tags: options.tags ?? 'type:app,framework:nest,test:vitest,linter:biome',
+    strict: options.strict ?? true,
+    tags:
+      options.tags ??
+      `type:app,framework:nest,test:vitest,linter:biome,bundler:webpack`,
   };
 }

@@ -710,9 +710,10 @@ vi.mocked(mockRepo.findById).mockResolvedValue({ id: '1' });
 
 完成代码实现后，可以：
 
-1. **继续优化**: 运行 `/oks-optimization $ARGUMENTS` 进行代码优化
-2. **运行所有测试**: 运行 `pnpm vitest run` 验证所有测试通过
-3. **提交代码**: 运行 `git add . && git commit` 提交代码
+1. **E2E 测试**: 运行 `/oks-e2e $ARGUMENTS` 进行端到端测试
+2. **代码优化**: 运行 `/oks-optimization $ARGUMENTS` 进行代码优化
+3. **运行所有测试**: 运行 `pnpm vitest run` 验证所有测试通过
+4. **提交代码**: 运行 `git add . && git commit` 提交代码
 
 ---
 

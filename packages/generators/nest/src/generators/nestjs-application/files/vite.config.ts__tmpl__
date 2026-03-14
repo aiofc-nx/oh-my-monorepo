@@ -1,0 +1,47 @@
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
+import swc from 'unplugin-swc';
+
+export default defineConfig({
+  build: {
+    lib: {
+      entry: resolve(__dirname, 'src/main.ts'),
+      name: '<%= className %>',
+      formats: ['es'],
+      fileName: 'main',
+    },
+    outDir: 'dist',
+    sourcemap: true,
+    rollupOptions: {
+      external: [
+        '@nestjs/common',
+        '@nestjs/core',
+        '@nestjs/platform-express',
+        'reflect-metadata',
+        'rxjs',
+        'class-transformer',
+        'class-validator',
+      ],
+    },
+  },
+  plugins: [
+    swc.vite({
+      jsc: {
+        parser: {
+          syntax: 'typescript',
+          decorators: true,
+          dynamicImport: true,
+        },
+        transform: {
+          legacyDecorator: true,
+          decoratorMetadata: true,
+        },
+      },
+    }),
+  ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
+});

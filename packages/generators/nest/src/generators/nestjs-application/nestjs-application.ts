@@ -68,6 +68,22 @@ export async function nestjsApplicationGeneratorInternal(
   updateTsConfig(tree, options);
   updateProject(tree, options);
 
+  const webpackConfigJsPath = `${options.projectRoot}/webpack.config.js`;
+  const viteConfigPath = `${options.projectRoot}/vite.config.ts`;
+
+  if (options.bundler === 'webpack') {
+    if (tree.exists(viteConfigPath)) {
+      tree.delete(viteConfigPath);
+    }
+    if (tree.exists(webpackConfigJsPath)) {
+      tree.delete(webpackConfigJsPath);
+    }
+  } else {
+    if (tree.exists(webpackConfigJsPath)) {
+      tree.delete(webpackConfigJsPath);
+    }
+  }
+
   if (!options.skipPackageJson) {
     const depsTask = addDependenciesToPackageJson(
       tree,
