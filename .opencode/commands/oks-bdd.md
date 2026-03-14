@@ -6,7 +6,62 @@ argument-hint: '<功能名称>'
 
 # BDD 场景设计
 
-从用户故事创建可执行的 BDD 场景。
+**本命令用途**：从用户故事创建可执行的 BDD（行为驱动开发）测试场景。
+
+**使用范围**：
+
+- ✅ 为已定义的功能需求创建 Gherkin 格式的测试场景
+- ✅ 覆盖 Happy Path、Error Cases、Edge Cases
+- ❌ 不适用于：编写代码实现、数据库设计、API 设计
+
+**用户输入**：`$ARGUMENTS`
+
+在继续之前，你**必须**确认用户提供的信息与本命令的使用范围一致：
+
+- 用户想创建 BDD 测试场景？
+- 已有用户故事文档？
+- 如果不是，引导用户使用正确的命令（如 `/oks-user-story`）
+
+---
+
+## 分析用户意图
+
+**用户输入**: $ARGUMENTS
+
+在继续之前，你**必须**考虑用户输入：
+
+### 意图识别
+
+1. **功能名称**：用户想为哪个功能创建 BDD 场景？
+2. **场景范围**：是否明确了需要覆盖的场景类型？
+3. **前置状态**：用户故事是否已完成？
+
+### 信息收集
+
+如果用户输入不完整，询问以下信息：
+
+| 优先级 | 问题                      | 目的             |
+| ------ | ------------------------- | ---------------- |
+| 1      | 为哪个功能创建 BDD 场景？ | 确定测试范围     |
+| 2      | 有哪些核心业务流程？      | 确定 Happy Path  |
+| 3      | 需要处理哪些错误情况？    | 确定 Error Cases |
+| 4      | 有哪些边界条件？          | 确定 Edge Cases  |
+
+### 交互式引导
+
+当用户信息不完整时：
+
+1. **先检查用户故事**：是否已有用户故事文档？
+2. **提取功能需求**：从用户故事的 FR-XXX 提取场景
+3. **确认场景数量**：至少 5 个场景（2 Happy + 2 Error + 1 Edge）
+
+### 收敛标准
+
+满足以下条件后立即开始执行：
+
+- [ ] 已确定功能名称
+- [ ] 已确认用户故事存在
+- [ ] 已明确至少 3 个核心场景
 
 ---
 
@@ -39,7 +94,6 @@ echo "$SUGGEST"
 echo ""
 echo "**解决方案**:"
 echo " 1. /oks-user-story $ARGUMENTS"
-echo " 2. 或 /oks-workflow $ARGUMENTS（自动处理依赖）"
 exit 1
 fi
 `
@@ -116,9 +170,9 @@ done
 # 如果只有一个 vision，使用它
 
 if [ -z "$PROJECT_NAME" ]; then
-VISION*COUNT=$(ls -1 "$VISION_DIR"/*-vision.md 2>/dev/null | wc -l)
+VISION_COUNT=$(ls -1 "$VISION_DIR"/_-vision.md 2>/dev/null | wc -l)
 if [ "$VISION_COUNT" -eq 1 ]; then
-PROJECT*NAME=$(basename $(ls -1 "$VISION_DIR"/*-vision.md | head -1) -vision.md)
+PROJECT_NAME=$(basename $(ls -1 "$VISION_DIR"/_-vision.md | head -1) -vision.md)
 fi
 fi
 
@@ -587,7 +641,7 @@ Scenario: 用户登录
 
 1. **继续到 TDD**: 运行 `/oks-tdd $ARGUMENTS` 开始 TDD 循环
 2. **验证场景**: 运行 `pnpm vitest run features/$ARGUMENTS.feature`
-3. **完整流程**: 运行 `/oks-workflow $ARGUMENTS` 执行完整工作流
+3. **完整流程**: 依次执行 `/oks-user-story`, `/oks-design`, `/oks-tdd`, `/oks-implementation`
 
 ---
 

@@ -305,18 +305,18 @@ argument-hint: ''
 ## 📁 文档结构
 
 ```
-docs/
-├── visions/                      # 阶段一：愿景文档
-│   └── {project}-vision.md
-├── user-stories/                 # 阶段二：用户故事
-│   └── {project}/
-│       └── {feature}.md
-├── designs/                      # 阶段三：技术设计
-│   ├── tech-stack.md            # 技术栈定义
-│   └── {project}/
-│       └── {feature}.md
-└── features/                     # 阶段四：BDD 场景
-    └── {feature}.feature
+<project>/docs/specify/
+├── vision.md                     # 阶段一：愿景文档
+├── user-story.md                 # 阶段二：用户故事
+├── design.md                     # 阶段三：技术设计
+features/
+└── {feature}.feature             # 阶段四：BDD 场景
+src/modules/{module}/
+├── entities/                     # 阶段五：领域模型
+├── services/                     # 阶段六：服务层
+└── controllers/                  # 阶段六：控制器
+e2e/
+└── {feature}.spec.ts             # 阶段七：E2E 测试
 ```
 
 ---

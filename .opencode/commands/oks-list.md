@@ -6,7 +6,17 @@ argument-hint: '[--features] [--docs]'
 
 # 项目与功能列表
 
-查看 monorepo 中所有项目、功能模块和文档状态。
+**本命令用途**：查看 monorepo 中所有项目、功能模块和文档状态。
+
+**使用范围**：
+
+- ✅ 列出所有应用（apps/）和库（libs/）
+- ✅ 查看项目文档状态（vision.md、design.md 等）
+- ✅ 显示测试文件数量
+- ❌ 不适用于：创建项目（用 `/oks-generator`）
+- ❌ 不适用于：查看命令帮助（用 `/oks-help`）
+
+**用户输入**：`$ARGUMENTS`
 
 ---
 

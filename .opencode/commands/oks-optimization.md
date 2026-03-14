@@ -4,29 +4,79 @@ agent: build
 argument-hint: '<功能名称>'
 ---
 
-## ⚠️ 参数验证
+# 代码优化
 
-!`if [ -z "$ARGUMENTS" ]; then
-  echo "❌ **错误: 缺少功能名称**"
-  echo ""
-  echo "**用法**: /oks-optimization <功能名称>"
-  echo ""
-  echo "**示例**: /oks-optimization 用户登录"
-  exit 1
-fi`
+**本命令用途**：提升代码质量和性能（性能、代码重复、架构、安全）。
+
+**使用范围**：
+
+- ✅ 性能优化（消除 N+1 查询、添加缓存）
+- ✅ 代码质量（降低复杂度、消除重复）
+- ✅ 架构优化（降低耦合度）
+- ✅ 安全加固（输入验证、权限控制）
+- ❌ 不适用于：新功能开发（用 `/oks-implementation`）
+- ❌ 不适用于：测试编写（用 `/oks-tdd`）
+
+**用户输入**：`$ARGUMENTS`
+
+在继续之前，你**必须**确认用户提供的信息与本命令的使用范围一致：
+
+- 用户想优化现有代码？
+- 实现阶段已完成？
+- 如果用户想开发新功能，引导使用 `/oks-implementation`
+
+---
+
+## 分析用户意图
+
+**用户输入**: $ARGUMENTS
+
+在继续之前，你**必须**考虑用户输入：
+
+### 意图识别
+
+1. **优化目标**：用户想优化哪个功能？
+2. **优化维度**：性能？代码质量？安全？还是全部？
+3. **性能指标**：用户对性能有什么具体要求？
+
+### 信息收集
+
+如果用户输入不完整，询问以下信息：
+
+| 优先级 | 问题             | 目的         |
+| ------ | ---------------- | ------------ |
+| 1      | 优化哪个功能？   | 确定优化范围 |
+| 2      | 有无性能问题？   | 确定优化重点 |
+| 3      | 优化目标是什么？ | 确定成功标准 |
+
+### 收敛标准
+
+满足以下条件后立即开始执行：
+
+- [ ] 已确定功能名称
+- [ ] 实现阶段已完成
+- [ ] 所有测试通过
 
 ---
 
 ## 🔒 前置条件检查
 
 !`
+if [ -z "$ARGUMENTS" ]; then
+echo "❌ **错误: 缺少功能名称**"
+echo ""
+echo "**用法**: /oks-optimization <功能名称>"
+echo ""
+echo "**示例**: /oks-optimization 用户登录"
+exit 1
+fi
 
 # 使用统一的前置检查脚本
 
 RESULT=$(bash oks-coding-system/scripts/check-prerequisites.sh --json --stage=optimization --feature="$ARGUMENTS" 2>&1)
 if echo "$RESULT" | grep -q '"error"'; then
   MISSING=$(echo "$RESULT" | grep -o '"missing":\[[^]]*\]' | sed 's/"missing":\[/缺失: /; s/\]//; s/", "/\n  - /g' | sed 's/"//g')
-  SUGGEST=$(echo "$RESULT" | grep -o '"suggestions":\[[^]]\*\]' | sed 's/"suggestions":\[/建议: /; s/\]//; s/", "/\n → /g' | sed 's/"//g')
+  SUGGEST=$(echo "$RESULT" | grep -o '"suggestions":\[[^]]*\]' | sed 's/"suggestions":\[/建议: /; s/\]//; s/", "/\n → /g' | sed 's/"//g')
   echo ""
   echo "❌ **前置条件未满足**"
   echo ""
@@ -38,13 +88,9 @@ echo "**解决方案**:"
 echo " /oks-implementation $ARGUMENTS"
 exit 1
 fi
+
+echo "✅ 前置条件检查通过"
 `
-
----
-
-# 代码优化
-
-提升代码质量和性能。
 
 ---
 
@@ -52,66 +98,44 @@ fi
 
 功能名称: **$ARGUMENTS**
 
-## 项目上下文
-
-当前分支: !`git branch --show-current`
-测试覆盖率: !`pnpm vitest run --coverage 2>&1 | grep "All files" || echo "未运行覆盖率测试"`
-模块文件数: !`find src/modules -name "*.ts" -type f 2>/dev/null | wc -l | xargs -I {} echo "{} 个文件" || echo "0 个文件"`
-
-## 关联文档
-
-!`
-REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-PROJECT_ROOT=$(get_project_root "$PROJECT_NAME")
-VISION_FILE="$REPO_ROOT/$PROJECT_ROOT/docs/specify/vision.md"
-PROJECT_NAME=""
-
-# 尝试从 vision 文档获取项目名
-
-for file in "$VISION_DIR"/*-vision.md; do
-    if [ -f "$file" ] && grep -qi "$ARGUMENTS" "$file" 2>/dev/null; then
-PROJECT_NAME=$(basename "$file" -vision.md)
-break
-fi
-done
-
-# 如果只有一个 vision，使用它
-
-if [ -z "$PROJECT_NAME" ]; then
-VISION*COUNT=$(ls -1 "$VISION_DIR"/*-vision.md 2>/dev/null | wc -l)
-if [ "$VISION_COUNT" -eq 1 ]; then
-PROJECT*NAME=$(basename $(ls -1 "$VISION_DIR"/*-vision.md | head -1) -vision.md)
-fi
-fi
-
-# 检查设计文档中的性能目标
-
-if [ -n "$PROJECT_NAME" ] && [ -f "$REPO_ROOT/<project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md" ]; then
-echo "**技术设计**: ✅ <project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md"
-echo ""
-echo "从设计文档中获取性能目标："
-grep -A 5 "性能目标\|性能设计" "$REPO_ROOT/<project>/docs/specify/$PROJECT_NAME/$ARGUMENTS.md" 2>/dev/null | head -10 || echo "- 未找到性能目标定义"
-elif [ -f "$REPO_ROOT/<project>/docs/specify/$ARGUMENTS.md" ]; then
-    echo "**技术设计**: ✅ <project>/docs/specify/$ARGUMENTS.md"
-else
-echo "**技术设计**: ⚠️ 不存在"
-fi
-`
-
 ---
 
-## ⚠️ 优化前必须完成
+## 交互式引导
 
-> **重要**: 优化前必须确保所有测试通过，否则无法验证优化是否引入问题
+当用户信息不完整时：
 
-!`echo "**测试状态检查**:"
-if pnpm vitest run 2>&1 | grep -q "passed"; then
-    echo "✅ 所有测试通过，可以开始优化"
-else
-    echo "❌ 存在失败测试，请先修复后再优化"
-    echo ""
-    echo "运行: pnpm vitest run 查看详情"
-fi`
+### 🎯 推荐提问顺序
+
+按以下顺序提问，避免来回反复：
+
+1. **范围确认**: 本次优化聚焦哪个模块？有明确的优化目标？
+2. **问题确认**: 有无具体的性能问题？（N+1 查询慢、响应超时）
+3. **目标确认**: 优化目标是什么？（响应时间 < 200ms？重复率 < 5%？）
+
+### 💬 可直接复用的话术模板
+
+- 「请确认要优化的功能名称。」
+- 「是否有具体的性能问题？（如慢查询、响应超时）」
+- 「优化目标是什么？（性能/代码质量/安全）」
+
+### 🎯 交互收敛标准
+
+满足以下条件后立即停止追问，开始执行：
+
+- [ ] 已明确优化范围（功能/模块）
+- [ ] 已确定优化维度（性能/质量/安全）
+- [ ] 已设定优化目标（可衡量的指标）
+
+### 📊 兜底策略
+
+| 选项 | 适用场景                           | 优先级 |
+| ---- | ---------------------------------- | ------ |
+| A    | 全方位优化（性能+质量+安全）       | 推荐   |
+| B    | 仅性能优化（消除 N+1, 添加缓存）   | 中     |
+| C    | 仅代码质量（降低复杂度、消除重复） | 低     |
+| D    | 仅安全加固（输入验证、权限检查）   | 低     |
+
+**请选择优化范围（A/B/C/D）？**
 
 ---
 
